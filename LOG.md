@@ -127,3 +127,17 @@
 #### 代码提交
 - 本次共5个 commit，全部推送成功
 - 文件大小：47934→55432 字节（+7498）
+
+### 22:00-22:10 事件删除 + 类型修复
+
+#### 修复
+1. **事件删除功能** — 详情弹窗新增「删除」按钮，调用 `crudDelete()` + `deleteEvent()`
+2. **修复编辑表单类型按钮** — `showEditForm` 使用 `life/work/course` 替代旧的 `task/appointment/reminder`
+3. **修复创建事件默认类型** — fallback `'task'` → `'life'`
+4. **修复事件圆点颜色** — evtHtml 类型映射同步
+5. **关闭弹窗隐藏删除按钮**
+6. **新增 .gitignore** — 清理远程 node_modules/build artifacts（+140K 行删除）
+
+#### 提交
+- `a45a3e1` feat: 事件删除功能 + 修复编辑表单类型值为新系统 + 修复创建事件默认类型
+- `b788c65` chore: add .gitignore, stop tracking node_modules/build artifacts
