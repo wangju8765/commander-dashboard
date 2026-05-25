@@ -71,7 +71,59 @@
 - 规范文档 `EVENT_DETAIL_SPEC.md`（交给其他 agent 的交接规范）
 - 数据库迁移 SQL：`add-detail-html-column.sql`
 
-### 核心教训（本 session 确立）
-- AGENTS.md 新增「地基原则」：用户确认过的产物只修改不重写
+### 19:00-19:35 用户反馈修复 session
+
+#### 7项 UI/交互改进（全部完成并部署）
+1. **日期框** — `.date-field` flex 1.3→2.5，时间 1，日期 input 加 `white-space:nowrap`
+2. **类型按钮** — 下拉 select → 三色按钮组（📋任务蓝 / 📅预约橙 / 🔔提醒绿），隐藏 input 存值
+3. **日历清晰度** — day-pill 2.5rem→3rem，dow 0.6→0.65rem，dom 0.85→0.95rem
+4. **过去窗口** — `i=-2`→`i=-1`
+5. **选中态** — 新增 `.day-pill.selected` 样式（亮蓝边框+背景+白色字），点击切换，今天保持淡背景
+6. **类型探讨** — 不修改，回复中讨论
+7. **详情编辑** — 新增 crudUpdate/updateEvent PATCH API，详情页加
 - AGENTS.md 新增「UI 交付验证清单」
 - MEMORY.md 补充「示意图即是生产代码地基」
+
+### 19:35-22:00 深度迭代 session
+
+#### 用户反馈修复
+1. **编辑按钮** — ✏️ emoji→文字「编辑」，移到关闭按钮左侧
+2. **编辑可改类型** — 编辑表单新增三色按钮类型切换
+3. **创建表单排序** — 类型字段排第一
+4. **类型标签** — 去掉 emoji 改用颜色小点，生活改蓝色 #5b9aff
+5. **课程按钮** — 选课程时显示5个固定按钮（翔哥/邵子齐/郭靖宇/蔡汐堋/四年级）
+6. **日历字体** — dow 0.7rem + 600, dom 1.05rem + 700
+7. **日历窗口** — 0~+6（今天+未来6天）
+8. **默认日期** — 改为日历选中日 S.selDate
+
+#### 重大 bug 修复
+- **编辑按钮闭包 bug**：`||` 创建一次按钮，闭包锁死在第一个事件。改为每次 `openEventDetail` 重新绑定 `onclick`
+
+#### 类型系统重构
+- 数据库 CHECK 约束改为允许 life/work/course
+- 旧数据迁移：task/appointment/reminder→life，笔杆子→work
+- 代码全部删除 task/appointment/reminder 映射
+
+#### Markdown 备注系统
+- 新增 `mdToHtml` 渲染器（支持 #标题 / **加粗** / -列表）
+- description 改为 Markdown 存储，编辑框等宽字体+语法提示
+- detail_html 保持独立，两者同时渲染
+
+#### 交互式勾选框
+- `- [ ] / - [x]` 渲染为可点击勾选框
+- 点击自动勾选/取消，实时 PATCH 到 Supabase
+- 选中文字变灰+删除线
+
+#### 日历繁忙进度条
+- 小圆点→进度条（宽度+颜色双维度）
+- 公式：事件数×60÷600min
+- ≤30%绿/≤60%橙/>60%红
+
+#### 数据库
+- 用户手动在 Supabase SQL Editor 执行删约束+加新约束
+- 旧数据已迁移（4条→life, 1条→work）
+- 哥哥测评 description 写入 Markdown（含交互式勾选框）
+
+#### 代码提交
+- 本次共5个 commit，全部推送成功
+- 文件大小：47934→55432 字节（+7498）

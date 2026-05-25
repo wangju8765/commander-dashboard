@@ -1,0 +1,17 @@
+{
+  "name": "commander-dashboard",
+  "version": "1.0.0",
+  "description": "**目标：** 做一个个人管理面板，可视化追踪项目、目标、周计划、未来规划、思考与行动，释放认知负荷 **状态：** 🎯 规划中 **起始：** 2026-05-25 **负责人：** 主宰",
+  "main": "setup_db.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.1",
+    "pg": "^8.21.0"
+  }
+}
