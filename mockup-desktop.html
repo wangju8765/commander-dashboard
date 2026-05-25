@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>主宰面板 · 桌面版示意图</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:16px}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  /* ===== DESKTOP LAYOUT (1440px wide canvas) ===== */
+  .app{display:flex;min-height:100vh}
+  
+  /* Sidebar */
+  .sidebar{width:220px;border-right:1px solid rgba(255,255,255,0.06);padding:1.5rem 0.75rem;flex-shrink:0;display:flex;flex-direction:column}
+  .sidebar .logo{font-size:1.2rem;font-weight:700;color:#fff;padding:0 0.75rem 1.5rem;display:flex;align-items:center;gap:0.375rem}
+  .sidebar .logo span{font-size:0.8rem;color:#666;font-weight:400}
+  .sidebar nav{display:flex;flex-direction:column;gap:0.125rem;flex:1}
+  .nav-item{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.75rem;border-radius:0.5rem;font-size:0.85rem;color:#555;cursor:pointer;transition:all 0.12s;background:none;border:none;text-align:left;width:100%}
+  .nav-item:hover{background:rgba(255,255,255,0.04);color:#888}
+  .nav-item.active{background:rgba(91,154,255,0.1);color:#5b9aff;font-weight:500}
+  .nav-item .badge{margin-left:auto;font-size:0.65rem;background:rgba(91,154,255,0.15);color:#5b9aff;padding:0.1rem 0.4rem;border-radius:0.75rem;font-weight:500}
+  .nav-divider{height:1px;background:rgba(255,255,255,0.06);margin:0.5rem 0.75rem}
+
+  /* Main area */
+  .main{flex:1;overflow-y:auto;padding:1.5rem 2rem}
+
+  /* Top bar */
+  .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+  .top-bar .greeting{font-size:1.25rem;font-weight:600;color:#fff}
+  .top-bar .greeting small{font-size:0.75rem;color:#555;font-weight:400;margin-left:0.75rem}
+  .top-bar .actions{display:flex;gap:0.5rem}
+  .top-bar .btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#ccc;padding:0.4rem 0.85rem;border-radius:0.5rem;font-size:0.8rem;cursor:pointer;transition:background 0.12s}
+  .top-bar .btn:hover{background:rgba(91,154,255,0.12);color:#5b9aff}
+  .top-bar .btn.primary{background:#5b9aff;color:#fff;border-color:#5b9aff}
+  .top-bar .btn.primary:hover{background:#4a89f0}
+
+  /* ===== DASHBOARD GRID ===== */
+  .dash-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+  .dash-col{display:flex;flex-direction:column;gap:0.75rem}
+
+  /* Panel card */
+  .panel{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;overflow:hidden}
+  .panel-header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem 0.5rem}
+  .panel-title{font-size:0.7rem;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.05em}
+  .panel-action{font-size:0.65rem;color:#5b9aff;cursor:pointer;background:none;border:none}
+  .panel-body{padding:0 1rem 0.75rem}
+
+  /* ===== CALENDAR MINI ===== */
+  .mini-cal{display:flex;gap:0.25rem}
+  .mini-day{flex:1;text-align:center;padding:0.3rem 0;border-radius:0.375rem}
+  .mini-day .dow{font-size:0.6rem;color:#555}
+  .mini-day .num{font-size:0.8rem;font-weight:500;color:#888;margin-top:0.1rem}
+  .mini-day.today{background:rgba(91,154,255,0.12)}
+  .mini-day.today .num{color:#5b9aff;font-weight:600}
+  .mini-day.today .dow{color:#5b9aff}
+
+  /* ===== EVENT LIST ===== */
+  .event-row{display:flex;gap:0.5rem;padding:0.375rem 0;align-items:flex-start}
+  .event-row+.event-row{border-top:1px solid rgba(255,255,255,0.04)}
+  .event-dot{width:6px;height:6px;border-radius:50%;margin-top:0.35rem;flex-shrink:0}
+  .event-dot.blue{background:#5b9aff}
+  .event-dot.orange{background:#ff9f43}
+  .event-dot.green{background:#2ed573}
+  .event-info{flex:1}
+  .event-info .title{font-size:0.8rem;color:#e8e8ed}
+  .event-info .meta{font-size:0.65rem;color:#555;margin-top:0.05rem}
+  .event-check{width:1rem;height:1rem;border-radius:50%;border:2px solid rgba(255,255,255,0.1);flex-shrink:0;margin-top:0.15rem;cursor:pointer}
+  .event-check.done{background:#2ed573;border-color:#2ed573;position:relative}
+  .event-check.done::after{content:'';position:absolute;top:2px;left:4px;width:4px;height:7px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+  .event-row.done .title{color:#444;text-decoration:line-through}
+
+  /* ===== PROJECT CARD (mini) ===== */
+  .project-mini{display:flex;gap:0.75rem;padding:0.5rem 0;align-items:center}
+  .project-mini+.project-mini{border-top:1px solid rgba(255,255,255,0.04)}
+  .project-mini-info{flex:1;min-width:0}
+  .project-mini-name{font-size:0.8rem;font-weight:500;color:#e8e8ed}
+  .project-mini-tags{display:flex;gap:0.2rem;margin-top:0.15rem}
+  .project-mini-tag{font-size:0.55rem;padding:0.05rem 0.25rem;border-radius:0.2rem}
+  .project-mini-tag.work{background:rgba(255,159,67,0.12);color:#ff9f43}
+  .project-mini-tag.life{background:rgba(46,213,115,0.12);color:#2ed573}
+  .project-mini-tag.think{background:rgba(160,120,255,0.12);color:#a078ff}
+  .project-mini-tag.family{background:rgba(255,107,107,0.12);color:#ff6b6b}
+  .project-mini-progress{width:4rem;text-align:right}
+  .project-mini-progress .pct{font-size:0.7rem;font-weight:600;color:#555}
+  .project-mini-progress .bar{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:0.15rem;overflow:hidden}
+  .project-mini-progress .bar .fill{height:100%;border-radius:2px}
+
+  /* ===== GOAL ITEM ===== */
+  .goal-mini{display:flex;gap:0.5rem;padding:0.5rem 0;align-items:center}
+  .goal-mini+.goal-mini{border-top:1px solid rgba(255,255,255,0.04)}
+  .goal-mini-icon{width:1.5rem;height:1.5rem;border-radius:0.375rem;display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0}
+  .goal-mini-icon.long{background:rgba(160,120,255,0.12);color:#a078ff}
+  .goal-mini-icon.short{background:rgba(91,154,255,0.12);color:#5b9aff}
+  .goal-mini-body{flex:1;min-width:0}
+  .goal-mini-title{font-size:0.8rem;color:#e8e8ed}
+  .goal-mini-meta{font-size:0.6rem;color:#444;margin-top:0.05rem}
+  .goal-mini-pct{font-size:0.75rem;font-weight:600;color:#555;min-width:2.5rem;text-align:right}
+
+  /* ===== TIMELINE ENTRY ===== */
+  .entry-mini{display:flex;gap:0.5rem;padding:0.5rem 0;align-items:flex-start}
+  .entry-mini+.entry-mini{border-top:1px solid rgba(255,255,255,0.04)}
+  .entry-mini-icon{width:1.25rem;height:1.25rem;border-radius:0.3rem;display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0;margin-top:0.05rem}
+  .entry-mini-icon.thought{background:rgba(160,120,255,0.12);color:#a078ff}
+  .entry-mini-icon.action{background:rgba(46,213,115,0.12);color:#2ed573}
+  .entry-mini-icon.plan{background:rgba(255,159,67,0.12);color:#ff9f43}
+  .entry-mini-body{flex:1;min-width:0}
+  .entry-mini-title{font-size:0.8rem;color:#e8e8ed}
+  .entry-mini-text{font-size:0.65rem;color:#555;margin-top:0.05rem;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+  .entry-mini-date{font-size:0.55rem;color:#444;margin-top:0.1rem}
+
+  /* ===== FULL-WIDTH PANEL ===== */
+  .panel-full{grid-column:1 / -1}
+  .quick-add{display:flex;gap:0.5rem;padding:0.5rem 0}
+  .quick-add input{flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:0.5rem;padding:0.4rem 0.75rem;color:#e8e8ed;font-size:0.8rem;outline:none;transition:border 0.12s}
+  .quick-add input:focus{border-color:#5b9aff}
+  .quick-add input::placeholder{color:#444}
+  .quick-add select{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:0.5rem;padding:0.4rem 0.5rem;color:#888;font-size:0.75rem;outline:none}
+  .quick-add button{background:#5b9aff;border:none;color:#fff;padding:0.4rem 0.85rem;border-radius:0.5rem;font-size:0.8rem;cursor:pointer}
+
+  /* ===== RESPONSIVE ===== */
+  @media(max-width:1100px){
+    .dash-grid{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:768px){
+    .app{display:block}
+    .sidebar{display:none}
+    .main{padding:1rem}
+    .dash-grid{grid-template-columns:1fr}
+    .top-bar .greeting{font-size:1rem}
+    .top-bar .greeting small{display:block;margin-left:0}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== SIDEBAR ===== -->
+  <aside class="sidebar">
+    <div class="logo">🦞 主宰 <span>面板</span></div>
+    <nav>
+      <button class="nav-item active">📋 概览</button>
+      <button class="nav-item">📅 日历</button>
+      <button class="nav-item">📊 项目 <span class="badge">6</span></button>
+      <button class="nav-item">🎯 目标 <span class="badge">4</span></button>
+      <button class="nav-item">💭 思考库</button>
+      <button class="nav-item">✅ 行动库</button>
+      <div class="nav-divider"></div>
+      <button class="nav-item">⚙️ 设置</button>
+      <button class="nav-item">📥 导出备份</button>
+    </nav>
+  </aside>
+
+  <!-- ===== MAIN ===== -->
+  <div class="main">
+    <div class="top-bar">
+      <div class="greeting">
+        下午好，Zeno
+        <small>2026.05.25 周一</small>
+      </div>
+      <div class="actions">
+        <button class="btn">📥 导出</button>
+        <button class="btn primary">＋ 快速添加</button>
+      </div>
+    </div>
+
+    <div class="dash-grid">
+
+      <!-- COL 1: 今日日程 -->
+      <div class="dash-col">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">📅 本周日历</span>
+          </div>
+          <div class="panel-body">
+            <div class="mini-cal">
+              <div class="mini-day"><div class="dow">日</div><div class="num">24</div></div>
+              <div class="mini-day today"><div class="dow">一</div><div class="num">25</div></div>
+              <div class="mini-day"><div class="dow">二</div><div class="num">26</div></div>
+              <div class="mini-day"><div class="dow">三</div><div class="num">27</div></div>
+              <div class="mini-day"><div class="dow">四</div><div class="num">28</div></div>
+              <div class="mini-day"><div class="dow">五</div><div class="num">29</div></div>
+              <div class="mini-day"><div class="dow">六</div><div class="num">30</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">📋 今日待办</span>
+            <button class="panel-action">+ 添加</button>
+          </div>
+          <div class="panel-body">
+            <div class="event-row">
+              <div class="event-dot orange"></div>
+              <div class="event-info">
+                <div class="title">陪老大去感统训练</div>
+                <div class="meta">09:00 - 11:00 · 感统工作室</div>
+              </div>
+              <div class="event-check"></div>
+            </div>
+            <div class="event-row">
+              <div class="event-dot blue"></div>
+              <div class="event-info">
+                <div class="title">写下周奥数组卷</div>
+                <div class="meta">五年级 · 分数运算专项</div>
+              </div>
+              <div class="event-check"></div>
+            </div>
+            <div class="event-row">
+              <div class="event-dot green"></div>
+              <div class="event-info">
+                <div class="title">晚上看老二的听写</div>
+                <div class="meta">语文第一单元</div>
+              </div>
+              <div class="event-check"></div>
+            </div>
+            <div class="event-row done">
+              <div class="event-dot" style="background:#444"></div>
+              <div class="event-info">
+                <div class="title">发公众号文章</div>
+                <div class="meta">《粗心不是态度问题》已发</div>
+              </div>
+              <div class="event-check done"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">🗓️ 本周安排</span>
+          </div>
+          <div class="panel-body">
+            <div class="event-row">
+              <div class="event-dot orange" style="opacity:0.5"></div>
+              <div class="event-info">
+                <div class="title" style="color:#888">周二 · 家长咨询 王XX</div>
+                <div class="meta">14:00 - 15:30</div>
+              </div>
+            </div>
+            <div class="event-row">
+              <div class="event-dot blue" style="opacity:0.5"></div>
+              <div class="event-info">
+                <div class="title" style="color:#888">周三 · 改完语文小程序样式</div>
+                <div class="meta">和主宰讨论过</div>
+              </div>
+            </div>
+            <div class="event-row">
+              <div class="event-dot blue" style="opacity:0.5"></div>
+              <div class="event-info">
+                <div class="title" style="color:#888">周五 · 整理读书笔记</div>
+                <div class="meta">《思考，快与慢》第三章</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 2: 项目 + 目标 -->
+      <div class="dash-col">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">📊 项目快照</span>
+            <button class="panel-action">查看全部 →</button>
+          </div>
+          <div class="panel-body">
+            <div class="project-mini">
+              <div class="project-mini-info">
+                <div class="project-mini-name">✅ 速算24点游戏</div>
+                <div class="project-mini-tags"><span class="project-mini-tag work">工作</span></div>
+              </div>
+              <div class="project-mini-progress">
+                <div class="pct">100%</div>
+                <div class="bar"><div class="fill" style="width:100%;background:#2ed573"></div></div>
+              </div>
+            </div>
+            <div class="project-mini">
+              <div class="project-mini-info">
+                <div class="project-mini-name">🚧 语文写字小程序</div>
+                <div class="project-mini-tags"><span class="project-mini-tag work">工作</span></div>
+              </div>
+              <div class="project-mini-progress">
+                <div class="pct">65%</div>
+                <div class="bar"><div class="fill" style="width:65%;background:#5b9aff"></div></div>
+              </div>
+            </div>
+            <div class="project-mini">
+              <div class="project-mini-info">
+                <div class="project-mini-name">🎯 主宰面板</div>
+                <div class="project-mini-tags"><span class="project-mini-tag life">个人</span></div>
+              </div>
+              <div class="project-mini-progress">
+                <div class="pct">5%</div>
+                <div class="bar"><div class="fill" style="width:5%;background:#a078ff"></div></div>
+              </div>
+            </div>
+            <div class="project-mini">
+              <div class="project-mini-info">
+                <div class="project-mini-name">📖 心理学系列笔记</div>
+                <div class="project-mini-tags"><span class="project-mini-tag think">务虚</span></div>
+              </div>
+              <div class="project-mini-progress">
+                <div class="pct">40%</div>
+                <div class="bar"><div class="fill" style="width:40%;background:#ff9f43"></div></div>
+              </div>
+            </div>
+            <div class="project-mini">
+              <div class="project-mini-info">
+                <div class="project-mini-name">👨‍👩‍👧‍👦 家庭教育计划</div>
+                <div class="project-mini-tags"><span class="project-mini-tag family">家庭</span></div>
+              </div>
+              <div class="project-mini-progress">
+                <div class="pct">30%</div>
+                <div class="bar"><div class="fill" style="width:30%;background:#2ed573"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">🎯 目标进度</span>
+            <button class="panel-action">查看全部 →</button>
+          </div>
+          <div class="panel-body">
+            <div class="goal-mini">
+              <div class="goal-mini-icon long">🏗️</div>
+              <div class="goal-mini-body">
+                <div class="goal-mini-title">数学教育产品矩阵</div>
+                <div class="goal-mini-meta">长期 · 24点✅ 写字🚧</div>
+              </div>
+              <div class="goal-mini-pct">35%</div>
+            </div>
+            <div class="goal-mini">
+              <div class="goal-mini-icon long">📝</div>
+              <div class="goal-mini-body">
+                <div class="goal-mini-title">公众号 1 万订阅</div>
+                <div class="goal-mini-meta">长期 · 当前 3200</div>
+              </div>
+              <div class="goal-mini-pct">32%</div>
+            </div>
+            <div class="goal-mini">
+              <div class="goal-mini-icon short">🎯</div>
+              <div class="goal-mini-body">
+                <div class="goal-mini-title">6月前完成面板MVP</div>
+                <div class="goal-mini-meta">短期 · 截止 06-15</div>
+              </div>
+              <div class="goal-mini-pct">5%</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COL 3: 思考/行动最近记录 -->
+      <div class="dash-col">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">💭 最近思考</span>
+            <button class="panel-action">+ 记录</button>
+          </div>
+          <div class="panel-body">
+            <div class="entry-mini">
+              <div class="entry-mini-icon thought">💭</div>
+              <div class="entry-mini-body">
+                <div class="entry-mini-title">关于"粗心"的底层原因</div>
+                <div class="entry-mini-text">工作记忆超载 + 注意力分配策略不成熟，不是态度问题</div>
+                <div class="entry-mini-date">05-24</div>
+              </div>
+            </div>
+            <div class="entry-mini">
+              <div class="entry-mini-icon action">✅</div>
+              <div class="entry-mini-body">
+                <div class="entry-mini-title">和笔杆子讨论排版优化</div>
+                <div class="entry-mini-text">最终方案：双标题，主标题加引号，加导读</div>
+                <div class="entry-mini-date">05-24 · 语文写字小程序</div>
+              </div>
+            </div>
+            <div class="entry-mini">
+              <div class="entry-mini-icon plan">🗓️</div>
+              <div class="entry-mini-body">
+                <div class="entry-mini-title">暑假计划：给老大设计数学思维营</div>
+                <div class="entry-mini-text">每天2小时，Minecraft主题，数感→逻辑→建模</div>
+                <div class="entry-mini-date">05-22</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <span class="panel-title">💡 快速录入</span>
+          </div>
+          <div class="panel-body">
+            <div class="quick-add">
+              <select style="width:5rem">
+                <option>💭 思考</option>
+                <option>✅ 行动</option>
+                <option>🗓️ 规划</option>
+              </select>
+              <input type="text" placeholder="随手记录一条..." />
+              <button>保存</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="flex:1;display:flex;flex-direction:column">
+          <div class="panel-header">
+            <span class="panel-title">📊 本周统计</span>
+          </div>
+          <div class="panel-body" style="flex:1;display:flex;flex-direction:column;gap:0.5rem;justify-content:center">
+            <div style="display:flex;gap:1rem;text-align:center">
+              <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:0.5rem;padding:0.75rem">
+                <div style="font-size:1.2rem;font-weight:700;color:#5b9aff">12</div>
+                <div style="font-size:0.6rem;color:#555;margin-top:0.2rem">已完成事项</div>
+              </div>
+              <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:0.5rem;padding:0.75rem">
+                <div style="font-size:1.2rem;font-weight:700;color:#ff9f43">4</div>
+                <div style="font-size:0.6rem;color:#555;margin-top:0.2rem">待处理</div>
+              </div>
+              <div style="flex:1;background:rgba(255,255,255,0.03);border-radius:0.5rem;padding:0.75rem">
+                <div style="font-size:1.2rem;font-weight:700;color:#2ed573">5</div>
+                <div style="font-size:0.6rem;color:#555;margin-top:0.2rem">思考记录</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /dash-grid -->
+  </div><!-- /main -->
+</div><!-- /app -->
+</body>
+</html>

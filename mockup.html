@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>主宰面板 · 示意图</title>
+<style>
+  /* ===== RESET & BASE ===== */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:calc(100vw / 375 * 16);touch-action:manipulation}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  /* ===== LAYOUT ===== */
+  .app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+  .header{padding:1.25rem 1rem 0.5rem;background:#0f0f13;position:sticky;top:0;z-index:10}
+  .header h1{font-size:1.5rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:0.375rem}
+  .header h1 span{font-size:1rem;color:#666}
+  .header .date{font-size:0.75rem;color:#555;margin-top:0.125rem}
+  .main{flex:1;padding:0.5rem 1rem 6rem;overflow-y:auto}
+  .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(15,15,19,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);display:flex;padding:0.375rem 0 0.75rem;z-index:100}
+  .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.125rem;padding:0.25rem;background:none;border:none;color:#555;font-size:0.625rem;cursor:pointer;transition:color 0.15s}
+  .tab-btn.active{color:#5b9aff}
+  .tab-btn .icon{font-size:1.25rem;line-height:1}
+  .tab-btn .label{font-weight:500}
+
+  /* ===== SECTION TITLES ===== */
+  .section-title{font-size:0.75rem;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.05em;margin:1.25rem 0 0.625rem;display:flex;align-items:center;gap:0.5rem}
+  .section-title::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.06)}
+
+  /* ===== CARDS ===== */
+  .card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:0.85rem;margin-bottom:0.625rem;transition:background 0.15s}
+  .card:active{background:rgba(255,255,255,0.08)}
+
+  /* ===== TODAY / CALENDAR ===== */
+  .time-indicator{font-size:0.7rem;color:#555;margin-top:0.25rem;font-weight:500}
+  .event-item{display:flex;gap:0.75rem;align-items:flex-start;position:relative}
+  .event-item+.event-item{margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.04)}
+  .event-time{font-size:0.75rem;color:#666;min-width:3rem;font-weight:500;padding-top:0.05rem}
+  .event-dot{width:0.5rem;height:0.5rem;border-radius:50%;margin-top:0.3rem;flex-shrink:0}
+  .event-dot.task{background:#5b9aff}
+  .event-dot.appointment{background:#ff9f43}
+  .event-dot.reminder{background:#2ed573}
+  .event-body{flex:1;min-width:0}
+  .event-title{font-size:0.85rem;font-weight:500;color:#e8e8ed}
+  .event-desc{font-size:0.7rem;color:#555;margin-top:0.125rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .event-completed{opacity:0.35;text-decoration:line-through}
+
+  /* ===== PROJECTS ===== */
+  .project-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.625rem}
+  .project-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:0.85rem}
+  .project-card:active{background:rgba(255,255,255,0.08)}
+  .project-name{font-size:0.85rem;font-weight:600;color:#e8e8ed;margin-bottom:0.3rem}
+  .project-tags{display:flex;gap:0.25rem;margin-bottom:0.5rem;flex-wrap:wrap}
+  .project-tag{font-size:0.6rem;padding:0.1rem 0.35rem;border-radius:0.25rem;background:rgba(91,154,255,0.12);color:#5b9aff;font-weight:500}
+  .project-tag.tag-life{background:rgba(46,213,115,0.12);color:#2ed573}
+  .project-tag.tag-work{background:rgba(255,159,67,0.12);color:#ff9f43}
+  .project-tag.tag-family{background:rgba(255,107,107,0.12);color:#ff6b6b}
+  .project-tag.tag-think{background:rgba(160,120,255,0.12);color:#a078ff}
+  .progress-bar{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;overflow:hidden;margin-top:0.4rem}
+  .progress-fill{height:100%;border-radius:2px;transition:width 0.3s}
+  .progress-fill.blue{background:#5b9aff}
+  .progress-fill.green{background:#2ed573}
+  .progress-fill.orange{background:#ff9f43}
+  .progress-fill.purple{background:#a078ff}
+  .project-status{font-size:0.6rem;padding:0.1rem 0.35rem;border-radius:0.25rem;font-weight:500;display:inline-block;margin-bottom:0.4rem}
+  .status-planning{background:rgba(255,255,255,0.08);color:#888}
+  .status-progress{background:rgba(91,154,255,0.15);color:#5b9aff}
+  .status-done{background:rgba(46,213,115,0.15);color:#2ed573}
+  .status-archived{background:rgba(255,255,255,0.05);color:#555}
+
+  /* ===== GOALS ===== */
+  .goal-item{display:flex;gap:0.75rem;align-items:center}
+  .goal-item+.goal-item{margin-top:0.75rem;padding-top:0.75rem;border-top:1px solid rgba(255,255,255,0.04)}
+  .goal-icon{width:2rem;height:2rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .goal-icon.long{background:rgba(160,120,255,0.15);color:#a078ff}
+  .goal-icon.short{background:rgba(91,154,255,0.15);color:#5b9aff}
+  .goal-info{flex:1;min-width:0}
+  .goal-title{font-size:0.85rem;font-weight:500;color:#e8e8ed}
+  .goal-meta{font-size:0.65rem;color:#555;margin-top:0.1rem}
+  .goal-progress{width:4rem;flex-shrink:0;text-align:right}
+  .goal-progress .pct{font-size:0.75rem;font-weight:600;color:#666}
+  .goal-progress .bar{height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin-top:0.2rem;overflow:hidden}
+  .goal-progress .bar .fill{height:100%;border-radius:2px;transition:width 0.3s}
+  .goal-progress .bar .fill.long{background:#a078ff}
+  .goal-progress .bar .fill.short{background:#5b9aff}
+
+  /* ===== ENTRIES (思考/行动) ===== */
+  .entry-item{display:flex;gap:0.625rem}
+  .entry-item+.entry-item{margin-top:0.625rem;padding-top:0.625rem;border-top:1px solid rgba(255,255,255,0.04)}
+  .entry-type-icon{width:1.5rem;height:1.5rem;border-radius:0.375rem;display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;margin-top:0.1rem}
+  .entry-type-icon.thought{background:rgba(160,120,255,0.12);color:#a078ff}
+  .entry-type-icon.action{background:rgba(46,213,115,0.12);color:#2ed573}
+  .entry-type-icon.future{background:rgba(255,159,67,0.12);color:#ff9f43}
+  .entry-body{flex:1;min-width:0}
+  .entry-title{font-size:0.85rem;font-weight:500;color:#e8e8ed}
+  .entry-text{font-size:0.72rem;color:#555;margin-top:0.1rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .entry-date{font-size:0.6rem;color:#444;margin-top:0.15rem}
+
+  /* ===== ADD BUTTON (floating) ===== */
+  .fab{position:fixed;bottom:4.5rem;right:1rem;width:2.75rem;height:2.75rem;border-radius:50%;background:#5b9aff;border:none;color:#fff;font-size:1.5rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(91,154,255,0.3);cursor:pointer;z-index:50;transition:transform 0.15s}
+  .fab:active{transform:scale(0.92)}
+
+  /* ===== SIMULATED TAB CONTENT ===== */
+  .tab-content{display:none}
+  .tab-content.active{display:block}
+
+  /* ===== CALENDAR STRIP ===== */
+  .calendar-strip{display:flex;gap:0.375rem;overflow-x:auto;padding:0.5rem 0 0.75rem;-webkit-overflow-scrolling:touch}
+  .calendar-strip::-webkit-scrollbar{display:none}
+  .day-pill{flex-shrink:0;width:2.5rem;padding:0.4rem 0;border-radius:0.5rem;text-align:center;background:rgba(255,255,255,0.04);border:1px solid transparent}
+  .day-pill.today{background:rgba(91,154,255,0.15);border-color:#5b9aff}
+  .day-pill .dow{font-size:0.6rem;color:#555}
+  .day-pill.today .dow{color:#5b9aff}
+  .day-pill .dom{font-size:0.85rem;font-weight:600;color:#888;margin-top:0.1rem}
+  .day-pill.today .dom{color:#e8e8ed}
+  .day-pill .dot{width:4px;height:4px;border-radius:50%;margin:0.15rem auto 0}
+  .day-pill .dot.has{background:#5b9aff}
+
+  /* ===== RESPONSIVE ===== */
+  @media(min-width:768px){
+    .app{max-width:100%;flex-direction:row}
+    .header{position:static;width:14rem;border-right:1px solid rgba(255,255,255,0.06);padding:1.25rem;min-height:100vh}
+    .header h1{font-size:1.25rem}
+    .main{flex:1;padding:1.25rem 2rem 2rem}
+    .tab-bar{display:none}
+    .sidebar-nav{margin-top:2rem;display:flex;flex-direction:column;gap:0.25rem}
+    .sidebar-btn{background:none;border:none;text-align:left;padding:0.5rem 0.75rem;border-radius:0.5rem;font-size:0.85rem;color:#555;cursor:pointer;display:flex;align-items:center;gap:0.5rem}
+    .sidebar-btn.active{background:rgba(91,154,255,0.1);color:#5b9aff;font-weight:500}
+    .sidebar-btn:hover{background:rgba(255,255,255,0.04)}
+    .fab{bottom:1.5rem}
+    .project-grid{grid-template-columns:1fr 1fr 1fr}
+  }
+  @media(min-width:1024px){
+    .project-grid{grid-template-columns:1fr 1fr 1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== HEADER / SIDEBAR (desktop) ===== -->
+  <header class="header">
+    <h1>🦞 主宰 <span>面板</span></h1>
+    <div class="date">2026.05.25 · 周一</div>
+    <!-- Desktop sidebar nav -->
+    <nav class="sidebar-nav">
+      <button class="sidebar-btn active" data-tab="today">📅 今日</button>
+      <button class="sidebar-btn" data-tab="projects">📊 项目</button>
+      <button class="sidebar-btn" data-tab="goals">🎯 目标</button>
+      <button class="sidebar-btn" data-tab="library">📚 库</button>
+    </nav>
+  </header>
+
+  <!-- ===== MAIN CONTENT ===== -->
+  <div class="main">
+
+    <!-- ===== TAB: TODAY ===== -->
+    <div class="tab-content active" id="tab-today">
+
+      <!-- Calendar strip -->
+      <div class="calendar-strip">
+        <div class="day-pill"><div class="dow">日</div><div class="dom">24</div><div class="dot"></div></div>
+        <div class="day-pill today"><div class="dow">一</div><div class="dom">25</div><div class="dot has"></div></div>
+        <div class="day-pill"><div class="dow">二</div><div class="dom">26</div><div class="dot has"></div></div>
+        <div class="day-pill"><div class="dow">三</div><div class="dom">27</div><div class="dot"></div></div>
+        <div class="day-pill"><div class="dow">四</div><div class="dom">28</div><div class="dot has"></div></div>
+        <div class="day-pill"><div class="dow">五</div><div class="dom">29</div><div class="dot"></div></div>
+        <div class="day-pill"><div class="dow">六</div><div class="dom">30</div><div class="dot"></div></div>
+      </div>
+
+      <div class="section-title">今天</div>
+
+      <div class="card">
+        <div class="event-item">
+          <div class="event-dot appointment"></div>
+          <div class="event-body">
+            <div class="event-title">陪老大去感统训练</div>
+            <div class="event-desc">09:00 - 11:00 · 感统工作室</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="event-item">
+          <div class="event-dot task"></div>
+          <div class="event-body">
+            <div class="event-title">写下周奥数组卷</div>
+            <div class="event-desc">给五年级的分数运算专项</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="event-item">
+          <div class="event-dot reminder"></div>
+          <div class="event-body">
+            <div class="event-title">晚上看老二的听写</div>
+            <div class="event-desc">语文第一单元</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="event-item">
+          <div class="event-dot task" style="background:#666"></div>
+          <div class="event-body">
+            <div class="event-title event-completed">发公众号文章</div>
+            <div class="event-desc event-completed">《粗心不是态度问题》已发</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">本周</div>
+
+      <div class="card">
+        <div class="event-item">
+          <div class="event-dot appointment" style="background:#ff9f43"></div>
+          <div class="event-body">
+            <div class="event-title">周二 · 家长咨询 王XX</div>
+            <div class="event-desc">14:00 - 15:30 · 线上</div>
+          </div>
+        </div>
+        <div class="event-item" style="margin-top:0.75rem">
+          <div class="event-dot task" style="background:#5b9aff"></div>
+          <div class="event-body">
+            <div class="event-title">周三 · 改完语文小程序样式</div>
+            <div class="event-desc">和 主宰 讨论过样式方向</div>
+          </div>
+        </div>
+        <div class="event-item" style="margin-top:0.75rem">
+          <div class="event-dot task" style="background:#5b9aff"></div>
+          <div class="event-body">
+            <div class="event-title">周五 · 整理读书笔记</div>
+            <div class="event-desc">《思考，快与慢》第三章</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: PROJECTS ===== -->
+    <div class="tab-content" id="tab-projects">
+      <div class="project-grid">
+        <div class="project-card">
+          <span class="project-status status-done">✅ 已上线</span>
+          <div class="project-name">速算24点游戏</div>
+          <div class="project-tags"><span class="project-tag tag-work">工作</span></div>
+          <div class="progress-bar"><div class="progress-fill green" style="width:100%"></div></div>
+        </div>
+        <div class="project-card">
+          <span class="project-status status-progress">🚧 进行中</span>
+          <div class="project-name">语文写字小程序</div>
+          <div class="project-tags"><span class="project-tag tag-work">工作</span></div>
+          <div class="progress-bar"><div class="progress-fill blue" style="width:65%"></div></div>
+        </div>
+        <div class="project-card">
+          <span class="project-status status-progress">🎯 规划中</span>
+          <div class="project-name">主宰面板</div>
+          <div class="project-tags"><span class="project-tag tag-life">个人</span></div>
+          <div class="progress-bar"><div class="progress-fill purple" style="width:5%"></div></div>
+        </div>
+        <div class="project-card">
+          <span class="project-status status-archived">📦 已归档</span>
+          <div class="project-name">小王数学</div>
+          <div class="project-tags"><span class="project-tag tag-work">工作</span></div>
+          <div class="progress-bar"><div class="progress-fill" style="width:100%;background:#444"></div></div>
+        </div>
+        <div class="project-card">
+          <span class="project-status status-progress">📖 阅读中</span>
+          <div class="project-name">心理学系列笔记</div>
+          <div class="project-tags"><span class="project-tag tag-think">务虚</span></div>
+          <div class="progress-bar"><div class="progress-fill orange" style="width:40%"></div></div>
+        </div>
+        <div class="project-card">
+          <span class="project-status status-planning">👨‍👩‍👧‍👦 日常</span>
+          <div class="project-name">家庭教育计划</div>
+          <div class="project-tags"><span class="project-tag tag-family">家庭</span></div>
+          <div class="progress-bar"><div class="progress-fill green" style="width:30%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: GOALS ===== -->
+    <div class="tab-content" id="tab-goals">
+      <div class="section-title">长期目标</div>
+      <div class="card">
+        <div class="goal-item">
+          <div class="goal-icon long">🏗️</div>
+          <div class="goal-info">
+            <div class="goal-title">数学教育产品矩阵</div>
+            <div class="goal-meta">24点✅ · 写字🚧 · 更多规划中</div>
+          </div>
+          <div class="goal-progress">
+            <div class="pct">35%</div>
+            <div class="bar"><div class="fill long" style="width:35%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="goal-item">
+          <div class="goal-icon long">📝</div>
+          <div class="goal-info">
+            <div class="goal-title">公众号 1 万订阅</div>
+            <div class="goal-meta">当前 3200 · 预计年底前</div>
+          </div>
+          <div class="goal-progress">
+            <div class="pct">32%</div>
+            <div class="bar"><div class="fill long" style="width:32%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="section-title">短期目标</div>
+      <div class="card">
+        <div class="goal-item">
+          <div class="goal-icon short">🎯</div>
+          <div class="goal-info">
+            <div class="goal-title">6月前完成面板MVP</div>
+            <div class="goal-meta">截止 2026-06-15 · 关联：主宰面板</div>
+          </div>
+          <div class="goal-progress">
+            <div class="pct">5%</div>
+            <div class="bar"><div class="fill short" style="width:5%"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="goal-item">
+          <div class="goal-icon short">📘</div>
+          <div class="goal-info">
+            <div class="goal-title">读完《思考，快与慢》</div>
+            <div class="goal-meta">截止 2026-05-31 · 已读 40%</div>
+          </div>
+          <div class="goal-progress">
+            <div class="pct">40%</div>
+            <div class="bar"><div class="fill short" style="width:40%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB: LIBRARY (思考/行动/未来) ===== -->
+    <div class="tab-content" id="tab-library">
+      <div style="display:flex;gap:0.375rem;margin-bottom:0.75rem">
+        <span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:1rem;background:rgba(160,120,255,0.12);color:#a078ff;font-weight:500">全部</span>
+        <span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:1rem;background:rgba(255,255,255,0.04);color:#555;font-weight:500">💭 思考</span>
+        <span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:1rem;background:rgba(255,255,255,0.04);color:#555;font-weight:500">✅ 行动</span>
+        <span style="font-size:0.7rem;padding:0.2rem 0.5rem;border-radius:1rem;background:rgba(255,255,255,0.04);color:#555;font-weight:500">🗓️ 规划</span>
+      </div>
+
+      <div class="entry-item">
+        <div class="entry-type-icon thought">💭</div>
+        <div class="entry-body">
+          <div class="entry-title">关于"粗心"的底层原因</div>
+          <div class="entry-text">孩子粗心本质是工作记忆超载 + 注意力分配策略不成熟，不是态度问题。可以写系列文章。</div>
+          <div class="entry-date">05-24</div>
+        </div>
+      </div>
+
+      <div class="entry-item">
+        <div class="entry-type-icon action">✅</div>
+        <div class="entry-body">
+          <div class="entry-title">和笔杆子讨论公众号排版优化</div>
+          <div class="entry-text">最终方案：用双标题模板，主标题加引号，加导读段落</div>
+          <div class="entry-date">05-24 · 关联: 语文写字小程序</div>
+        </div>
+      </div>
+
+      <div class="entry-item">
+        <div class="entry-type-icon future">🗓️</div>
+        <div class="entry-body">
+          <div class="entry-title">暑假计划：给老大设计数学思维营</div>
+          <div class="entry-text">每天 2 小时，Minecraft 主题化，从数感 → 逻辑 → 建模</div>
+          <div class="entry-date">05-22</div>
+        </div>
+      </div>
+
+      <div class="entry-item">
+        <div class="entry-type-icon thought">💭</div>
+        <div class="entry-body">
+          <div class="entry-title">《家庭辅导的方向与细节》读书笔记</div>
+          <div class="entry-text">核心观点：辅导不是替孩子做题，是帮孩子建立自己的解题框架。类比：教练不会替运动员跑步。</div>
+          <div class="entry-date">05-20 · 标签: 教育/读书</div>
+        </div>
+      </div>
+
+      <div class="entry-item">
+        <div class="entry-type-icon action">✅</div>
+        <div class="entry-body">
+          <div class="entry-title">完成面板项目立项文档</div>
+          <div class="entry-text">README.md + PLAN.md 写完，等待和用户讨论数据结构</div>
+          <div class="entry-date">05-25 · 关联: 主宰面板</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /main -->
+
+  <!-- ===== FAB (floating add button) ===== -->
+  <button class="fab">+</button>
+
+  <!-- ===== TAB BAR (mobile) ===== -->
+  <div class="tab-bar">
+    <button class="tab-btn active" data-tab="today">
+      <span class="icon">📅</span>
+      <span class="label">今日</span>
+    </button>
+    <button class="tab-btn" data-tab="projects">
+      <span class="icon">📊</span>
+      <span class="label">项目</span>
+    </button>
+    <button class="tab-btn" data-tab="goals">
+      <span class="icon">🎯</span>
+      <span class="label">目标</span>
+    </button>
+    <button class="tab-btn" data-tab="library">
+      <span class="icon">📚</span>
+      <span class="label">库</span>
+    </button>
+  </div>
+
+</div><!-- /app -->
+
+<script>
+// Tab switching
+document.querySelectorAll('[data-tab]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const tab = btn.dataset.tab;
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('[data-tab]').forEach(el => el.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
