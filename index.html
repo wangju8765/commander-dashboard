@@ -153,7 +153,7 @@ body{background:#0f0f13;color:#e8e8ed}
 .detail-body .detail-desc{font-size:0.8rem;color:#888;margin-bottom:0.75rem;line-height:1.5}
 .detail-html{font-size:0.8rem;color:#e8e8ed;line-height:1.6}
 .detail-html .detail-section{margin-bottom:0.75rem}
-.detail-html .detail-section-title{font-size:0.75rem;font-weight:600;color:#5b9aff;margin-bottom:0.375rem}
+.detail-html .detail-section-title{font-size:0.75rem;font-weight:600;color:#a078ff;margin-bottom:0.375rem}
 .detail-html .detail-row{display:flex;gap:0.5rem;padding:0.125rem 0}
 .detail-html .detail-label{color:#555;min-width:4rem;flex-shrink:0}
 .detail-html .detail-value{color:#e8e8ed}
@@ -315,7 +315,7 @@ body{background:#0f0f13;color:#e8e8ed}
 .detail-body .detail-desc{font-size:0.8rem;color:#888;margin-bottom:0.75rem;line-height:1.5}
 .detail-html{font-size:0.8rem;color:#e8e8ed;line-height:1.6}
 .detail-html .detail-section{margin-bottom:0.75rem}
-.detail-html .detail-section-title{font-size:0.75rem;font-weight:600;color:#5b9aff;margin-bottom:0.375rem}
+.detail-html .detail-section-title{font-size:0.75rem;font-weight:600;color:#a078ff;margin-bottom:0.375rem}
 .detail-html .detail-row{display:flex;gap:0.5rem;padding:0.125rem 0}
 .detail-html .detail-label{color:#555;min-width:4rem;flex-shrink:0}
 .detail-html .detail-value{color:#e8e8ed}
@@ -586,7 +586,7 @@ function renderCal() {
 function evtHtml(items) {
   if(!items||!items.length)return'<div class="empty-state"><div class="icon">📭</div><div class="msg">暂无事项</div></div>';
   return items.map(function(e){
-    var c=e.event_type==='appointment'?'#ff9f43':e.event_type==='reminder'?'#2ed573':'#5b9aff';
+    var c=e.event_type==='appointment'?'#ff9f43':e.event_type==='reminder'?'#a078ff':'#2ed573';
     return'<div class="card"><div class="event-item'+(isPast(e)?' past':'')+'" data-eid="'+e.id+'"><div class="event-dot" style="background:'+c+'"></div><div class="event-body"><div class="event-title'+(isPast(e)?' past':'')+'">'+esc(e.title)+'</div><div class="event-desc'+(isPast(e)?' past':'')+'">'+(e.start_time||'')+(e.start_time&&e.description?' · ':'')+esc(e.description||'')+'</div></div></div></div>';
   }).join('');
 }
@@ -644,7 +644,7 @@ function rDashToday() {
   var ts=fmt(S.today);var items=S.events.filter(function(e){return e.event_date===ts&&!isPast(e)}).sort(function(a,b){return(a.start_time||'')>(b.start_time||'')?1:-1;}).slice(0,5);
   if(!items.length){el.innerHTML='<div style="font-size:0.8rem;color:#555;padding:0.5rem 0">✅ 今天暂无待办</div>';return;}
   el.innerHTML=items.map(function(e){
-    return'<div class="event-row"><div class="event-dot" style="background:'+(e.event_type==='appointment'?'#ff9f43':e.event_type==='reminder'?'#2ed573':'#5b9aff')+'"></div><div class="event-info"><div class="title">'+esc(e.title)+'</div><div class="meta">'+(e.start_time||'')+'</div></div></div>';
+    return'<div class="event-row"><div class="event-dot" style="background:'+(e.event_type==='appointment'?'#ff9f43':e.event_type==='reminder'?'#a078ff':'#2ed573')+'"></div><div class="event-info"><div class="title">'+esc(e.title)+'</div><div class="meta">'+(e.start_time||'')+'</div></div></div>';
   }).join('');
 }
 function rDashProj() {
@@ -744,7 +744,7 @@ document.addEventListener('click',function(e){
 function openModal(type) {
   var o=document.getElementById('modalOverlay'),t=document.getElementById('modalTitle'),f=document.getElementById('modalForm');
   var cf={
-    event:{title:'📅 添加事项',fields:'<label>标题</label><input name="title" required placeholder="事项名称"><div class="form-row"><div class="date-field"><label>日期</label><input name="event_date" type="date" value="'+fmt(S.today)+'" required></div><div class="time-field"><label>时间</label><input name="start_time" type="time"></div></div><label>类型</label><div class="type-buttons"><button type="button" class="type-btn active" data-value="task" style="--type-color:#5b9aff;--type-bg:rgba(91,154,255,0.15)">📋 任务</button><button type="button" class="type-btn" data-value="appointment" style="--type-color:#ff9f43;--type-bg:rgba(255,159,67,0.15)">📅 预约</button><button type="button" class="type-btn" data-value="reminder" style="--type-color:#2ed573;--type-bg:rgba(46,213,115,0.15)">🔔 提醒</button></div><input type="hidden" name="event_type" value="task"><label>备注</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){return addEvent(d);}},
+    event:{title:'📅 添加事项',fields:'<label>标题</label><input name="title" required placeholder="事项名称"><div class="form-row"><div class="date-field"><label>日期</label><input name="event_date" type="date" value="'+fmt(S.today)+'" required></div><div class="time-field"><label>时间</label><input name="start_time" type="time"></div></div><label>类型</label><div class="type-buttons"><button type="button" class="type-btn active" data-value="task" style="--type-color:#2ed573;--type-bg:rgba(46,213,115,0.15)">📋 生活</button><button type="button" class="type-btn" data-value="appointment" style="--type-color:#ff9f43;--type-bg:rgba(255,159,67,0.15)">💼 工作</button><button type="button" class="type-btn" data-value="reminder" style="--type-color:#a078ff;--type-bg:rgba(160,120,255,0.15)">🎓 课程</button></div><input type="hidden" name="event_type" value="task"><label>备注</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){return addEvent(d);}},
     project:{title:'📊 新建项目',fields:'<label>项目名</label><input name="name" required placeholder="项目名称"><div class="form-row"><div><label>状态</label><select name="status"><option value="planning">规划中</option><option value="in_progress" selected>进行中</option><option value="completed">已完成</option><option value="archived">已归档</option></select></div><div><label>进度 %</label><input name="progress" type="number" min="0" max="100" value="0"></div></div><label>标签（逗号分隔）</label><input name="tags" placeholder="工作,个人,务虚,家庭"><label>描述</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){d.tags=d.tags?d.tags.split(',').map(function(t){return t.trim();}).filter(Boolean):[];d.progress=parseInt(d.progress)||0;return crudInsert('projects',d).then(function(ok){if(ok)loadAll();});}},
     goal:{title:'🎯 新建目标',fields:'<label>标题</label><input name="title" required placeholder="目标名称"><div class="form-row"><div><label>类型</label><select name="type"><option value="long_term">长期</option><option value="short_term" selected>短期</option></select></div><div><label>截止日期</label><input name="due_date" type="date"></div></div><label>进度 %</label><input name="progress" type="number" min="0" max="100" value="0"><label>描述</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){d.progress=parseInt(d.progress)||0;return crudInsert('goals',d).then(function(ok){if(ok)loadAll();});}},
     entry:{title:'📚 记录',fields:'<label>类型</label><select name="type"><option value="thought">💭 思考</option><option value="action">✅ 行动</option><option value="plan">🗓️ 规划</option></select><label>标题</label><input name="title" required placeholder="标题"><label>内容</label><textarea name="content" rows="3"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){d.entry_date=fmt(S.today);return crudInsert('entries',d).then(function(ok){if(ok)loadAll();});}}
@@ -755,6 +755,7 @@ function openModal(type) {
   f.onsubmit=function(e){e.preventDefault();f.querySelectorAll('.input-error,.field-error').forEach(function(el){if(el.classList)el.classList.remove('input-error');else el.remove();});var fe=f.querySelector('.form-error');if(fe)fe.style.display='none';var fd=new FormData(f),obj={};fd.forEach(function(v,k){obj[k]=v;});if(type==='event'){var err=false;if(!obj.title||!obj.title.trim()){var ti=f.querySelector('[name="title"]');ti.classList.add('input-error');var ee=document.createElement('div');ee.className='field-error';ee.textContent='请输入事项名称';ti.parentNode.appendChild(ee);err=true;}if(!obj.event_date){var di=f.querySelector('[name="event_date"]');di.classList.add('input-error');var ee2=document.createElement('div');ee2.className='field-error';ee2.textContent='请选择日期';di.parentNode.appendChild(ee2);err=true;}if(err)return;if(!obj.start_time)delete obj.start_time;if(!obj.description)delete obj.description;if(!obj.event_type)obj.event_type='task';c.sub(obj).then(function(ok){if(ok)o.classList.remove('show');else{var fe2=f.querySelector('.form-error')||function(){var e=document.createElement('div');e.className='form-error';f.insertBefore(e,f.firstChild);return e;}();fe2.textContent='保存失败，请稍后重试';fe2.style.display='block';}});return;}var p=c.sub(obj);if(p&&p.then)p.then(function(){o.classList.remove('show');});else o.classList.remove('show');};
 }
 function closeModal(){
+  var btn=document.getElementById('detailEditBtn');if(btn)btn.style.display='none';
   var o=document.getElementById('modalOverlay');
   o.classList.remove('show');
   document.getElementById('modalForm').style.display='';
@@ -770,19 +771,21 @@ function openEventDetail(id){
   var o=document.getElementById('modalOverlay'),t=document.getElementById('modalTitle'),f=document.getElementById('modalForm'),d=document.getElementById('detailBody');
   f.style.display='none';
   d.style.display='block';
-  t.textContent=e.title;
+  t.textContent='📋 事件详情';
+  var editBtn=document.getElementById('detailEditBtn')||function(){var b=document.createElement('button');b.id='detailEditBtn';b.textContent='✏️';b.style.cssText='background:none;border:none;color:#5b9aff;font-size:1rem;cursor:pointer;padding:0.25rem 0.5rem;border-radius:0.375rem;margin-right:0.5rem';b.onclick=function(){showEditForm(e,d);};var c=document.getElementById('modalClose');c.parentNode.insertBefore(b,c);return b;}();
+  editBtn.style.display='';
   renderDetail(e,d);
   o.classList.add('show');
 }
 function renderDetail(e,d){
   var tm=e.start_time?' '+e.start_time:'';
-  var html='<div class="detail-title">'+esc(e.title)+'</div>';
-  html+='<div class="detail-meta">'+esc(e.event_date)+tm+' · '+(e.event_type==='appointment'?'预约':e.event_type==='reminder'?'提醒':'任务')+'</div>';
+  var tl=esc(e.title);
+  var ty=e.event_type==='appointment'?'💼 工作':e.event_type==='reminder'?'🎓 课程':'📋 生活';
+  var html='<div class="detail-title">'+tl+'</div>';
+  html+='<div class="detail-meta">'+esc(e.event_date)+tm+' · '+ty+'</div>';
   if(e.description)html+='<div class="detail-desc">'+esc(e.description)+'</div>';
   if(e.detail_html)html+='<div class="detail-html">'+e.detail_html+'</div>';
-  html+='<div style="margin-top:0.75rem;display:flex;gap:0.5rem"><button class="btn-submit" id="editEventBtn" style="flex:1">✏️ 编辑</button></div>';
   d.innerHTML=html;
-  document.getElementById('editEventBtn').onclick=function(){showEditForm(e,d);};
 }
 function showEditForm(e,d){
   var tm=e.start_time||'';
