@@ -165,8 +165,14 @@ body{background:#0f0f13;color:#e8e8ed}
 .md-h2{font-size:0.85rem;font-weight:600;color:#e8e8ed;margin:0.625rem 0 0.2rem}
 .md-h3{font-size:0.8rem;font-weight:600;color:#ccc;margin:0.5rem 0 0.15rem}
 .md-p{font-size:0.8rem;color:#e8e8ed;line-height:1.6;margin:0.25rem 0}
-.md-ul{margin:0.25rem 0;padding-left:1rem}
+.md-ul{margin:0.25rem 0;padding-left:0}
 .md-li{font-size:0.8rem;color:#e8e8ed;line-height:1.5}
+.md-cb{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.5rem;margin:0.125rem 0;border-radius:0.5rem;cursor:pointer;font-size:0.8rem;color:#e8e8ed;transition:background 0.12s}
+.md-cb:hover{background:rgba(255,255,255,0.04)}
+.md-cb input[type=checkbox]{-webkit-appearance:none;appearance:none;width:1rem;height:1rem;border:2px solid rgba(255,255,255,0.2);border-radius:0.25rem;cursor:pointer;flex-shrink:0;position:relative;transition:all 0.12s}
+.md-cb input[type=checkbox]:checked{border-color:#2ed573;background:#2ed573}
+.md-cb input[type=checkbox]:checked::after{content:'✓';position:absolute;top:-0.1rem;left:0.1rem;font-size:0.7rem;color:#fff;font-weight:700}
+.md-cb.checked span{color:#555;text-decoration:line-through}
 
 /* Empty, loading, error */
 .empty-state{text-align:center;padding:1.5rem 1rem;color:#555;font-size:0.78rem}
@@ -344,8 +350,14 @@ body{background:#0f0f13;color:#e8e8ed}
 .md-h2{font-size:0.85rem;font-weight:600;color:#e8e8ed;margin:0.625rem 0 0.2rem}
 .md-h3{font-size:0.8rem;font-weight:600;color:#ccc;margin:0.5rem 0 0.15rem}
 .md-p{font-size:0.8rem;color:#e8e8ed;line-height:1.6;margin:0.25rem 0}
-.md-ul{margin:0.25rem 0;padding-left:1rem}
+.md-ul{margin:0.25rem 0;padding-left:0}
 .md-li{font-size:0.8rem;color:#e8e8ed;line-height:1.5}
+.md-cb{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.5rem;margin:0.125rem 0;border-radius:0.5rem;cursor:pointer;font-size:0.8rem;color:#e8e8ed;transition:background 0.12s}
+.md-cb:hover{background:rgba(255,255,255,0.04)}
+.md-cb input[type=checkbox]{-webkit-appearance:none;appearance:none;width:1rem;height:1rem;border:2px solid rgba(255,255,255,0.2);border-radius:0.25rem;cursor:pointer;flex-shrink:0;position:relative;transition:all 0.12s}
+.md-cb input[type=checkbox]:checked{border-color:#2ed573;background:#2ed573}
+.md-cb input[type=checkbox]:checked::after{content:'✓';position:absolute;top:-0.1rem;left:0.1rem;font-size:0.7rem;color:#fff;font-weight:700}
+.md-cb.checked span{color:#555;text-decoration:line-through}
 }
 </style>
 </head>
@@ -538,15 +550,17 @@ function isPast(e) {
   if(e.event_date===fmt(S.today)&&e.start_time){var n=new Date(),p=e.start_time.split(':');var t=new Date();t.setHours(parseInt(p[0]),parseInt(p[1]),0);return n>t;}
   return false;
 }
-function mdToHtml(md){
+function mdToHtml(md, eid){
   if(!md)return'';
   var h=esc(md);
   h=h.replace(/^### (.+)$/gm,'<div class="md-h3">$1</div>');
   h=h.replace(/^## (.+)$/gm,'<div class="md-h2">$1</div>');
   h=h.replace(/^# (.+)$/gm,'<div class="md-h1">$1</div>');
   h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  h=h.replace(/^- \[x\] (.+)$/gim,'<label class="md-cb checked"><input type="checkbox" checked data-eid="'+eid+'"><span>$1</span></label>');
+  h=h.replace(/^- \[ \] (.+)$/gim,'<label class="md-cb"><input type="checkbox" data-eid="'+eid+'"><span>$1</span></label>');
   h=h.replace(/^- (.+)$/gm,'<li class="md-li">$1</li>');
-  h=h.replace(/((?:<li[^>]*>.*?<\/li>\n?)+)/g,'<ul class="md-ul">$1</ul>');
+  h=h.replace(/((?:<(?:label|li)[^>]*>.*?<\/(?:label|li)>\n?)+)/g,'<div class="md-ul">$1</div>');
   h=h.replace(/\n\n/g,'</div><div class="md-p">');
   h='<div class="md-p">'+h+'</div>';
   h=h.replace(/<div class="md-p"><\/div>/g,'');
@@ -822,10 +836,29 @@ function renderDetail(e,d){
   var html='<div class="detail-title">'+tl+'</div>';
   html+='<div class="detail-meta">'+esc(e.event_date)+tm+' · '+ty+'</div>';
   var notes='';
-  if(e.description)notes+=mdToHtml(e.description);
+  if(e.description)notes+=mdToHtml(e.description,e.id);
   if(e.detail_html)notes+='<div class="detail-html">'+e.detail_html+'</div>';
   if(notes)html+='<div class="detail-desc" style="margin-top:0.625rem">'+notes+'</div>';
   d.innerHTML=html;
+  d.querySelectorAll('.md-cb input[type=checkbox]').forEach(function(cb){
+    cb.onchange=function(){
+      var eid=this.dataset.eid;
+      for(var j=0;j<S.events.length;j++){if(S.events[j].id===eid){var ev=S.events[j];break;}}
+      if(!ev||!ev.description)return;
+      var label=this.nextElementSibling.textContent.trim();
+      var lines=ev.description.split('\n');
+      var found=false;
+      for(var k=0;k<lines.length;k++){
+        var m=lines[k].match(/^- \[([ x])\] (.+)$/);
+        if(m&&m[2].trim()===label){lines[k]=this.checked?'- [x] '+m[2]:'- [ ] '+m[2];found=true;break;}
+      }
+      if(!found)return;
+      var newDesc=lines.join('\n');
+      updateEvent(eid,{description:newDesc}).then(function(ok){
+        if(ok){for(var j2=0;j2<S.events.length;j2++){if(S.events[j2].id===eid){S.events[j2].description=newDesc;break;}}renderDetail(S.events.find(function(ev){return ev.id===eid;})||ev,d);}
+      });
+    };
+  });
 }
 function showEditForm(e,d){
   var ty=e.event_type||'task';
