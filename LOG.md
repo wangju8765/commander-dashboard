@@ -29,6 +29,16 @@
 - 缺少编辑/删除功能
 - 缺少未来规划模块
 
+### 16:00-16:50 修复 session
+- 根因诊断：之前卡顿是 DeepSeek API 503，非逻辑问题
+- **下拉刷新**：彻底方案 `html/body { overflow:hidden; height:100% }`，只让 `.main` 滚动
+- **电脑版布局**：`#desktopView { display:flex }` — sidebar 和 main 左右并排
+- **FAB 被 tab bar 遮挡**：`bottom:calc(6rem + env(safe-area-inset-bottom))`，z-index:150
+- **头顶飘进刘海**：header 加 `padding-top:calc(1.25rem + env(safe-area-inset-top))`
+- **tab bar 安全区**：`padding-bottom:calc(0.375rem + env(safe-area-inset-bottom))`
+- 所有修改已提交 + 部署到 GitHub Pages
+- 用户需删除旧 Home Screen 快捷方式重新添加才能完全生效
+
 ### 核心教训（本 session 确立）
 - AGENTS.md 新增「地基原则」：用户确认过的产物只修改不重写
 - AGENTS.md 新增「UI 交付验证清单」
