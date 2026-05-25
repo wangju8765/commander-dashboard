@@ -542,7 +542,8 @@ var D = 86400000;
 function fmt(d) { var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0'); return y+'-'+m+'-'+dd; }
 function isT(d) { var t=S.today; return d.getFullYear()===t.getFullYear()&&d.getMonth()===t.getMonth()&&d.getDate()===t.getDate(); }
 function dow(d) { return ['日','一','二','三','四','五','六'][d.getDay()]; }
-function esc(s) { return String(s||'').replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]||m;}); }
+function esc(s){return String(s||'').replace(/[&<>"]/g,function(m){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]||m;});}
+function trunc(s,n){return s&&s.length>n?s.slice(0,n)+'…':s||'';}
 function isPast(e) {
   if(e.event_date<fmt(S.today))return true;
   if(e.event_date===fmt(S.today)&&e.start_time){var n=new Date(),p=e.start_time.split(':');var t=new Date();t.setHours(parseInt(p[0]),parseInt(p[1]),0);return n>t;}
@@ -638,7 +639,7 @@ function evtHtml(items) {
   if(!items||!items.length)return'<div class="empty-state"><div class="icon">📭</div><div class="msg">暂无事项</div></div>';
   return items.map(function(e){
     var c=e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d';
-    return'<div class="card"><div class="event-item'+(isPast(e)?' past':'')+'" data-eid="'+e.id+'"><div class="event-dot" style="background:'+c+'"></div><div class="event-body"><div class="event-title'+(isPast(e)?' past':'')+'">'+esc(e.title)+'</div><div class="event-desc'+(isPast(e)?' past':'')+'">'+(e.start_time||'')+(e.start_time&&e.description?' · ':'')+esc(e.description||'')+'</div></div></div></div>';
+    return'<div class="card"><div class="event-item'+(isPast(e)?' past':'')+'" data-eid="'+e.id+'"><div class="event-dot" style="background:'+c+'"></div><div class="event-body"><div class="event-title'+(isPast(e)?' past':'')+'">'+esc(e.title)+'</div><div class="event-desc'+(isPast(e)?' past':'')+'">'+(e.start_time||'')+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div></div>';
   }).join('');
 }
 
@@ -885,7 +886,7 @@ function showEditForm(e,d){
   var ty=e.event_type||'life';
   var tyBtn='<div class="type-buttons"><button type="button" class="type-btn'+(ty==='life'?' active':'')+'" data-value="life" style="--type-color:#a078ff;--type-bg:rgba(160,120,255,0.15)"><span class="type-dot" style="background:#a078ff"></span>生活</button><button type="button" class="type-btn'+(ty==='work'?' active':'')+'" data-value="work" style="--type-color:#ff9f43;--type-bg:rgba(255,159,67,0.15)"><span class="type-dot" style="background:#ff9f43"></span>工作</button><button type="button" class="type-btn'+(ty==='course'?' active':'')+'" data-value="course" style="--type-color:#ff6b9d;--type-bg:rgba(255,107,157,0.15)"><span class="type-dot" style="background:#ff6b9d"></span>课程</button></div><input type="hidden" id="editEventType" value="'+ty+'">';
   var html='<form style="display:flex;flex-direction:column;gap:0.5rem"><label>类型</label>'+tyBtn+'<label>标题</label><input id="editTitle" value="'+esc(e.title)+'" required><div class="form-row"><div class="date-field"><label>日期</label><input id="editDate" type="date" value="'+e.event_date+'"></div><div class="time-field"><label>时间</label><input id="editTime" type="time" value="'+(e.start_time||'')+'" step="900"></div></div>'
-  html+='<label>备注 <span style="color:#555;font-weight:400">(支持 # 标题、**加粗**、- 列表)</span></label><textarea id="editDesc" rows="6" style="font-family:monospace;font-size:0.8rem">'+esc(e.description||'')+'</textarea>';
+  html+='<label>备注 <span style="color:#555;font-weight:400">(支持 # 标题、**加粗**、- 列表)</span></label><textarea id="editDesc" rows="6" style="font-family:monospace;font-size:0.8rem">'+(e.description||'')+'</textarea>';
   html+='<div style="display:flex;gap:0.5rem"><button class="btn-submit" id="saveEditBtn" style="flex:1">💾 保存</button><button class="btn-submit" id="cancelEditBtn" style="flex:1;background:rgba(255,255,255,0.06);color:#888">取消</button></div></form>';
   d.innerHTML=html;
   d.querySelectorAll('.type-btn').forEach(function(b){b.onclick=function(){d.querySelectorAll('.type-btn').forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById('editEventType').value=this.dataset.value;};});
@@ -896,9 +897,9 @@ function showEditForm(e,d){
     if(!title)return;
     var data={};
     if(title!==e.title)data.title=title;
-    if(desc!==(e.description||''))data.description=desc||null;
+    if(desc!==(e.description||''))data.description=desc;if(data.description==='')delete data.description;
     if(newType!==e.event_type)data.event_type=newType;
-    var newDate=document.getElementById('editDate').value;var newTime=document.getElementById('editTime').value||null;if(newDate!==e.event_date)data.event_date=newDate;if(newTime!==(e.start_time||null))data.start_time=newTime;if(Object.keys(data).length===0){renderDetail(e,d);return;}
+    var newDate=document.getElementById('editDate').value;var newTime=document.getElementById('editTime').value||null;if(newDate!==e.event_date)data.event_date=newDate;var oldStart=e.start_time||null;if(newTime!==oldStart){var oldParts=oldStart?oldStart.slice(0,5):null;if(newTime!==oldParts)data.start_time=newTime;}if(Object.keys(data).length===0){renderDetail(e,d);return;}
     updateEvent(e.id,data).then(function(ok){
       if(ok){
         for(var j=0;j<S.events.length;j++){if(S.events[j].id===e.id){S.events[j].title=data.title||e.title;S.events[j].description=data.description||null;S.events[j].event_type=data.event_type||e.event_type;S.events[j].event_date=data.event_date||e.event_date;S.events[j].start_time=data.start_time||e.start_time;break;}}
