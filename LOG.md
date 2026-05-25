@@ -39,6 +39,38 @@
 - 所有修改已提交 + 部署到 GitHub Pages
 - 用户需删除旧 Home Screen 快捷方式重新添加才能完全生效
 
+### 17:00-18:00 表单验证 + 功能迭代 session
+
+#### 表单验证优化（用户反馈：alert 弹窗不好）
+- 去掉 alert()，改为内联提示（红字/红框）
+- 标题为空 → 红框 + "请输入事项名称"
+- 日期为空 → 红框 + "请选择日期"
+- 空时间/备注 → 清洗后不发送到 API
+- API 失败 → 模态框内显示红色提示条
+- 日期框宽度：`flex:1.3` + select 高度统一 `min-height:2.2rem`
+
+#### Bug修复（用户 Safari 实际使用反馈）
+1. **日期 tab 点不了** — renderEvents 用 S.today 而非 S.selDate，修复
+2. **勾选圈白字** — CSS `\\u2713` → `\\2713`（JavaScript vs CSS 的 Unicode 写法差异）
+3. **双击放大** — 全局 `* { touch-action: manipulation }`
+4. **Safari 下拉刷新** — 之前已修复
+
+#### 事件模型重新设计（用户讨论确立）
+- 去掉手动勾选（toggle），改为**自动完成**：时间过了自动变灰
+- 新增 `isPast()` 函数，按时间判断事件是否已完成
+- 移除 `event-check` 全套 CSS/JS（圆圈、勾号、toggle 逻辑）
+- 移除 `crudUpdate`（不再需要）
+
+#### 日期条改为 10 天窗口
+- 过去 2 天 + 今天 + 未来 7 天
+- 创建事件不受限制（通过 agent 截图创建）
+
+#### 事件详情块
+- 新增 `detail_html` 字段（TEXT）
+- 点击事件弹出详情卡，渲染 detail_html
+- 规范文档 `EVENT_DETAIL_SPEC.md`（交给其他 agent 的交接规范）
+- 数据库迁移 SQL：`add-detail-html-column.sql`
+
 ### 核心教训（本 session 确立）
 - AGENTS.md 新增「地基原则」：用户确认过的产物只修改不重写
 - AGENTS.md 新增「UI 交付验证清单」
