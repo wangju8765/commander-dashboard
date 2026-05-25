@@ -7,350 +7,272 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>主宰面板</title>
 <style>
-/* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{font-size:calc(100vw / 375 * 16);touch-action:manipulation}
+html{font-size:calc(100vw/375*16);touch-action:manipulation}
 body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-
-/* ===== VARIABLES ===== */
-:root{--bg:#0f0f13;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.06);--text:#e8e8ed;--text2:#888;--text3:#555;--text4:#444;--accent:#5b9aff;--accent2:#2ed573;--accent3:#ff9f43;--accent4:#a078ff;--accent5:#ff6b6b;--radius:0.75rem;--sidebar-w:220px}
-
-/* ===== APP ===== */
+:root{--bg:#0f0f13;--bg2:rgba(255,255,255,0.03);--bg3:rgba(255,255,255,0.04);--border:rgba(255,255,255,0.06);--text:#e8e8ed;--text2:#888;--text3:#555;--text4:#444;--accent:#5b9aff;--accent2:#2ed573;--accent3:#ff9f43;--accent4:#a078ff;--radius:0.75rem}
 .app{display:flex;min-height:100vh;min-height:100dvh;width:100%}
 
-/* ===== SIDEBAR (desktop only) ===== */
+/* Sidebar (desktop only) */
 .sidebar{display:none}
 @media(min-width:768px){
-  .sidebar{display:flex;flex-direction:column;width:var(--sidebar-w);border-right:1px solid var(--border);padding:1.5rem 0.75rem;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;height:100dvh;z-index:50;background:var(--bg)}
-  .sidebar .logo{font-size:1.1rem;font-weight:700;color:#fff;padding:0 0.75rem 1.25rem;display:flex;align-items:center;gap:0.375rem}
-  .sidebar .logo small{font-size:0.75rem;color:var(--text3);font-weight:400}
-  .sidebar nav{display:flex;flex-direction:column;gap:0.125rem;flex:1;overflow-y:auto}
-  .nav-item{display:flex;align-items:center;gap:0.5rem;padding:0.45rem 0.75rem;border-radius:0.5rem;font-size:0.85rem;color:var(--text3);cursor:pointer;transition:all 0.12s;background:none;border:none;text-align:left;width:100%}
+  .sidebar{display:flex;flex-direction:column;width:220px;border-right:1px solid var(--border);padding:1.5rem .75rem;flex-shrink:0;position:fixed;top:0;left:0;height:100vh;height:100dvh;z-index:50;background:var(--bg)}
+  .sidebar .logo{font-size:1.1rem;font-weight:700;color:#fff;padding:0 .75rem 1.25rem;display:flex;align-items:center;gap:.375rem}
+  .sidebar .logo small{font-size:.75rem;color:var(--text3);font-weight:400}
+  .sidebar nav{display:flex;flex-direction:column;gap:.125rem}
+  .nav-item{display:flex;align-items:center;gap:.5rem;padding:.45rem .75rem;border-radius:.5rem;font-size:.85rem;color:var(--text3);cursor:pointer;transition:all .12s;background:none;border:none;text-align:left;width:100%}
   .nav-item:hover{background:var(--bg3);color:var(--text2)}
-  .nav-item.active{background:rgba(91,154,255,0.1);color:var(--accent);font-weight:500}
-  .nav-item .badge{margin-left:auto;font-size:0.6rem;background:rgba(91,154,255,0.12);color:var(--accent);padding:0.05rem 0.35rem;border-radius:0.75rem;font-weight:500}
-  .nav-divider{height:1px;background:var(--border);margin:0.5rem 0.75rem}
-  .main{margin-left:var(--sidebar-w);width:calc(100% - var(--sidebar-w))}
+  .nav-item.active{background:rgba(91,154,255,.1);color:var(--accent);font-weight:500}
+  .nav-item .badge{margin-left:auto;font-size:.6rem;background:rgba(91,154,255,.12);color:var(--accent);padding:.05rem .35rem;border-radius:.75rem;font-weight:500}
+  .nav-divider{height:1px;background:var(--border);margin:.5rem .75rem}
+  .main{margin-left:220px;width:calc(100% - 220px)}
   .mobile-header,.tab-bar{display:none!important}
-  .dash-grid{display:grid!important}
 }
 
-/* ===== MOBILE HEADER ===== */
-.mobile-header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem 0.25rem;position:sticky;top:0;z-index:40;background:var(--bg)}
-.mobile-header h1{font-size:1.15rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:0.25rem}
-.mobile-header .date{font-size:0.65rem;color:var(--text3)}
-.mobile-header .actions{display:flex;gap:0.375rem}
-.mobile-header .actions button{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:2rem;height:2rem;border-radius:0.5rem;font-size:0.85rem;cursor:pointer}
+/* Mobile header */
+.mobile-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem .25rem;position:sticky;top:0;z-index:40;background:var(--bg)}
+.mobile-header h1{font-size:1.15rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:.25rem}
+.mobile-header .date{font-size:.65rem;color:var(--text3)}
+.mobile-header .actions{display:flex;gap:.375rem}
+.mobile-header .actions button{background:var(--bg3);border:1px solid var(--border);color:var(--text2);width:2rem;height:2rem;border-radius:.5rem;font-size:.85rem;cursor:pointer}
 
-/* ===== MAIN CONTENT ===== */
-.main{flex:1;overflow-y:auto;padding:0.5rem 0.85rem 5.5rem;min-height:100vh;min-height:100dvh}
+.main{flex:1;overflow-y:auto;padding:.5rem .85rem 5.5rem;min-height:100vh;min-height:100dvh}
 @media(min-width:768px){.main{padding:1.25rem 1.5rem 1.5rem}}
 
-/* ===== TOP BAR (desktop) ===== */
+/* Desktop top bar */
 .top-bar{display:none}
 @media(min-width:768px){
   .top-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem}
   .top-bar .greeting{font-size:1.15rem;font-weight:600;color:#fff}
-  .top-bar .greeting small{font-size:0.7rem;color:var(--text3);font-weight:400;margin-left:0.5rem}
-  .top-bar .btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:0.35rem 0.75rem;border-radius:0.5rem;font-size:0.78rem;cursor:pointer;transition:background 0.12s}
-  .top-bar .btn:hover{background:rgba(91,154,255,0.1);color:var(--accent)}
+  .top-bar .greeting small{font-size:.7rem;color:var(--text3);font-weight:400;margin-left:.5rem}
+  .top-bar .btn{background:var(--bg3);border:1px solid var(--border);color:var(--text2);padding:.35rem .75rem;border-radius:.5rem;font-size:.78rem;cursor:pointer}
+  .top-bar .btn:hover{background:rgba(91,154,255,.1);color:var(--accent)}
   .top-bar .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
-  .top-bar .btn.primary:hover{background:#4a89f0}
-  .top-bar .actions{display:flex;gap:0.375rem}
+  .top-bar .actions{display:flex;gap:.375rem}
 }
 
-/* ===== SECTION HEADER ===== */
-.section-header{display:flex;align-items:center;justify-content:space-between;margin:1rem 0 0.5rem}
-.section-header .label{font-size:0.7rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;gap:0.375rem}
-.section-header .action{font-size:0.65rem;color:var(--accent);cursor:pointer;background:none;border:none;padding:0.15rem 0.3rem}
+/* Desktop dashboard grid */
+.dash-grid{display:none;grid-template-columns:1fr 1fr 1fr;gap:.75rem;margin-top:.75rem}
+.dash-col{display:flex;flex-direction:column;gap:.5rem}
+.panel{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:.65rem .85rem .35rem}
+.panel-title{font-size:.65rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.panel-body{padding:0 .85rem .65rem}
+@media(max-width:1100px){.dash-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:768px){.dash-grid{display:grid!important}}
 
-/* ===== CARD ===== */
-.card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem;margin-bottom:0.5rem;transition:background 0.12s}
+/* Section header */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin:1rem 0 .5rem}
+.section-header .label{font-size:.7rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em}
+.section-header .action{font-size:.65rem;color:var(--accent);cursor:pointer;background:none;border:none;padding:.15rem .3rem}
 
-/* ===== CALENDAR STRIP ===== */
-.cal-strip{display:flex;gap:0.25rem;overflow-x:auto;padding:0.25rem 0 0.5rem;-webkit-overflow-scrolling:touch}
+/* Card */
+.card{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:.75rem;margin-bottom:.5rem}
+
+/* Calendar strip */
+.cal-strip{display:flex;gap:.25rem;overflow-x:auto;padding:.25rem 0 .5rem}
 .cal-strip::-webkit-scrollbar{display:none}
-.day-pill{flex-shrink:0;width:2.4rem;padding:0.35rem 0;border-radius:0.5rem;text-align:center;background:var(--bg3);border:1px solid transparent;cursor:pointer;transition:all 0.1s}
-.day-pill.today{background:rgba(91,154,255,0.12);border-color:var(--accent)}
-.day-pill .dow{font-size:0.55rem;color:var(--text3)}
+.day-pill{flex-shrink:0;width:2.4rem;padding:.35rem 0;border-radius:.5rem;text-align:center;background:var(--bg3);border:1px solid transparent;cursor:pointer}
+.day-pill.today{background:rgba(91,154,255,.12);border-color:var(--accent)}
+.day-pill .dow{font-size:.55rem;color:var(--text3)}
 .day-pill.today .dow{color:var(--accent)}
-.day-pill .dom{font-size:0.8rem;font-weight:600;color:var(--text2);margin-top:0.05rem}
+.day-pill .dom{font-size:.8rem;font-weight:600;color:var(--text2);margin-top:.05rem}
 .day-pill.today .dom{color:#fff}
-.day-pill .dot{width:3px;height:3px;border-radius:50%;margin:0.1rem auto 0}
+.day-pill .dot{width:3px;height:3px;border-radius:50%;margin:.1rem auto 0}
 .day-pill .dot.has{background:var(--accent)}
 
-/* ===== EVENT ITEM ===== */
-.event-row{display:flex;gap:0.5rem;padding:0.35rem 0;align-items:flex-start}
+/* Event row */
+.event-row{display:flex;gap:.5rem;padding:.35rem 0;align-items:flex-start}
 .event-row+.event-row{border-top:1px solid var(--border)}
-.event-dot{width:6px;height:6px;border-radius:50%;margin-top:0.35rem;flex-shrink:0}
-.event-dot.task{background:var(--accent)}
-.event-dot.appt{background:var(--accent3)}
-.event-dot.remind{background:var(--accent2)}
+.event-dot{width:6px;height:6px;border-radius:50%;margin-top:.35rem;flex-shrink:0}
 .event-body{flex:1;min-width:0}
-.event-title{font-size:0.82rem;font-weight:500;color:var(--text);display:flex;align-items:center;gap:0.375rem}
-.event-title .tag{font-size:0.55rem;padding:0.05rem 0.3rem;border-radius:0.2rem;background:rgba(255,255,255,0.06);color:var(--text3)}
-.event-meta{font-size:0.65rem;color:var(--text3);margin-top:0.05rem}
-.event-check{width:1.1rem;height:1.1rem;border-radius:50%;border:2px solid rgba(255,255,255,0.1);flex-shrink:0;margin-top:0.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.event-title{font-size:.82rem;font-weight:500;color:var(--text)}
+.event-meta{font-size:.65rem;color:var(--text3);margin-top:.05rem}
+.event-check{width:1.1rem;height:1.1rem;border-radius:50%;border:2px solid rgba(255,255,255,.1);flex-shrink:0;margin-top:.15rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
 .event-check.done{background:var(--accent2);border-color:var(--accent2)}
-.event-check.done::after{content:'✓';color:#fff;font-size:0.65rem;font-weight:700}
+.event-check.done::after{content:'\u2713';color:#fff;font-size:.65rem;font-weight:700}
 .event-row.done .event-title{color:var(--text4);text-decoration:line-through}
 
-/* ===== DESKTOP DASHBOARD GRID ===== */
-.dash-grid{display:none;grid-template-columns:1fr 1fr 1fr;gap:0.75rem;margin-top:0.75rem}
-.dash-col{display:flex;flex-direction:column;gap:0.5rem}
-.panel{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
-.panel-header{display:flex;align-items:center;justify-content:space-between;padding:0.65rem 0.85rem 0.35rem}
-.panel-title{font-size:0.65rem;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
-.panel-action{font-size:0.6rem;color:var(--accent);cursor:pointer;background:none;border:none}
-.panel-body{padding:0 0.85rem 0.65rem}
-@media(max-width:1100px){.dash-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:767px){.dash-grid{display:none!important}}
-
-/* ===== PROJECTS ===== */
-.project-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem}
+/* Project card */
+.project-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
 @media(min-width:768px){.project-grid{grid-template-columns:1fr 1fr 1fr}}
 @media(min-width:1200px){.project-grid{grid-template-columns:1fr 1fr 1fr 1fr}}
-.pcard{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:0.7rem;cursor:pointer}
-.pcard:active{background:var(--bg2)}
-.pcard .status{font-size:0.58rem;padding:0.05rem 0.3rem;border-radius:0.2rem;display:inline-block;margin-bottom:0.3rem;font-weight:500}
+.pcard{background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:.7rem}
+.pcard .status{font-size:.58rem;padding:.05rem .3rem;border-radius:.2rem;display:inline-block;margin-bottom:.3rem;font-weight:500}
 .pcard .status.s-plan{background:var(--bg3);color:var(--text2)}
-.pcard .status.s-doing{background:rgba(91,154,255,0.12);color:var(--accent)}
-.pcard .status.s-done{background:rgba(46,213,115,0.12);color:var(--accent2)}
-.pcard .status.s-arch{background:rgba(255,255,255,0.04);color:var(--text4)}
-.pcard .pname{font-size:0.82rem;font-weight:600;color:var(--text);margin-bottom:0.25rem}
-.pcard .ptags{display:flex;gap:0.15rem;flex-wrap:wrap;margin-bottom:0.35rem}
-.pcard .ptag{font-size:0.55rem;padding:0.05rem 0.25rem;border-radius:0.15rem;font-weight:500}
-.ptag.work{background:rgba(255,159,67,0.1);color:var(--accent3)}
-.ptag.life{background:rgba(46,213,115,0.1);color:var(--accent2)}
-.ptag.think{background:rgba(160,120,255,0.1);color:var(--accent4)}
-.ptag.family{background:rgba(255,107,107,0.1);color:var(--accent5)}
-.pbar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
-.pfill{height:100%;border-radius:2px;transition:width 0.3s}
-.pfill.blue{background:var(--accent)}
-.pfill.green{background:var(--accent2)}
-.pfill.orange{background:var(--accent3)}
-.pfill.purple{background:var(--accent4)}
+.pcard .status.s-doing{background:rgba(91,154,255,.12);color:var(--accent)}
+.pcard .status.s-done{background:rgba(46,213,115,.12);color:var(--accent2)}
+.pcard .status.s-arch{background:rgba(255,255,255,.04);color:var(--text4)}
+.pcard .pname{font-size:.82rem;font-weight:600;color:var(--text);margin-bottom:.25rem}
+.pcard .ptags{display:flex;gap:.15rem;flex-wrap:wrap;margin-bottom:.35rem}
+.pcard .ptag{font-size:.55rem;padding:.05rem .25rem;border-radius:.15rem;font-weight:500}
+.ptag.work{background:rgba(255,159,67,.1);color:var(--accent3)}
+.ptag.life{background:rgba(46,213,115,.1);color:var(--accent2)}
+.ptag.think{background:rgba(160,120,255,.1);color:var(--accent4)}
+.ptag.family{background:rgba(255,107,107,.1);color:#ff6b6b}
+.pbar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.pfill{height:100%;border-radius:2px;transition:width .3s}
 
-/* ===== GOALS ===== */
-.goal-row{display:flex;gap:0.5rem;padding:0.5rem 0;align-items:center}
-.goal-row+.goal-row{border-top:1px solid var(--border)}
-.goal-icon{width:1.75rem;height:1.75rem;border-radius:0.4rem;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0}
-.goal-icon.long{background:rgba(160,120,255,0.1);color:var(--accent4)}
-.goal-icon.short{background:rgba(91,154,255,0.1);color:var(--accent)}
+/* Goal */
+.goal-row{display:flex;gap:.5rem;padding:.5rem 0;align-items:center;border-bottom:1px solid var(--border)}
+.goal-icon{width:1.75rem;height:1.75rem;border-radius:.4rem;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.goal-icon.long{background:rgba(160,120,255,.1);color:var(--accent4)}
+.goal-icon.short{background:rgba(91,154,255,.1);color:var(--accent)}
 .goal-body{flex:1;min-width:0}
-.goal-title{font-size:0.82rem;font-weight:500;color:var(--text)}
-.goal-meta{font-size:0.6rem;color:var(--text4);margin-top:0.05rem}
-.goal-pct{font-size:0.72rem;font-weight:600;color:var(--text3);min-width:2.5rem;text-align:right}
-.goal-bar{height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:0.15rem;overflow:hidden}
-.goal-bar .fill{height:100%;border-radius:2px;transition:width 0.3s}
-.goal-bar .fill.long{background:var(--accent4)}
-.goal-bar .fill.short{background:var(--accent)}
+.goal-title{font-size:.82rem;font-weight:500;color:var(--text)}
+.goal-meta{font-size:.6rem;color:var(--text4);margin-top:.05rem}
+.goal-pct{font-size:.72rem;font-weight:600;color:var(--text3);min-width:2.5rem;text-align:right}
+.goal-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:.15rem;overflow:hidden}
+.goal-bar .fill{height:100%;border-radius:2px}
 
-/* ===== ENTRIES ===== */
-.entry-row{display:flex;gap:0.5rem;padding:0.5rem 0;align-items:flex-start}
-.entry-row+.entry-row{border-top:1px solid var(--border)}
-.entry-icon{width:1.25rem;height:1.25rem;border-radius:0.3rem;display:flex;align-items:center;justify-content:center;font-size:0.6rem;flex-shrink:0;margin-top:0.05rem}
-.entry-icon.thought{background:rgba(160,120,255,0.1);color:var(--accent4)}
-.entry-icon.action{background:rgba(46,213,115,0.1);color:var(--accent2)}
-.entry-icon.plan{background:rgba(255,159,67,0.1);color:var(--accent3)}
+/* Entry */
+.entry-row{display:flex;gap:.5rem;padding:.5rem 0;align-items:flex-start;border-bottom:1px solid var(--border)}
+.entry-icon{width:1.25rem;height:1.25rem;border-radius:.3rem;display:flex;align-items:center;justify-content:center;font-size:.6rem;flex-shrink:0;margin-top:.05rem}
 .entry-body{flex:1;min-width:0}
-.entry-title{font-size:0.82rem;font-weight:500;color:var(--text)}
-.entry-text{font-size:0.68rem;color:var(--text3);margin-top:0.05rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.entry-date{font-size:0.55rem;color:var(--text4);margin-top:0.1rem}
-.entry-filter{display:flex;gap:0.25rem;margin-bottom:0.5rem;flex-wrap:wrap}
-.entry-filter span{font-size:0.65rem;padding:0.15rem 0.4rem;border-radius:1rem;background:var(--bg3);color:var(--text3);cursor:pointer;transition:all 0.1s}
-.entry-filter span.active{background:rgba(91,154,255,0.12);color:var(--accent);font-weight:500}
+.entry-title{font-size:.82rem;font-weight:500;color:var(--text)}
+.entry-text{font-size:.68rem;color:var(--text3);margin-top:.05rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.entry-date{font-size:.55rem;color:var(--text4);margin-top:.1rem}
+.entry-filter{display:flex;gap:.25rem;margin-bottom:.5rem;flex-wrap:wrap}
+.entry-filter span{font-size:.65rem;padding:.15rem .4rem;border-radius:1rem;background:var(--bg3);color:var(--text3);cursor:pointer}
+.entry-filter span.active{background:rgba(91,154,255,.12);color:var(--accent);font-weight:500}
 
-/* ===== TAB CONTENT (mobile only) ===== */
+/* Tab pages */
 .tab-page{display:none}
 .tab-page.active{display:block}
-/* Desktop: hide all tab pages, only show dash-grid */
 @media(min-width:768px){.tab-page{display:none!important}}
 
-/* ===== FAB ===== */
-.fab{position:fixed;bottom:5rem;right:0.85rem;width:2.6rem;height:2.6rem;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:1.4rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(91,154,255,0.3);cursor:pointer;z-index:40;transition:transform 0.12s}
-.fab:active{transform:scale(0.9)}
-@media(min-width:768px){.fab{bottom:1.25rem;display:flex}}
+/* FAB */
+.fab{position:fixed;bottom:5rem;right:.85rem;width:2.6rem;height:2.6rem;border-radius:50%;background:var(--accent);border:none;color:#fff;font-size:1.4rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(91,154,255,.3);cursor:pointer;z-index:40}
+.fab:active{transform:scale(.9)}
 
-/* ===== TAB BAR (mobile) ===== */
-.tab-bar{position:fixed;bottom:0;left:0;width:100%;background:rgba(15,15,19,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:0.25rem 0 0.7rem;z-index:100}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.05rem;padding:0.2rem;background:none;border:none;color:var(--text3);font-size:0.6rem;cursor:pointer;transition:color 0.12s}
+/* Tab bar */
+.tab-bar{position:fixed;bottom:0;left:0;width:100%;background:rgba(15,15,19,.95);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;padding:.25rem 0 .7rem;z-index:100}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:.05rem;padding:.2rem;background:none;border:none;color:var(--text3);font-size:.6rem;cursor:pointer}
 .tab-btn.active{color:var(--accent)}
 .tab-btn .icon{font-size:1.15rem;line-height:1}
 
-/* ===== MODAL ===== */
-.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:200;display:none;align-items:flex-end;justify-content:center}
 .modal-overlay.show{display:flex}
 @media(min-width:768px){.modal-overlay{align-items:center}}
-.modal{background:#1a1a20;border-radius:1rem 1rem 0 0;width:100%;max-width:430px;max-height:80vh;overflow-y:auto;padding:1rem;animation:slideUp 0.2s ease}
+.modal{background:#1a1a20;border-radius:1rem 1rem 0 0;width:100%;max-width:430px;max-height:80vh;overflow-y:auto;padding:1rem;animation:slideUp .2s ease}
 @media(min-width:768px){.modal{border-radius:1rem}}
 @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
-.modal-title{font-size:0.9rem;font-weight:600}
-.modal-close{background:none;border:none;color:var(--text3);font-size:1.2rem;cursor:pointer;padding:0.25rem}
-.modal form{display:flex;flex-direction:column;gap:0.5rem}
-.modal label{font-size:0.7rem;color:var(--text3);font-weight:500}
-.modal input,.modal select,.modal textarea{background:var(--bg3);border:1px solid var(--border);border-radius:0.5rem;padding:0.5rem;color:var(--text);font-size:0.82rem;outline:none;transition:border 0.12s;width:100%}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.modal-title{font-size:.9rem;font-weight:600}
+.modal-close{background:none;border:none;color:var(--text3);font-size:1.2rem;cursor:pointer;padding:.25rem}
+.modal form{display:flex;flex-direction:column;gap:.5rem}
+.modal label{font-size:.7rem;color:var(--text3);font-weight:500}
+.modal input,.modal select,.modal textarea{background:var(--bg3);border:1px solid var(--border);border-radius:.5rem;padding:.5rem;color:var(--text);font-size:.82rem;outline:none;width:100%}
 .modal input:focus,.modal select:focus,.modal textarea:focus{border-color:var(--accent)}
 .modal textarea{resize:vertical;min-height:3rem}
-.modal .form-row{display:flex;gap:0.5rem}
+.modal .form-row{display:flex;gap:.5rem}
 .modal .form-row>*{flex:1}
-.modal .btn-submit{background:var(--accent);border:none;color:#fff;padding:0.55rem;border-radius:0.5rem;font-size:0.85rem;cursor:pointer;margin-top:0.25rem;font-weight:500}
-.modal .btn-submit:active{opacity:0.8}
-
-/* ===== QUICK ADD (desktop) ===== */
-.quick-add-row{display:flex;gap:0.375rem;padding:0.4rem 0;align-items:center}
-.quick-add-row select,.quick-add-row input{background:var(--bg3);border:1px solid var(--border);border-radius:0.375rem;padding:0.35rem 0.5rem;color:var(--text);font-size:0.75rem;outline:none}
-.quick-add-row input{flex:1;min-width:0}
-.quick-add-row select{width:4.5rem}
-.quick-add-row button{background:var(--accent);border:none;color:#fff;padding:0.35rem 0.65rem;border-radius:0.375rem;font-size:0.72rem;cursor:pointer;white-space:nowrap}
-
-/* ===== STATS ROW ===== */
-.stats-row{display:flex;gap:0.5rem;text-align:center;padding:0.25rem 0}
-.stats-row .stat{flex:1;background:var(--bg2);border-radius:0.5rem;padding:0.5rem 0.25rem}
+.modal .btn-submit{background:var(--accent);border:none;color:#fff;padding:.55rem;border-radius:.5rem;font-size:.85rem;cursor:pointer;margin-top:.25rem;font-weight:500}
+.quick-add-row{display:flex;gap:.375rem;padding:.4rem 0;align-items:center}
+.quick-add-row input{flex:1;min-width:0;background:var(--bg3);border:1px solid var(--border);border-radius:.375rem;padding:.35rem .5rem;color:var(--text);font-size:.75rem;outline:none}
+.quick-add-row select{background:var(--bg3);border:1px solid var(--border);border-radius:.375rem;padding:.35rem .5rem;color:var(--text);font-size:.75rem;outline:none;width:4.5rem}
+.quick-add-row button{background:var(--accent);border:none;color:#fff;padding:.35rem .65rem;border-radius:.375rem;font-size:.72rem;cursor:pointer;white-space:nowrap}
+.stats-row{display:flex;gap:.5rem;text-align:center;padding:.25rem 0}
+.stats-row .stat{flex:1;background:var(--bg2);border-radius:.5rem;padding:.5rem .25rem}
 .stats-row .stat .num{font-size:1.1rem;font-weight:700;color:var(--accent)}
 .stats-row .stat .num.green{color:var(--accent2)}
 .stats-row .stat .num.orange{color:var(--accent3)}
-.stats-row .stat .lbl{font-size:0.55rem;color:var(--text4);margin-top:0.1rem}
-
-/* ===== EMPTY STATE ===== */
-.empty-state{text-align:center;padding:1.5rem 1rem;color:var(--text4)}
-.empty-state .icon{font-size:2rem;margin-bottom:0.5rem;opacity:0.3}
-.empty-state .msg{font-size:0.78rem}
-
-/* ===== LOADING ===== */
-.loading{text-align:center;padding:1.5rem;color:var(--text4);font-size:0.78rem}
-.spinner{display:inline-block;width:1.2rem;height:1.2rem;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.6s linear infinite;margin-bottom:0.5rem}
+.stats-row .stat .lbl{font-size:.55rem;color:var(--text4);margin-top:.1rem}
+.empty-state{text-align:center;padding:1.5rem 1rem;color:var(--text4);font-size:.78rem}
+.loading{text-align:center;padding:1.5rem;color:var(--text4);font-size:.78rem}
+.spinner{display:inline-block;width:1.2rem;height:1.2rem;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite;margin-bottom:.5rem}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* ===== ERROR ===== */
-.error-msg{text-align:center;padding:1.5rem;color:var(--accent5);font-size:0.78rem}
-.error-msg .detail{font-size:0.65rem;color:var(--text4);margin-top:0.25rem;word-break:break-all}
-
-/* ===== HIDE/SHOW HELPERS ===== */
-@media(max-width:767px){.desktop-only{display:none!important}}
-@media(min-width:768px){.mobile-only{display:none!important}}
+.error-msg{text-align:center;padding:1.5rem;color:#ff6b6b;font-size:.78rem}
+.error-msg .detail{font-size:.65rem;color:var(--text4);margin-top:.25rem;word-break:break-all}
 </style>
 </head>
 <body>
 <div class="app" id="app">
 
-  <!-- ===== DESKTOP SIDEBAR ===== -->
-  <aside class="sidebar" id="sidebar">
+  <!-- Sidebar -->
+  <aside class="sidebar">
     <div class="logo">🦞 主宰 <small>面板</small></div>
     <nav id="sidebarNav">
       <button class="nav-item active" data-tab="today">📋 概览</button>
       <button class="nav-item" data-tab="calendar">📅 日历</button>
-      <button class="nav-item" data-tab="projects">📊 项目 <span class="badge" id="projectBadge">0</span></button>
-      <button class="nav-item" data-tab="goals">🎯 目标 <span class="badge" id="goalBadge">0</span></button>
+      <button class="nav-item" data-tab="projects">📊 项目 <span class="badge" id="pBadge">0</span></button>
+      <button class="nav-item" data-tab="goals">🎯 目标 <span class="badge" id="gBadge">0</span></button>
       <button class="nav-item" data-tab="library">📚 库</button>
       <div class="nav-divider"></div>
       <button class="nav-item" id="exportBtn">📥 导出备份</button>
     </nav>
   </aside>
 
-  <!-- ===== MOBILE HEADER ===== -->
-  <div class="mobile-header" id="mobileHeader">
-    <h1>🦞 主宰 <span class="date" id="mobileDate"></span></h1>
-    <div class="actions">
-      <button id="mobileAddBtn" aria-label="添加">＋</button>
-    </div>
+  <!-- Mobile header -->
+  <div class="mobile-header">
+    <h1>🦞 主宰 <span class="date" id="mDate"></span></h1>
+    <div class="actions"><button id="mAddBtn">＋</button></div>
   </div>
 
-  <div class="main" id="mainContent">
+  <div class="main">
 
-    <!-- ===== TOP BAR (desktop) ===== -->
+    <!-- Desktop top bar -->
     <div class="top-bar">
       <div class="greeting" id="greeting">加载中...</div>
-      <div class="actions">
-        <button class="btn primary" id="addBtn">＋ 添加事项</button>
-      </div>
+      <div class="actions"><button class="btn primary" id="addBtn">＋ 添加事项</button></div>
     </div>
 
-    <!-- ===== DESKTOP DASHBOARD ===== -->
+    <!-- Desktop dashboard -->
     <div class="dash-grid" id="dashGrid">
       <div class="dash-col">
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">📅 本周</span></div>
-          <div class="panel-body" id="dashCalendar"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">📋 今日待办</span> <button class="panel-action" onclick="openModal('event')">+</button></div>
-          <div class="panel-body" id="dashTodayEvents"></div>
-        </div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">📅 本周</span></div><div class="panel-body" id="dCal"></div></div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">📋 今日待办</span></div><div class="panel-body" id="dToday"></div></div>
       </div>
       <div class="dash-col">
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">📊 项目</span></div>
-          <div class="panel-body" id="dashProjects"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">🎯 目标</span></div>
-          <div class="panel-body" id="dashGoals"></div>
-        </div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">📊 项目</span></div><div class="panel-body" id="dProj"></div></div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">🎯 目标</span></div><div class="panel-body" id="dGoal"></div></div>
       </div>
       <div class="dash-col">
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">💭 最近记录</span></div>
-          <div class="panel-body" id="dashEntries"></div>
-        </div>
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">💡 快速录入</span></div>
-          <div class="panel-body">
-            <div class="quick-add-row">
-              <select id="quickType"><option value="thought">💭思考</option><option value="action">✅行动</option><option value="plan">🗓️规划</option></select>
-              <input type="text" id="quickInput" placeholder="随手记一条..." />
-              <button id="quickSave">保存</button>
-            </div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="panel-header"><span class="panel-title">📊 统计</span></div>
-          <div class="panel-body" id="dashStats"></div>
-        </div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">💭 最近</span></div><div class="panel-body" id="dEntry"></div></div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">💡 快速录入</span></div><div class="panel-body"><div class="quick-add-row"><select id="qType"><option value="thought">💭思考</option><option value="action">✅行动</option><option value="plan">🗓️规划</option></select><input id="qInput" placeholder="随手记一条..."><button id="qSave">保存</button></div></div></div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">📊 统计</span></div><div class="panel-body" id="dStat"></div></div>
       </div>
     </div>
 
-    <!-- ===== MOBILE TAB PAGES ===== -->
-    <div class="tab-page active" id="pageToday">
+    <!-- Mobile pages -->
+    <div class="tab-page active" id="pToday">
       <div class="cal-strip" id="calStrip"></div>
       <div class="section-header"><span class="label">📅 今天</span></div>
-      <div id="todayEvents"><div class="loading"><div class="spinner"></div>加载中...</div></div>
+      <div id="todayEvents"><div class="loading"><div class="spinner"></div>加载数据中...</div></div>
       <div class="section-header"><span class="label">🗓️ 本周</span></div>
-      <div id="weekEvents"><div class="loading"><div class="spinner"></div>加载中...</div></div>
+      <div id="weekEvents"><div class="loading"><div class="spinner"></div>加载数据中...</div></div>
     </div>
-    <div class="tab-page" id="pageCalendar">
+    <div class="tab-page" id="pCalendar">
       <div class="cal-strip" id="calStripFull"></div>
-      <div class="section-header"><span class="label" id="selectedDayLabel">📅 今天</span> <button class="action" onclick="openModal('event')">+</button></div>
-      <div id="dayEvents"><div class="loading"><div class="spinner"></div>加载中...</div></div>
+      <div class="section-header"><span class="label" id="selDay">📅 今天</span></div>
+      <div id="dayEvents"><div class="loading"><div class="spinner"></div>加载数据中...</div></div>
     </div>
-    <div class="tab-page" id="pageProjects">
+    <div class="tab-page" id="pProjects">
       <div class="section-header"><span class="label">📊 项目</span> <button class="action" onclick="openModal('project')">+</button></div>
-      <div class="project-grid" id="projectGrid"></div>
+      <div class="project-grid" id="projGrid"><div class="loading" style="grid-column:1/-1"><div class="spinner"></div>加载数据中...</div></div>
     </div>
-    <div class="tab-page" id="pageGoals">
+    <div class="tab-page" id="pGoals">
       <div class="section-header"><span class="label">🎯 长期目标</span> <button class="action" onclick="openModal('goal')">+</button></div>
-      <div id="longGoals"></div>
+      <div id="longGoals"><div class="loading"><div class="spinner"></div>加载数据中...</div></div>
       <div class="section-header" style="margin-top:1rem"><span class="label">🎯 短期目标</span> <button class="action" onclick="openModal('goal')">+</button></div>
-      <div id="shortGoals"></div>
+      <div id="shortGoals"><div class="loading"><div class="spinner"></div>加载数据中...</div></div>
     </div>
-    <div class="tab-page" id="pageLibrary">
+    <div class="tab-page" id="pLibrary">
       <div class="section-header"><span class="label">📚 库</span> <button class="action" onclick="openModal('entry')">+</button></div>
       <div class="entry-filter" id="entryFilter">
-        <span data-filter="all" class="active">全部</span>
-        <span data-filter="thought">💭 思考</span>
-        <span data-filter="action">✅ 行动</span>
-        <span data-filter="plan">🗓️ 规划</span>
+        <span class="active" data-f="all">全部</span>
+        <span data-f="thought">💭 思考</span>
+        <span data-f="action">✅ 行动</span>
+        <span data-f="plan">🗓️ 规划</span>
       </div>
-      <div id="entryList"></div>
+      <div id="entryList"><div class="loading"><div class="spinner"></div>加载数据中...</div></div>
     </div>
 
   </div>
 
-  <!-- ===== FAB ===== -->
   <button class="fab" id="fab">＋</button>
 
-  <!-- ===== TAB BAR (mobile) ===== -->
   <div class="tab-bar" id="tabBar">
     <button class="tab-btn active" data-tab="today"><span class="icon">📋</span>概览</button>
     <button class="tab-btn" data-tab="calendar"><span class="icon">📅</span>日历</button>
@@ -359,9 +281,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvet
     <button class="tab-btn" data-tab="library"><span class="icon">📚</span>库</button>
   </div>
 
-  <!-- ===== MODAL ===== -->
   <div class="modal-overlay" id="modalOverlay">
-    <div class="modal" id="modalContent">
+    <div class="modal">
       <div class="modal-header">
         <span class="modal-title" id="modalTitle">新建</span>
         <button class="modal-close" id="modalClose">✕</button>
@@ -372,79 +293,64 @@ body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvet
 
 </div>
 
-<!-- Load supabase-js from CDN (non-module approach for reliability) -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.106.1/dist/umd/supabase.js"></script>
 <script>
 // ============================================================
 // CONFIG
 // ============================================================
-const SUPABASE_URL = 'https://pkxmsfyzcphzvuangrzs.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBreG1zZnl6Y3BoenZ1YW5ncnpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDkxNzcsImV4cCI6MjA5NDYyNTE3N30.K1_niR4ZylqzbDPFnmTs5HRo2aEbObkGw3V9clM1czo';
+var SUPABASE_URL = 'https://pkxmsfyzcphzvuangrzs.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBreG1zZnl6Y3BoenZ1YW5ncnpzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwNDkxNzcsImV4cCI6MjA5NDYyNTE3N30.K1_niR4ZylqzbDPFnmTs5HRo2aEbObkGw3V9clM1czo';
+
 
 // ============================================================
-// SUPABASE CLIENT
+// SUPABASE REST CLIENT (zero dependencies)
 // ============================================================
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-  db: { schema: 'commander_dashboard' }
-});
+function supabaseFetch(method, table, params, body) {
+  var url = SUPABASE_URL + '/rest/v1/' + table;
+  if (params) url += '?' + params;
+  return fetch(url, {
+    method: method,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_KEY,
+      'Content-Type': 'application/json',
+      
+      // 'Content-Profile': 'public'
+    },
+    body: body ? JSON.stringify(body) : null
+  });
+}
 
 // ============================================================
 // STATE
 // ============================================================
-const state = {
-  events: [],
-  projects: [],
-  goals: [],
-  entries: [],
-  today: new Date(),
-  selectedDate: new Date(),
-  currentTab: 'today',
-  entryFilter: 'all',
-  loaded: false,
-  error: null
-};
+var S = { events: [], projects: [], goals: [], entries: [], today: new Date(), selDate: new Date(), curTab: 'today', eFilter: 'all', loaded: false, err: null };
+var D = 86400000;
+
+function fmt(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+function isT(d) { var t=S.today; return d.getFullYear()===t.getFullYear()&&d.getMonth()===t.getMonth()&&d.getDate()===t.getDate(); }
+function dow(d) { return ['日','一','二','三','四','五','六'][d.getDay()]; }
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 // ============================================================
-// UTILITY
+// DATA LOADING (direct REST API, no SDK)
 // ============================================================
-function fmtDate(d) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return y + '-' + m + '-' + day;
-}
-function isToday(d) {
-  const t = state.today;
-  return d.getFullYear() === t.getFullYear() && d.getMonth() === t.getMonth() && d.getDate() === t.getDate();
-}
-function dowName(d) {
-  return ['日','一','二','三','四','五','六'][d.getDay()];
-}
-const DAY_MS = 86400000;
-
-// ============================================================
-// DATA LOADING
-// ============================================================
-async function loadAll() {
-  state.error = null;
+async function load() {
+  S.err = null;
   try {
-    const [eventsRes, projectsRes, goalsRes, entriesRes] = await Promise.all([
-      supabase.from('calendar_events').select('*').order('event_date').order('start_time'),
-      supabase.from('projects').select('*').order('created_at'),
-      supabase.from('goals').select('*').order('created_at'),
-      supabase.from('entries').select('*').order('created_at', { ascending: false }).limit(50)
-    ]);
-
-    if (eventsRes.error) throw new Error('events: ' + eventsRes.error.message);
-    state.events = eventsRes.data || [];
-    state.projects = projectsRes.data || [];
-    state.goals = goalsRes.data || [];
-    state.entries = entriesRes.data || [];
-    state.loaded = true;
-  } catch (err) {
-    console.error('loadAll error:', err);
-    state.error = err.message;
-    state.loaded = true;
+    var urls = [];
+    ['calendar_events?order=event_date', 'projects?order=created_at', 'goals?order=created_at', 'entries?order=created_at.desc&limit=50'].forEach(function(t) {
+      urls.push(supabaseFetch('GET', t).then(function(r) { if (!r.ok) throw new Error(t + ': ' + r.status); return r.json(); }));
+    });
+    var results = await Promise.all(urls);
+    S.events = results[0] || [];
+    S.projects = results[1] || [];
+    S.goals = results[2] || [];
+    S.entries = results[3] || [];
+    S.loaded = true;
+  } catch(e) {
+    console.error(e);
+    S.err = e.message;
+    S.loaded = true;
   }
   render();
 }
@@ -452,299 +358,215 @@ async function loadAll() {
 // ============================================================
 // CRUD
 // ============================================================
-async function addEvent(data) {
-  const { error } = await supabase.from('calendar_events').insert(data);
-  if (error) { alert('添加失败: ' + error.message); return; }
-  await loadAll();
+async function dbInsert(table, data) {
+  var r = await supabaseFetch('POST', table, null, data);
+  if (!r.ok) { var t = await r.text(); alert('添加失败: ' + t); return false; }
+  return true;
 }
-async function updateEvent(id, data) {
-  const { error } = await supabase.from('calendar_events').update(data).eq('id', id);
-  if (error) console.error(error); else await loadAll();
+async function dbUpdate(table, id, data) {
+  await supabaseFetch('PATCH', table + '?id=eq.' + id, null, data);
 }
-async function addProject(data) {
-  const { error } = await supabase.from('projects').insert(data);
-  if (error) { alert('添加失败: ' + error.message); return; }
-  await loadAll();
+async function addEvent(d) { if (await dbInsert('calendar_events', d)) await load(); }
+async function updateEvent(id, d) { await dbUpdate('calendar_events', id, d); await load(); }
+async function addProject(d) { 
+  if (d.tags && typeof d.tags === 'string') d.tags = d.tags.split(',').map(function(t) { return t.trim(); }).filter(Boolean);
+  if (await dbInsert('projects', d)) await load();
 }
-async function addGoal(data) {
-  const { error } = await supabase.from('goals').insert(data);
-  if (error) { alert('添加失败: ' + error.message); return; }
-  await loadAll();
-}
-async function addEntry(data) {
-  const { error } = await supabase.from('entries').insert(data);
-  if (error) { alert('添加失败: ' + error.message); return; }
-  await loadAll();
-}
+async function addGoal(d) { if (await dbInsert('goals', d)) await load(); }
+async function addEntry(d) { d.entry_date = fmt(S.today); if (await dbInsert('entries', d)) await load(); }
 
 // ============================================================
 // RENDER
 // ============================================================
 function render() {
-  if (state.error) {
-    const errHtml = '<div class="error-msg">❌ 数据加载失败<div class="detail">' + state.error + '</div></div>';
-    document.getElementById('todayEvents').innerHTML = errHtml;
-    document.getElementById('dashGrid').innerHTML = '<div class="error-msg" style="grid-column:1/-1">❌ 数据加载失败<div class="detail">' + state.error + '</div></div>';
+  if (S.err) {
+    var h = '<div class="error-msg">❌ 数据加载失败<div class="detail">' + esc(S.err) + '</div></div>';
+    document.getElementById('todayEvents').innerHTML = h;
+    document.getElementById('weekEvents').innerHTML = h;
+    document.getElementById('dayEvents').innerHTML = h;
+    document.getElementById('dashGrid').innerHTML = '<div class="error-msg" style="grid-column:1/-1">❌ 数据加载失败<div class="detail">' + esc(S.err) + '</div></div>';
     return;
   }
+  if (!S.loaded) return; // still loading
 
-  const now = state.today;
-  const hour = now.getHours();
-  const greet = hour < 12 ? '早上好' : hour < 18 ? '下午好' : '晚上好';
-  document.getElementById('mobileDate').textContent = fmtDate(now);
-  document.getElementById('greeting').innerHTML = greet + '，Zeno <small>' + fmtDate(now) + ' · ' + dowName(now) + '</small>';
-  document.getElementById('projectBadge').textContent = state.projects.length;
-  document.getElementById('goalBadge').textContent = state.goals.length;
+  var h = S.today.getHours();
+  var g = h < 12 ? '早上好' : h < 18 ? '下午好' : '晚上好';
+  document.getElementById('mDate').textContent = fmt(S.today);
+  document.getElementById('greeting').innerHTML = g + '，Zeno <small>' + fmt(S.today) + ' · ' + dow(S.today) + '</small>';
+  document.getElementById('pBadge').textContent = S.projects.length;
+  document.getElementById('gBadge').textContent = S.goals.length;
 
-  renderCalendarStrips();
-  renderTodayEvents();
-  renderWeekEvents();
-  renderDayEvents();
+  renderCal();
+  renderToday();
+  renderWeek();
+  renderDay();
   renderProjects();
   renderGoals();
   renderEntries();
-  renderDashCalendar();
-  renderDashTodayEvents();
-  renderDashProjects();
-  renderDashGoals();
-  renderDashEntries();
-  renderDashStats();
+  rDashCal();
+  rDashToday();
+  rDashProj();
+  rDashGoal();
+  rDashEntry();
+  rDashStat();
 }
 
-function renderCalendarStrips() {
-  const html = [];
-  for (let i = -1; i <= 6; i++) {
-    const d = new Date(state.today.getTime() + i * DAY_MS);
-    const cls = isToday(d) ? 'today' : '';
-    const dot = state.events.some(e => e.event_date === fmtDate(d)) ? '<div class="dot has"></div>' : '<div class="dot"></div>';
-    html.push('<div class="day-pill ' + cls + '" data-date="' + fmtDate(d) + '"><div class="dow">' + dowName(d) + '</div><div class="dom">' + d.getDate() + '</div>' + dot + '</div>');
+// --- Calendar strips ---
+function renderCal() {
+  var h = '';
+  for (var i = -1; i <= 6; i++) {
+    var d = new Date(S.today.getTime() + i * D);
+    var c = isT(d) ? 'today' : '';
+    var dot = S.events.some(function(e) { return e.event_date === fmt(d); }) ? '<div class="dot has"></div>' : '<div class="dot"></div>';
+    h += '<div class="day-pill ' + c + '" data-d="' + fmt(d) + '"><div class="dow">' + dow(d) + '</div><div class="dom">' + d.getDate() + '</div>' + dot + '</div>';
   }
-  document.getElementById('calStrip').innerHTML = html.join('');
-  document.getElementById('calStripFull').innerHTML = html.join('');
+  document.getElementById('calStrip').innerHTML = h;
+  document.getElementById('calStripFull').innerHTML = h;
 }
 
-function renderEventsIn(elId, items) {
-  const el = document.getElementById(elId);
-  if (!items || !items.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">📭</div><div class="msg">暂无事项</div></div>';
-    return;
-  }
-  el.innerHTML = items.map(e => {
-    const typeCls = e.event_type === 'appointment' ? 'appt' : e.event_type === 'reminder' ? 'remind' : 'task';
-    return '<div class="card"><div class="event-row' + (e.completed ? ' done' : '') + '"><div class="event-dot ' + typeCls + '"></div><div class="event-body"><div class="event-title">' + esc(e.title) + '</div><div class="event-meta">' + (e.start_time || '') + (e.start_time && e.description ? ' · ' : '') + esc(e.description || '') + '</div></div><div class="event-check' + (e.completed ? ' done' : '') + '" onclick="toggleEvent(\'' + e.id + '\',' + (e.completed ? 'false' : 'true') + ')"></div></div></div>';
+function evtHtml(items) {
+  if (!items || !items.length) return '<div class="empty-state">📭 暂无事项</div>';
+  return items.map(function(e) {
+    var tc = e.event_type === 'appointment' ? 'background:#ff9f43' : e.event_type === 'reminder' ? 'background:#2ed573' : 'background:#5b9aff';
+    return '<div class="card"><div class="event-row' + (e.completed ? ' done' : '') + '"><div class="event-dot" style="' + tc + '"></div><div class="event-body"><div class="event-title">' + esc(e.title) + '</div><div class="event-meta">' + (e.start_time||'') + (e.start_time && e.description ? ' · ' : '') + esc(e.description||'') + '</div></div><div class="event-check' + (e.completed ? ' done' : '') + '" onclick="tog(\'' + e.id + '\',' + (e.completed ? 'false' : 'true') + ')"></div></div></div>';
   }).join('');
 }
 
-function esc(s) { return String(s).replace(/[&<>"']/g, function(m) { return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
-
-function renderTodayEvents() {
-  const todayStr = fmtDate(state.today);
-  const items = state.events.filter(e => e.event_date === todayStr).sort((a,b) => (a.start_time||'') > (b.start_time||'') ? 1 : -1);
-  renderEventsIn('todayEvents', items);
+function renderToday() {
+  var ts = fmt(S.today);
+  document.getElementById('todayEvents').innerHTML = evtHtml(S.events.filter(function(e) { return e.event_date === ts; }).sort(function(a,b) { return (a.start_time||'') > (b.start_time||'') ? 1 : -1; }));
 }
-
-function renderWeekEvents() {
-  const todayStr = fmtDate(state.today);
-  const weekEnd = fmtDate(new Date(state.today.getTime() + 6 * DAY_MS));
-  const items = state.events.filter(e => e.event_date > todayStr && e.event_date <= weekEnd);
-  renderEventsIn('weekEvents', items);
+function renderWeek() {
+  var ts = fmt(S.today);
+  var we = fmt(new Date(S.today.getTime() + 6 * D));
+  document.getElementById('weekEvents').innerHTML = evtHtml(S.events.filter(function(e) { return e.event_date > ts && e.event_date <= we; }));
 }
-
-function renderDayEvents() {
-  const sel = fmtDate(state.selectedDate);
-  const items = state.events.filter(e => e.event_date === sel).sort((a,b) => (a.start_time||'') > (b.start_time||'') ? 1 : -1);
-  renderEventsIn('dayEvents', items);
+function renderDay() {
+  var s = fmt(S.selDate);
+  document.getElementById('dayEvents').innerHTML = evtHtml(S.events.filter(function(e) { return e.event_date === s; }).sort(function(a,b) { return (a.start_time||'') > (b.start_time||'') ? 1 : -1; }));
 }
 
 function renderProjects() {
-  const el = document.getElementById('projectGrid');
-  if (!state.projects.length) {
-    el.innerHTML = '<div class="empty-state" style="grid-column:1/-1"><div class="icon">📦</div><div class="msg">暂无项目，点 + 新建</div></div>';
-    return;
-  }
-  const statusMap = {planning:'🎯 规划中',in_progress:'🚧 进行中',completed:'✅ 已完成',archived:'📦 已归档'};
-  const statusCls = {planning:'s-plan',in_progress:'s-doing',completed:'s-done',archived:'s-arch'};
-  const tagCls = {工作:'work',个人:'life',务虚:'think',家庭:'family'};
-  el.innerHTML = state.projects.map(p => {
-    const tags = (p.tags || []);
-    const tagHtml = tags.map(t => '<span class="ptag ' + (tagCls[t] || 'work') + '">' + esc(t) + '</span>').join('');
-    const pCls = p.progress >= 80 ? 'green' : p.progress >= 40 ? 'blue' : 'purple';
-    return '<div class="pcard"><span class="status ' + (statusCls[p.status] || 's-plan') + '">' + (statusMap[p.status] || p.status) + '</span><div class="pname">' + esc(p.name) + '</div><div class="ptags">' + tagHtml + '</div><div class="pbar"><div class="pfill ' + pCls + '" style="width:' + (p.progress || 0) + '%"></div></div></div>';
+  var el = document.getElementById('projGrid');
+  if (!S.projects.length) { el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">📦 暂无项目</div>'; return; }
+  var sm = {planning:'🎯 规划中',in_progress:'🚧 进行中',completed:'✅ 已完成',archived:'📦 已归档'};
+  var sc = {planning:'s-plan',in_progress:'s-doing',completed:'s-done',archived:'s-arch'};
+  var tc = {工作:'work',个人:'life',务虚:'think',家庭:'family'};
+  el.innerHTML = S.projects.map(function(p) {
+    var t = (p.tags||[]).map(function(x) { return '<span class="ptag ' + (tc[x]||'work') + '">' + esc(x) + '</span>'; }).join('');
+    var pc = p.progress >= 80 ? 'background:#2ed573' : p.progress >= 40 ? 'background:#5b9aff' : 'background:#a078ff';
+    return '<div class="pcard"><span class="status ' + (sc[p.status]||'s-plan') + '">' + (sm[p.status]||p.status) + '</span><div class="pname">' + esc(p.name) + '</div><div class="ptags">' + t + '</div><div class="pbar"><div class="pfill" style="width:' + (p.progress||0) + '%;' + pc + '"></div></div></div>';
   }).join('');
 }
 
 function renderGoals() {
-  ['long','short'].forEach(type => {
-    const el = document.getElementById(type === 'long' ? 'longGoals' : 'shortGoals');
-    const items = state.goals.filter(g => g.type === (type === 'long' ? 'long_term' : 'short_term'));
-    if (!items.length) {
-      el.innerHTML = '<div class="empty-state"><div class="icon">🎯</div><div class="msg">暂无目标</div></div>';
-      return;
-    }
-    el.innerHTML = items.map(g => {
-      return '<div class="card"><div class="goal-row"><div class="goal-icon ' + type + '">' + (type==='long'?'🏗️':'🎯') + '</div><div class="goal-body"><div class="goal-title">' + esc(g.title) + '</div><div class="goal-meta">' + (g.due_date ? '截止 ' + g.due_date : '') + (g.description ? ' · ' + esc(g.description) : '') + '</div></div><div class="goal-pct">' + (g.progress||0) + '%</div></div><div class="goal-bar"><div class="fill ' + type + '" style="width:' + (g.progress||0) + '%"></div></div></div>';
+  ['long','short'].forEach(function(type) {
+    var el = document.getElementById(type === 'long' ? 'longGoals' : 'shortGoals');
+    var items = S.goals.filter(function(g) { return g.type === (type === 'long' ? 'long_term' : 'short_term'); });
+    if (!items.length) { el.innerHTML = '<div class="empty-state">🎯 暂无目标</div>'; return; }
+    el.innerHTML = items.map(function(g) {
+      return '<div class="card"><div class="goal-row"><div class="goal-icon ' + type + '">' + (type==='long'?'🏗️':'🎯') + '</div><div class="goal-body"><div class="goal-title">' + esc(g.title) + '</div><div class="goal-meta">' + (g.due_date ? '截止 ' + g.due_date : '') + (g.description ? ' · ' + esc(g.description) : '') + '</div></div><div class="goal-pct">' + (g.progress||0) + '%</div></div><div class="goal-bar"><div class="fill" style="width:' + (g.progress||0) + '%"></div></div></div>';
     }).join('');
   });
 }
 
 function renderEntries() {
-  const el = document.getElementById('entryList');
-  let items = state.entries;
-  if (state.entryFilter !== 'all') items = items.filter(e => e.type === state.entryFilter);
-  if (!items.length) {
-    el.innerHTML = '<div class="empty-state"><div class="icon">📝</div><div class="msg">暂无记录</div></div>';
-    return;
-  }
-  const iconMap = {thought:'💭',action:'✅',plan:'🗓️'};
-  const clsMap = {thought:'thought',action:'action',plan:'plan'};
-  el.innerHTML = items.map(e => {
-    return '<div class="entry-row"><div class="entry-icon ' + (clsMap[e.type] || 'thought') + '">' + (iconMap[e.type] || '📝') + '</div><div class="entry-body"><div class="entry-title">' + esc(e.title || '') + '</div><div class="entry-text">' + esc(e.content || '') + '</div><div class="entry-date">' + (e.entry_date || '') + '</div></div></div>';
+  var el = document.getElementById('entryList');
+  var items = S.entries;
+  if (S.eFilter !== 'all') items = items.filter(function(e) { return e.type === S.eFilter; });
+  if (!items.length) { el.innerHTML = '<div class="empty-state">📝 暂无记录</div>'; return; }
+  var im = {thought:'💭',action:'✅',plan:'🗓️'};
+  var ic = {thought:'background:rgba(160,120,255,.1);color:#a078ff',action:'background:rgba(46,213,115,.1);color:#2ed573',plan:'background:rgba(255,159,67,.1);color:#ff9f43'};
+  el.innerHTML = items.map(function(e) {
+    return '<div class="entry-row"><div class="entry-icon" style="' + (ic[e.type]||ic.thought) + '">' + (im[e.type]||'📝') + '</div><div class="entry-body"><div class="entry-title">' + esc(e.title||'') + '</div><div class="entry-text">' + esc(e.content||'') + '</div><div class="entry-date">' + (e.entry_date||'') + '</div></div></div>';
   }).join('');
 }
 
-function renderDashCalendar() {
-  const el = document.getElementById('dashCalendar');
-  const days = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(state.today.getTime() + i * DAY_MS);
-    const cls = isToday(d) ? 'today' : '';
-    days.push('<div class="mini-day ' + cls + '"><div class="dow">' + dowName(d) + '</div><div class="num">' + d.getDate() + '</div></div>');
-  }
-  el.innerHTML = '<div style="display:flex;gap:0.25rem">' + days.join('') + '</div>';
+// Dashboard panels
+function rDashCal() {
+  var h = '', d;
+  for (var i = 0; i < 7; i++) { d = new Date(S.today.getTime() + i * D); h += '<div style="flex:1;text-align:center;padding:.3rem 0;border-radius:.375rem;' + (isT(d)?'background:rgba(91,154,255,.12)':'') + '"><div style="font-size:.6rem;color:var(--text3)">' + dow(d) + '</div><div style="font-size:.8rem;font-weight:600;margin-top:.1rem;' + (isT(d)?'color:#5b9aff':'color:var(--text2)') + '">' + d.getDate() + '</div></div>'; }
+  document.getElementById('dCal').innerHTML = '<div style="display:flex;gap:.25rem">' + h + '</div>';
 }
-
-function renderDashTodayEvents() {
-  const todayStr = fmtDate(state.today);
-  const items = state.events.filter(e => e.event_date === todayStr && !e.completed).sort((a,b) => (a.start_time||'') > (b.start_time||'') ? 1 : -1).slice(0, 5);
-  const el = document.getElementById('dashTodayEvents');
-  if (!items.length) { el.innerHTML = '<div style="font-size:0.72rem;color:var(--text4);padding:0.5rem 0">✅ 今天暂无待办</div>'; return; }
-  el.innerHTML = items.map(e => {
-    const typeCls = e.event_type === 'appointment' ? 'appt' : e.event_type === 'reminder' ? 'remind' : 'task';
-    return '<div class="event-row"><div class="event-dot ' + typeCls + '"></div><div style="flex:1"><div style="font-size:0.78rem;color:var(--text)">' + esc(e.title) + '</div><div style="font-size:0.6rem;color:var(--text3)">' + (e.start_time||'') + '</div></div></div>';
+function rDashToday() {
+  var ts = fmt(S.today);
+  var items = S.events.filter(function(e) { return e.event_date === ts && !e.completed; }).sort(function(a,b) { return (a.start_time||'') > (b.start_time||'') ? 1 : -1; }).slice(0,5);
+  var el = document.getElementById('dToday');
+  if (!items.length) { el.innerHTML = '<div style="font-size:.72rem;color:var(--text4);padding:.5rem 0">✅ 暂无待办</div>'; return; }
+  el.innerHTML = items.map(function(e) {
+    return '<div class="event-row"><div class="event-dot" style="background:' + (e.event_type==='appointment'?'#ff9f43':e.event_type==='reminder'?'#2ed573':'#5b9aff') + '"></div><div style="flex:1"><div style="font-size:.78rem;color:var(--text)">' + esc(e.title) + '</div><div style="font-size:.6rem;color:var(--text3)">' + (e.start_time||'') + '</div></div></div>';
   }).join('');
 }
-
-function renderDashProjects() {
-  const el = document.getElementById('dashProjects');
-  const items = state.projects.filter(p => p.status !== 'archived').slice(0, 5);
-  if (!items.length) { el.innerHTML = '<div style="font-size:0.72rem;color:var(--text4);padding:0.5rem 0">暂无项目</div>'; return; }
-  el.innerHTML = items.map(p => {
-    const fillColor = p.progress >= 80 ? '#2ed573' : p.progress >= 40 ? '#5b9aff' : '#a078ff';
-    return '<div style="display:flex;gap:0.5rem;padding:0.35rem 0;align-items:center;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:0.78rem;color:var(--text)">' + esc(p.name) + '</div></div><div style="width:3.5rem;text-align:right"><div style="font-size:0.68rem;color:var(--text3);font-weight:600">' + (p.progress||0) + '%</div><div style="height:3px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:0.1rem;overflow:hidden"><div style="height:100%;border-radius:2px;width:' + (p.progress||0) + '%;background:' + fillColor + '"></div></div></div></div>';
+function rDashProj() {
+  var el = document.getElementById('dProj');
+  var items = S.projects.filter(function(p) { return p.status !== 'archived'; }).slice(0,5);
+  if (!items.length) { el.innerHTML = '<div style="font-size:.72rem;color:var(--text4);padding:.5rem 0">暂无项目</div>'; return; }
+  el.innerHTML = items.map(function(p) {
+    var c = p.progress >= 80 ? '#2ed573' : p.progress >= 40 ? '#5b9aff' : '#a078ff';
+    return '<div style="display:flex;gap:.5rem;padding:.35rem 0;align-items:center;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:.78rem;color:var(--text)">' + esc(p.name) + '</div></div><div style="width:3.5rem;text-align:right"><div style="font-size:.68rem;color:var(--text3);font-weight:600">' + (p.progress||0) + '%</div><div style="height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:.1rem;overflow:hidden"><div style="height:100%;border-radius:2px;width:' + (p.progress||0) + '%;background:' + c + '"></div></div></div></div>';
   }).join('');
 }
-
-function renderDashGoals() {
-  const el = document.getElementById('dashGoals');
-  const items = state.goals.slice(0, 3);
-  if (!items.length) { el.innerHTML = '<div style="font-size:0.72rem;color:var(--text4);padding:0.5rem 0">暂无目标</div>'; return; }
-  el.innerHTML = items.map(g => {
-    return '<div style="display:flex;gap:0.5rem;padding:0.35rem 0;align-items:center;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:0.78rem;color:var(--text)">' + esc(g.title) + '</div><div style="font-size:0.6rem;color:var(--text4)">' + (g.type === 'long_term' ? '长期' : '短期') + '</div></div><div style="font-size:0.72rem;font-weight:600;color:var(--text3)">' + (g.progress||0) + '%</div></div>';
+function rDashGoal() {
+  var el = document.getElementById('dGoal');
+  var items = S.goals.slice(0,3);
+  if (!items.length) { el.innerHTML = '<div style="font-size:.72rem;color:var(--text4);padding:.5rem 0">暂无目标</div>'; return; }
+  el.innerHTML = items.map(function(g) {
+    return '<div style="display:flex;gap:.5rem;padding:.35rem 0;align-items:center;border-bottom:1px solid var(--border)"><div style="flex:1;min-width:0"><div style="font-size:.78rem;color:var(--text)">' + esc(g.title) + '</div><div style="font-size:.6rem;color:var(--text4)">' + (g.type==='long_term'?'长期':'短期') + '</div></div><div style="font-size:.72rem;font-weight:600;color:var(--text3)">' + (g.progress||0) + '%</div></div>';
   }).join('');
 }
-
-function renderDashEntries() {
-  const el = document.getElementById('dashEntries');
-  const items = state.entries.slice(0, 3);
-  const iconMap = {thought:'💭',action:'✅',plan:'🗓️'};
-  if (!items.length) { el.innerHTML = '<div style="font-size:0.72rem;color:var(--text4);padding:0.5rem 0">暂无记录</div>'; return; }
-  el.innerHTML = items.map(e => {
-    return '<div style="display:flex;gap:0.4rem;padding:0.3rem 0;align-items:flex-start;border-bottom:1px solid var(--border)"><span style="font-size:0.7rem">' + (iconMap[e.type] || '📝') + '</span><div style="flex:1;min-width:0"><div style="font-size:0.75rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(e.title || '') + '</div><div style="font-size:0.55rem;color:var(--text4)">' + (e.entry_date || '') + '</div></div></div>';
+function rDashEntry() {
+  var el = document.getElementById('dEntry');
+  var items = S.entries.slice(0,3);
+  var im = {thought:'💭',action:'✅',plan:'🗓️'};
+  if (!items.length) { el.innerHTML = '<div style="font-size:.72rem;color:var(--text4);padding:.5rem 0">暂无记录</div>'; return; }
+  el.innerHTML = items.map(function(e) {
+    return '<div style="display:flex;gap:.4rem;padding:.3rem 0;align-items:flex-start;border-bottom:1px solid var(--border)"><span style="font-size:.7rem">' + (im[e.type]||'📝') + '</span><div style="flex:1;min-width:0"><div style="font-size:.75rem;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(e.title||'') + '</div><div style="font-size:.55rem;color:var(--text4)">' + (e.entry_date||'') + '</div></div></div>';
   }).join('');
 }
-
-function renderDashStats() {
-  const total = state.events.length;
-  const done = state.events.filter(e => e.completed).length;
-  const entries = state.entries.length;
-  document.getElementById('dashStats').innerHTML = '<div class="stats-row"><div class="stat"><div class="num">' + total + '</div><div class="lbl">总事项</div></div><div class="stat"><div class="num green">' + done + '</div><div class="lbl">已完成</div></div><div class="stat"><div class="num orange">' + entries + '</div><div class="lbl">记录</div></div></div>';
+function rDashStat() {
+  var t = S.events.length;
+  var d = S.events.filter(function(e) { return e.completed; }).length;
+  var en = S.entries.length;
+  document.getElementById('dStat').innerHTML = '<div class="stats-row"><div class="stat"><div class="num">' + t + '</div><div class="lbl">总事项</div></div><div class="stat"><div class="num green">' + d + '</div><div class="lbl">已完成</div></div><div class="stat"><div class="num orange">' + en + '</div><div class="lbl">记录</div></div></div>';
 }
 
 // ============================================================
-// TAB SWITCHING
+// INTERACTIONS
 // ============================================================
-function switchTab(tab) {
-  state.currentTab = tab;
+function switchTab(t) {
+  S.curTab = t;
   document.querySelectorAll('.tab-page').forEach(function(el) { el.classList.remove('active'); });
   document.querySelectorAll('.tab-btn').forEach(function(el) { el.classList.remove('active'); });
-  var pageEl = document.getElementById('page' + tab.charAt(0).toUpperCase() + tab.slice(1));
-  if (pageEl) pageEl.classList.add('active');
-  document.querySelectorAll('[data-tab="' + tab + '"]').forEach(function(el) { el.classList.add('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('active'); });
+  var p = document.getElementById('p' + t.charAt(0).toUpperCase() + t.slice(1));
+  if (p) p.classList.add('active');
+  document.querySelectorAll('[data-tab="' + t + '"]').forEach(function(el) { el.classList.add('active'); });
 }
 
-// ============================================================
-// TOGGLE EVENT
-// ============================================================
-window.toggleEvent = function(id, completed) {
-  updateEvent(id, { completed: completed });
-};
+window.tog = function(id, v) { updateEvent(id, {completed: v}); };
 
-// ============================================================
-// MODAL
-// ============================================================
-function openModal(type, data) {
-  var overlay = document.getElementById('modalOverlay');
-  var title = document.getElementById('modalTitle');
-  var form = document.getElementById('modalForm');
-
+function openModal(type) {
+  var o = document.getElementById('modalOverlay');
+  var t = document.getElementById('modalTitle');
+  var f = document.getElementById('modalForm');
   var configs = {
-    event: {
-      title: '📅 添加事项',
-      fields: '<label>标题</label><input name="title" required placeholder="事项名称" value="' + (data ? esc(data.title) : '') + '"><div class="form-row"><div><label>日期</label><input name="event_date" type="date" value="' + (data ? data.event_date : fmtDate(state.selectedDate)) + '"></div><div><label>时间</label><input name="start_time" type="time" value="' + (data ? (data.start_time || '') : '') + '"></div></div><label>类型</label><select name="event_type"><option value="task">任务</option><option value="appointment">预约</option><option value="reminder">提醒</option></select><label>备注</label><textarea name="description">' + (data ? esc(data.description || '') : '') + '</textarea><button class="btn-submit" type="submit">保存</button>',
-      submit: function(fd) {
-        var obj = {};
-        fd.forEach(function(v, k) { obj[k] = v; });
-        return data && data.id ? updateEvent(data.id, obj) : addEvent(obj);
-      }
-    },
-    project: {
-      title: '📊 新建项目',
-      fields: '<label>项目名</label><input name="name" required placeholder="项目名称" value="' + (data ? esc(data.name) : '') + '"><div class="form-row"><div><label>状态</label><select name="status"><option value="planning">规划中</option><option value="in_progress" selected>进行中</option><option value="completed">已完成</option><option value="archived">已归档</option></select></div><div><label>进度 %</label><input name="progress" type="number" min="0" max="100" value="' + (data ? (data.progress||0) : 0) + '"></div></div><label>标签（逗号分隔）</label><input name="tags" placeholder="工作,个人,务虚,家庭" value="' + (data ? (data.tags||[]).join(',') : '') + '"><label>描述</label><textarea name="description">' + (data ? esc(data.description||'') : '') + '</textarea><button class="btn-submit" type="submit">保存</button>',
-      submit: function(fd) {
-        var obj = {};
-        fd.forEach(function(v, k) { obj[k] = v; });
-        obj.tags = obj.tags ? obj.tags.split(',').map(function(t) { return t.trim(); }).filter(Boolean) : [];
-        obj.progress = parseInt(obj.progress) || 0;
-        return addProject(obj);
-      }
-    },
-    goal: {
-      title: '🎯 新建目标',
-      fields: '<label>标题</label><input name="title" required placeholder="目标名称" value="' + (data ? esc(data.title) : '') + '"><div class="form-row"><div><label>类型</label><select name="type"><option value="long_term">长期</option><option value="short_term" selected>短期</option></select></div><div><label>截止日期</label><input name="due_date" type="date" value="' + (data ? (data.due_date||'') : '') + '"></div></div><label>进度 %</label><input name="progress" type="number" min="0" max="100" value="' + (data ? (data.progress||0) : 0) + '"><label>描述</label><textarea name="description">' + (data ? esc(data.description||'') : '') + '</textarea><button class="btn-submit" type="submit">保存</button>',
-      submit: function(fd) {
-        var obj = {};
-        fd.forEach(function(v, k) { obj[k] = v; });
-        obj.progress = parseInt(obj.progress) || 0;
-        return addGoal(obj);
-      }
-    },
-    entry: {
-      title: '📚 记录',
-      fields: '<label>类型</label><select name="type"><option value="thought">💭 思考</option><option value="action">✅ 行动</option><option value="plan">🗓️ 规划</option></select><label>标题</label><input name="title" required placeholder="标题" value="' + (data ? esc(data.title) : '') + '"><label>内容</label><textarea name="content" rows="3">' + (data ? esc(data.content||'') : '') + '</textarea><button class="btn-submit" type="submit">保存</button>',
-      submit: function(fd) {
-        var obj = {};
-        fd.forEach(function(v, k) { obj[k] = v; });
-        obj.entry_date = fmtDate(state.today);
-        return addEntry(obj);
-      }
-    }
+    event: { title: '📅 添加事项', fields: '<label>标题</label><input name="title" required placeholder="事项名称"><div class="form-row"><div><label>日期</label><input name="event_date" type="date" value="' + fmt(S.selDate) + '"></div><div><label>时间</label><input name="start_time" type="time"></div></div><label>类型</label><select name="event_type"><option value="task">任务</option><option value="appointment">预约</option><option value="reminder">提醒</option></select><label>备注</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>', sub: function(d) { return addEvent(d); } },
+    project: { title: '📊 新建项目', fields: '<label>项目名</label><input name="name" required placeholder="项目名称"><div class="form-row"><div><label>状态</label><select name="status"><option value="planning">规划中</option><option value="in_progress" selected>进行中</option><option value="completed">已完成</option><option value="archived">已归档</option></select></div><div><label>进度 %</label><input name="progress" type="number" min="0" max="100" value="0"></div></div><label>标签（逗号分隔）</label><input name="tags" placeholder="工作,个人,务虚,家庭"><label>描述</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>', sub: function(d) { d.progress = parseInt(d.progress) || 0; return addProject(d); } },
+    goal: { title: '🎯 新建目标', fields: '<label>标题</label><input name="title" required placeholder="目标名称"><div class="form-row"><div><label>类型</label><select name="type"><option value="long_term">长期</option><option value="short_term" selected>短期</option></select></div><div><label>截止日期</label><input name="due_date" type="date"></div></div><label>进度 %</label><input name="progress" type="number" min="0" max="100" value="0"><label>描述</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>', sub: function(d) { d.progress = parseInt(d.progress) || 0; return addGoal(d); } },
+    entry: { title: '📚 记录', fields: '<label>类型</label><select name="type"><option value="thought">💭 思考</option><option value="action">✅ 行动</option><option value="plan">🗓️ 规划</option></select><label>标题</label><input name="title" required placeholder="标题"><label>内容</label><textarea name="content" rows="3"></textarea><button class="btn-submit" type="submit">保存</button>', sub: function(d) { return addEntry(d); } }
   };
-
-  var config = configs[type];
-  if (!config) return;
-  title.textContent = config.title;
-  form.innerHTML = config.fields;
-  overlay.classList.add('show');
-
-  form.onsubmit = function(e) {
+  var c = configs[type];
+  if (!c) return;
+  t.textContent = c.title;
+  f.innerHTML = c.fields;
+  o.classList.add('show');
+  f.onsubmit = function(e) {
     e.preventDefault();
-    var fd = new FormData(form);
-    var result = config.submit(fd);
-    if (result && typeof result.then === 'function') {
-      result.then(function() { overlay.classList.remove('show'); });
-    } else {
-      overlay.classList.remove('show');
-    }
+    var fd = new FormData(f);
+    var obj = {};
+    fd.forEach(function(v, k) { obj[k] = v; });
+    var prom = c.sub(obj);
+    if (prom && prom.then) prom.then(function() { o.classList.remove('show'); }); else o.classList.remove('show');
   };
 }
 
@@ -752,26 +574,22 @@ function openModal(type, data) {
 // INIT
 // ============================================================
 document.addEventListener('DOMContentLoaded', function() {
-  // Tab switching
-  document.querySelectorAll('.tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() { switchTab(this.dataset.tab); });
-  });
-  document.querySelectorAll('.nav-item[data-tab]').forEach(function(btn) {
-    btn.addEventListener('click', function() { switchTab(this.dataset.tab); });
-  });
+  // Tabs
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.addEventListener('click', function() { switchTab(this.dataset.tab); }); });
+  document.querySelectorAll('.nav-item[data-tab]').forEach(function(b) { b.addEventListener('click', function() { switchTab(this.dataset.tab); }); });
 
-  // FAB and add buttons
+  // FAB & add
   document.getElementById('fab').onclick = function() { openModal('event'); };
   document.getElementById('addBtn').onclick = function() { openModal('event'); };
-  document.getElementById('mobileAddBtn').onclick = function() { openModal('event'); };
+  document.getElementById('mAddBtn').onclick = function() { openModal('event'); };
 
   // Quick add
-  document.getElementById('quickSave').onclick = function() {
-    var input = document.getElementById('quickInput');
-    var type = document.getElementById('quickType').value;
-    if (!input.value.trim()) return;
-    addEntry({ type: type, title: input.value.trim(), content: '', entry_date: fmtDate(state.today) });
-    input.value = '';
+  document.getElementById('qSave').onclick = function() {
+    var inp = document.getElementById('qInput');
+    var t = document.getElementById('qType').value;
+    if (!inp.value.trim()) return;
+    addEntry({type: t, title: inp.value.trim(), content: ''});
+    inp.value = '';
   };
 
   // Entry filter
@@ -779,18 +597,18 @@ document.addEventListener('DOMContentLoaded', function() {
     el.addEventListener('click', function() {
       document.querySelectorAll('#entryFilter span').forEach(function(s) { s.classList.remove('active'); });
       this.classList.add('active');
-      state.entryFilter = this.dataset.filter;
+      S.eFilter = this.dataset.f;
       renderEntries();
     });
   });
 
   // Calendar day click
   document.addEventListener('click', function(e) {
-    var pill = e.target.closest('.day-pill');
-    if (pill && pill.dataset.date) {
-      state.selectedDate = new Date(pill.dataset.date + 'T12:00:00');
-      renderDayEvents();
-      document.getElementById('selectedDayLabel').textContent = '📅 ' + pill.dataset.date;
+    var p = e.target.closest('.day-pill');
+    if (p && p.dataset.d) {
+      S.selDate = new Date(p.dataset.d + 'T12:00:00');
+      renderDay();
+      document.getElementById('selDay').textContent = '📅 ' + p.dataset.d;
     }
   });
 
@@ -800,17 +618,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Export
   document.getElementById('exportBtn').onclick = function() {
-    var data = { events: state.events, projects: state.projects, goals: state.goals, entries: state.entries };
-    var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    var data = JSON.stringify({events:S.events,projects:S.projects,goals:S.goals,entries:S.entries}, null, 2);
+    var b = new Blob([data], {type:'application/json'});
     var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'commander-dashboard-' + fmtDate(state.today) + '.json';
+    a.href = URL.createObjectURL(b);
+    a.download = 'dashboard-' + fmt(S.today) + '.json';
     a.click();
   };
 
-  // Load data
-  render(); // initial render with loading state
-  loadAll();
+  // Load
+  load();
 });
 </script>
 </body>
