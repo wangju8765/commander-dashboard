@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>视觉方案对比</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;padding:2rem}
+  h1{font-size:1.4rem;font-weight:700;margin-bottom:0.25rem;color:#fff}
+  .sub{font-size:0.75rem;color:#888;margin-bottom:1.5rem}
+  .row{display:flex;gap:1rem;overflow-x:auto;padding-bottom:1rem}
+  .col{flex-shrink:0;width:340px}
+  .col-title{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.375rem}
+  .col-title .tag{font-size:0.6rem;padding:0.1rem 0.4rem;border-radius:0.25rem;font-weight:500}
+  .col-title .tag.rec{background:rgba(91,154,255,0.2);color:#5b9aff}
+  .col-desc{font-size:0.65rem;color:#888;margin-bottom:0.75rem;line-height:1.4}
+  .phone{width:320px;border-radius:1.5rem;overflow:hidden;box-shadow:0 0.5rem 2rem rgba(0,0,0,0.5);position:relative}
+  .phone .status{display:flex;justify-content:space-between;padding:0.5rem 1rem 0.25rem;font-size:0.65rem;font-weight:600}
+  .phone .header{padding:0.5rem 1rem 0.25rem}
+  .phone .header h2{font-size:var(--h2size,1.1rem);font-weight:700;display:flex;align-items:center;gap:0.25rem}
+  .phone .header h2 small{font-size:0.7rem;font-weight:400}
+  .phone .header .today{font-size:0.7rem;margin-top:0.1rem}
+  .phone .cal{display:flex;gap:0.25rem;padding:0.5rem 1rem;overflow-x:auto}
+  .phone .cal .pill{flex-shrink:0;width:2.5rem;text-align:center;padding:0.3rem 0;border-radius:0.5rem;border:1px solid transparent}
+  .phone .cal .pill .dow{font-size:0.6rem;font-weight:500}
+  .phone .cal .pill .num{font-size:var(--domsize,0.9rem);font-weight:700;margin-top:0.05rem}
+  .phone .cal .pill.today{background:var(--today-bg,rgba(91,154,255,0.1));border-color:var(--today-border,rgba(91,154,255,0.3))}
+  .phone .cal .pill.today .dow{color:var(--today-dow,#5b9aff);font-weight:600}
+  .phone .cal .pill.today .num{color:var(--today-num,#e8e8ed)}
+  .phone .section{padding:0 1rem 0.25rem;font-size:var(--secsize,0.65rem);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;display:flex;align-items:center;gap:0.375rem}
+  .phone .section::after{content:'';flex:1;height:1px;background:var(--secline,rgba(255,255,255,0.06))}
+  .phone .event{padding:0.375rem 1rem;display:flex;gap:0.5rem;align-items:flex-start}
+  .phone .event .dot{width:0.4rem;height:0.4rem;border-radius:50%;margin-top:0.3rem;flex-shrink:0}
+  .phone .event .body{flex:1}
+  .phone .event .title{font-size:var(--evtsize,0.8rem);font-weight:var(--evtw,500);line-height:1.4}
+  .phone .event .meta{font-size:var(--metasize,0.65rem);font-weight:var(--metaw,400);margin-top:0.05rem}
+  .phone .event.past .title{opacity:0.4}
+  .phone .card{padding:0.5rem 1rem}
+  .phone .card .item{display:flex;gap:0.5rem;align-items:center;margin-bottom:0.375rem}
+  .phone .card .item .tag{width:0.375rem;height:0.375rem;border-radius:50%}
+  .phone .card .item .name{font-size:var(--cardname,0.8rem);font-weight:var(--cardnw,500)}
+  .phone .card .item .pct{font-size:0.65rem;font-weight:600;margin-left:auto}
+  .phone .tab-bar{display:flex;padding:0.25rem 1rem 0.5rem;border-top:1px solid var(--tabline,rgba(255,255,255,0.06));margin-top:1rem}
+  .phone .tab-bar .tab{flex:1;text-align:center;font-size:var(--tabsize,0.65rem);font-weight:500;padding:0.25rem 0;opacity:0.5}
+  .phone .tab-bar .tab.active{opacity:1}
+
+  /* ===== OPTION A: BIGGER FONT ===== */
+  .op-a{background:#0f0f13;color:#e8e8ed}
+  .op-a .status{color:#888}
+  .op-a .header h2{color:#fff}
+  .op-a .header .today{color:#888}
+  .op-a .cal .pill .dow{color:#888}
+  .op-a .cal .pill .num{color:#aaa}
+  .op-a .cal .pill.today .num{color:#e8e8ed}
+  .op-a .section{color:#999;--secline:rgba(255,255,255,0.12)}
+  .op-a .event .title{color:#e8e8ed}
+  .op-a .event .meta{color:#999}
+  .op-a .card .item{color:#f0f0f5}
+  .op-a .card .item .pct{color:#aaa}
+  .op-a .tab-bar{background:rgba(15,15,19,0.95);--tabline:rgba(255,255,255,0.12);color:#aaa}
+
+  /* ===== OPTION B: SOLID CARDS ===== */
+  .op-b{background:#0f0f13;color:#fff}
+  .op-b .status{color:#aaa}
+  .op-b .header h2{color:#fff}
+  .op-b .header .today{color:#aaa}
+  .op-b .cal .pill{background:#1e1e28;border-color:#333}
+  .op-b .cal .pill .dow{color:#ddd}
+  .op-b .cal .pill .num{color:#fff}
+  .op-b .cal .pill.today{background:rgba(91,154,255,0.15);border-color:#5b9aff}
+  .op-b .cal .pill.today .num{color:#fff}
+  .op-b .section{color:#ddd;--secline:rgba(255,255,255,0.12)}
+  .op-b .event{background:#1e1e28;border-radius:0.625rem;margin:0.25rem 1rem;padding:0.5rem 0.75rem}
+  .op-b .event .title{color:#fff;font-weight:600}
+  .op-b .event .meta{color:#ddd}
+  .op-b .card .item{background:#1e1e28;border-radius:0.5rem;padding:0.5rem;border:1px solid #333}
+  .op-b .card .item .name{color:#fff;font-weight:600}
+  .op-b .card .item .pct{color:#ddd}
+  .op-b .tab-bar{background:rgba(30,30,40,0.95);--tabline:rgba(255,255,255,0.12);color:#ddd}
+
+  /* ===== OPTION C: LIGHTER BG + BOLDER ===== */
+  .op-c{background:#1a1a24;color:#f0f0f5}
+  .op-c .status{color:#ccc}
+  .op-c .header h2{color:#fff}
+  .op-c .header .today{color:#ccc}
+  .op-c .cal .pill{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12)}
+  .op-c .cal .pill .dow{color:#ccc}
+  .op-c .cal .pill .num{color:#fff}
+  .op-c .cal .pill.today{border-color:#5b9aff;background:rgba(91,154,255,0.15)}
+  .op-c .cal .pill.today .num{color:#fff}
+  .op-c .section{color:#ccc;--secline:rgba(255,255,255,0.12)}
+  .op-c .event .title{color:#fff;font-weight:600}
+  .op-c .event .meta{color:#ccc}
+  .op-c .card .item{background:rgba(255,255,255,0.08);border-radius:0.5rem;padding:0.5rem;border:1px solid rgba(255,255,255,0.12)}
+  .op-c .card .item .name{color:#fff;font-weight:600}
+  .op-c .card .item .pct{color:#ccc}
+  .op-c .tab-bar{background:rgba(26,26,36,0.95);--tabline:rgba(255,255,255,0.12);color:#ccc}
+
+  /* ===== OPTION D: COMBINED (A+B) ===== */
+  .op-d{background:#0f0f13;color:#fff}
+  .op-d .status{color:#ddd}
+  .op-d .header h2{color:#fff}
+  .op-d .header .today{color:#ddd}
+  .op-d .cal .pill{background:#1e1e28;border-color:#2a2a38}
+  .op-d .cal .pill .dow{color:#ddd}
+  .op-d .cal .pill .num{color:#fff}
+  .op-d .cal .pill.today{background:rgba(91,154,255,0.15);border-color:#5b9aff}
+  .op-d .cal .pill.today .num{color:#fff}
+  .op-d .section{color:#ddd;--secline:rgba(255,255,255,0.12)}
+  .op-d .event{background:#1e1e28;border-radius:0.625rem;margin:0.25rem 1rem;padding:0.5rem 0.75rem;border:1px solid #2a2a38}
+  .op-d .event .title{color:#fff;font-weight:700}
+  .op-d .event .meta{color:#ddd;font-weight:500}
+  .op-d .card .item{background:#1e1e28;border-radius:0.5rem;padding:0.5rem;border:1px solid #2a2a38}
+  .op-d .card .item .name{color:#fff;font-weight:700}
+  .op-d .card .item .pct{color:#ddd;font-weight:600}
+  .op-d .tab-bar{background:rgba(30,30,40,0.95);--tabline:rgba(255,255,255,0.12);color:#ddd}
+
+  /* ===== OPTION E: CURRENT (reference) ===== */
+  .op-e{background:#0f0f13;color:#e8e8ed}
+  .op-e .status{color:#888}
+  .op-e .header h2{color:#fff}
+  .op-e .header .today{color:#888}
+  .op-e .cal .pill{background:rgba(255,255,255,0.04);border-color:transparent}
+  .op-e .cal .pill .dow{color:#888}
+  .op-e .cal .pill .num{color:#aaa}
+  .op-e .cal .pill.today .num{color:#e8e8ed}
+  .op-e .section{color:#999;--secline:rgba(255,255,255,0.06)}
+  .op-e .event .title{color:#e8e8ed;font-weight:500}
+  .op-e .event .meta{color:#888}
+  .op-e .card .item .name{color:#e8e8ed;font-weight:500}
+  .op-e .card .item .pct{color:#888}
+  .op-e .tab-bar{background:rgba(15,15,19,0.95);--tabline:rgba(255,255,255,0.06);color:#aaa}
+</style>
+</head>
+<body>
+
+<h1>🎨 视觉方案对比</h1>
+<div class="sub">每种方案展示同一个页面（日历+事件列表），方便直观对比</div>
+
+<div class="row">
+
+<!-- ===== REFERENCE: CURRENT ===== -->
+<div class="col">
+  <div class="col-title">📄 当前版本 <span class="tag" style="background:rgba(255,255,255,0.08);color:#888">参考</span></div>
+  <div class="col-desc">你正在用的版本。暗底 + 透明卡片 + 灰字。</div>
+  <div class="phone op-e" style="font-size:16px">
+    <div class="status">9:41 <span>🔋</span></div>
+    <div class="header"><h2>🦞 主宰 <small>面板</small></h2><div class="today">2026-05-26 · 二</div></div>
+    <div class="cal">
+      <div class="pill"><div class="dow">一</div><div class="num">25</div></div>
+      <div class="pill today"><div class="dow">二</div><div class="num">26</div></div>
+      <div class="pill"><div class="dow">三</div><div class="num">27</div></div>
+      <div class="pill"><div class="dow">四</div><div class="num">28</div></div>
+      <div class="pill"><div class="dow">五</div><div class="num">29</div></div>
+      <div class="pill"><div class="dow">六</div><div class="num">30</div></div>
+      <div class="pill"><div class="dow">日</div><div class="num">31</div></div>
+    </div>
+    <div class="section">📋 今日</div>
+    <div class="event"><div class="dot" style="background:#a078ff"></div><div class="body"><div class="title">哥哥测评 · 儿童医院</div><div class="meta">08:25 → 15:08 · 去重庆</div></div></div>
+    <div class="event past"><div class="dot" style="background:#ff6b9d"></div><div class="body"><div class="title">四年级奥数课</div><div class="meta">14:00 → 16:00 · 永川</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff9f43"></div><div class="body"><div class="title">准备周末教案</div><div class="meta">备注：整理几何专题</div></div></div>
+    <div class="section">📊 项目</div>
+    <div class="card">
+      <div class="item"><div class="tag" style="background:#5b9aff"></div><div class="name">主宰面板</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#a078ff"></div><div class="name">语文写字小程序</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#555;opacity:0.5"></div><div class="name">小王数学</div><div class="pct">📦</div></div>
+    </div>
+    <div class="tab-bar"><div class="tab active">📅日历</div><div class="tab">📊项目</div><div class="tab">🎯目标</div><div class="tab">📚库</div></div>
+  </div>
+</div>
+
+<!-- ===== OPTION A: BIGGER FONT ===== -->
+<div class="col">
+  <div class="col-title">🔠 方案A：大字版 <span class="tag" style="background:rgba(46,213,115,0.15);color:#2ed573">推荐</span></div>
+  <div class="col-desc">字号整体+33%（16→24px），其余不变。内容变少但每个字都大一号。</div>
+  <div class="phone op-a" style="font-size:24px;--h2size:1.4rem;--domsize:1.1rem;--evtsize:0.95rem;--metasize:0.8rem;--cardname:0.9rem;--cardnw:600;--secsize:0.8rem;--tabsize:0.85rem;--evtw:500;--metaw:400">
+    <div class="status" style="font-size:0.65rem">9:41 <span>🔋</span></div>
+    <div class="header"><h2>🦞 主宰 <small>面板</small></h2><div class="today" style="font-size:0.75rem">2026-05-26 · 二</div></div>
+    <div class="cal">
+      <div class="pill"><div class="dow">一</div><div class="num">25</div></div>
+      <div class="pill today"><div class="dow">二</div><div class="num">26</div></div>
+      <div class="pill"><div class="dow">三</div><div class="num">27</div></div>
+      <div class="pill"><div class="dow">四</div><div class="num">28</div></div>
+      <div class="pill"><div class="dow">五</div><div class="num">29</div></div>
+      <div class="pill"><div class="dow">六</div><div class="num">30</div></div>
+      <div class="pill"><div class="dow">日</div><div class="num">31</div></div>
+    </div>
+    <div class="section">📋 今日</div>
+    <div class="event"><div class="dot" style="background:#a078ff"></div><div class="body"><div class="title">哥哥测评 · 儿童医院</div><div class="meta">08:25 → 15:08 · 去重庆</div></div></div>
+    <div class="event past"><div class="dot" style="background:#ff6b9d"></div><div class="body"><div class="title">四年级奥数课</div><div class="meta">14:00 → 16:00 · 永川</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff9f43"></div><div class="body"><div class="title">准备周末教案</div><div class="meta">备注：整理几何专题</div></div></div>
+    <div class="section">📊 项目</div>
+    <div class="card">
+      <div class="item"><div class="tag" style="background:#5b9aff"></div><div class="name" style="font-size:0.9rem;font-weight:600">主宰面板</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#a078ff"></div><div class="name" style="font-size:0.9rem;font-weight:600">语文写字小程序</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#555;opacity:0.5"></div><div class="name" style="font-size:0.9rem;font-weight:600">小王数学</div><div class="pct">📦</div></div>
+    </div>
+    <div class="tab-bar"><div class="tab active" style="font-size:0.85rem">📅日历</div><div class="tab" style="font-size:0.85rem">📊项目</div><div class="tab" style="font-size:0.85rem">🎯目标</div><div class="tab" style="font-size:0.85rem">📚库</div></div>
+  </div>
+</div>
+
+<!-- ===== OPTION B: SOLID CARDS ===== -->
+<div class="col">
+  <div class="col-title">📦 方案B：实色卡片</div>
+  <div class="col-desc">透明卡片→实底卡片（#1e1e28），白色文字+灰色细边框，边界分明。</div>
+  <div class="phone op-b" style="font-size:16px">
+    <div class="status">9:41 <span>🔋</span></div>
+    <div class="header"><h2>🦞 主宰 <small>面板</small></h2><div class="today">2026-05-26 · 二</div></div>
+    <div class="cal">
+      <div class="pill"><div class="dow">一</div><div class="num">25</div></div>
+      <div class="pill today"><div class="dow">二</div><div class="num">26</div></div>
+      <div class="pill"><div class="dow">三</div><div class="num">27</div></div>
+      <div class="pill"><div class="dow">四</div><div class="num">28</div></div>
+      <div class="pill"><div class="dow">五</div><div class="num">29</div></div>
+      <div class="pill"><div class="dow">六</div><div class="num">30</div></div>
+      <div class="pill"><div class="dow">日</div><div class="num">31</div></div>
+    </div>
+    <div class="section">📋 今日</div>
+    <div class="event"><div class="dot" style="background:#a078ff"></div><div class="body"><div class="title">哥哥测评 · 儿童医院</div><div class="meta">08:25 → 15:08 · 去重庆</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff6b9d"></div><div class="body"><div class="title" style="opacity:0.5">四年级奥数课</div><div class="meta">14:00 → 16:00 · 永川</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff9f43"></div><div class="body"><div class="title">准备周末教案</div><div class="meta">备注：整理几何专题</div></div></div>
+    <div class="section">📊 项目</div>
+    <div class="card">
+      <div class="item"><div class="tag" style="background:#5b9aff"></div><div class="name">主宰面板</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#a078ff"></div><div class="name">语文写字小程序</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#555;opacity:0.5"></div><div class="name">小王数学</div><div class="pct">📦</div></div>
+    </div>
+    <div class="tab-bar"><div class="tab active">📅日历</div><div class="tab">📊项目</div><div class="tab">🎯目标</div><div class="tab">📚库</div></div>
+  </div>
+</div>
+
+<!-- ===== OPTION D: COMBINED (A+B) ===== -->
+<div class="col">
+  <div class="col-title">⭐ 方案D：大字+实卡 <span class="tag rec">🦞主宰推荐</span></div>
+  <div class="col-desc">A+B合体。字号24px + 实色卡片 + 白字 + 加粗 + 3px左边框项目卡片。</div>
+  <div class="phone op-d" style="font-size:24px;--h2size:1.4rem;--domsize:1.1rem;--evtsize:0.95rem;--metasize:0.8rem;--cardname:0.9rem;--cardnw:700;--secsize:0.8rem;--tabsize:0.85rem">
+    <div class="status" style="font-size:0.65rem">9:41 <span>🔋</span></div>
+    <div class="header"><h2>🦞 主宰 <small>面板</small></h2><div class="today" style="font-size:0.75rem;color:#ddd">2026-05-26 · 二</div></div>
+    <div class="cal">
+      <div class="pill"><div class="dow">一</div><div class="num">25</div></div>
+      <div class="pill today"><div class="dow">二</div><div class="num">26</div></div>
+      <div class="pill"><div class="dow">三</div><div class="num">27</div></div>
+      <div class="pill"><div class="dow">四</div><div class="num">28</div></div>
+      <div class="pill"><div class="dow">五</div><div class="num">29</div></div>
+      <div class="pill"><div class="dow">六</div><div class="num">30</div></div>
+      <div class="pill"><div class="dow">日</div><div class="num">31</div></div>
+    </div>
+    <div class="section">📋 今日</div>
+    <div class="event"><div class="dot" style="background:#a078ff"></div><div class="body"><div class="title">哥哥测评 · 儿童医院</div><div class="meta">08:25 → 15:08 · 去重庆</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff6b9d"></div><div class="body"><div class="title" style="opacity:0.5">四年级奥数课</div><div class="meta">14:00 → 16:00 · 永川</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff9f43"></div><div class="body"><div class="title">准备周末教案</div><div class="meta">备注：整理几何专题</div></div></div>
+    <div class="section">📊 项目</div>
+    <div class="card">
+      <div class="item" style="border-left:3px solid #5b9aff"><div class="name">主宰面板</div><div class="pct">🚧</div></div>
+      <div class="item" style="border-left:3px solid #a078ff"><div class="name">语文写字小程序</div><div class="pct">🚧</div></div>
+      <div class="item" style="border-left:3px solid #555;opacity:0.5"><div class="name">小王数学</div><div class="pct">📦</div></div>
+    </div>
+    <div class="tab-bar"><div class="tab active" style="font-size:0.85rem">📅日历</div><div class="tab" style="font-size:0.85rem">📊项目</div><div class="tab" style="font-size:0.85rem">🎯目标</div><div class="tab" style="font-size:0.85rem">📚库</div></div>
+  </div>
+</div>
+
+<!-- ===== OPTION C: LIGHTER BG + BOLDER ===== -->
+<div class="col">
+  <div class="col-title">🌟 方案C：浅底+加粗</div>
+  <div class="col-desc">背景从纯黑→深紫灰（#1a1a24），全文字重+100，卡片略亮。</div>
+  <div class="phone op-c" style="font-size:16px">
+    <div class="status">9:41 <span>🔋</span></div>
+    <div class="header"><h2>🦞 主宰 <small>面板</small></h2><div class="today">2026-05-26 · 二</div></div>
+    <div class="cal">
+      <div class="pill"><div class="dow">一</div><div class="num">25</div></div>
+      <div class="pill today"><div class="dow">二</div><div class="num">26</div></div>
+      <div class="pill"><div class="dow">三</div><div class="num">27</div></div>
+      <div class="pill"><div class="dow">四</div><div class="num">28</div></div>
+      <div class="pill"><div class="dow">五</div><div class="num">29</div></div>
+      <div class="pill"><div class="dow">六</div><div class="num">30</div></div>
+      <div class="pill"><div class="dow">日</div><div class="num">31</div></div>
+    </div>
+    <div class="section">📋 今日</div>
+    <div class="event"><div class="dot" style="background:#a078ff"></div><div class="body"><div class="title">哥哥测评 · 儿童医院</div><div class="meta">08:25 → 15:08 · 去重庆</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff6b9d"></div><div class="body"><div class="title" style="opacity:0.5">四年级奥数课</div><div class="meta">14:00 → 16:00 · 永川</div></div></div>
+    <div class="event"><div class="dot" style="background:#ff9f43"></div><div class="body"><div class="title">准备周末教案</div><div class="meta">备注：整理几何专题</div></div></div>
+    <div class="section">📊 项目</div>
+    <div class="card">
+      <div class="item"><div class="tag" style="background:#5b9aff"></div><div class="name">主宰面板</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#a078ff"></div><div class="name">语文写字小程序</div><div class="pct">🚧</div></div>
+      <div class="item"><div class="tag" style="background:#555;opacity:0.5"></div><div class="name">小王数学</div><div class="pct">📦</div></div>
+    </div>
+    <div class="tab-bar"><div class="tab active">📅日历</div><div class="tab">📊项目</div><div class="tab">🎯目标</div><div class="tab">📚库</div></div>
+  </div>
+</div>
+
+</div>
+
+<p style="color:#555;font-size:0.7rem;margin-top:1rem">💡 手机上建议横屏查看，或用 Safari 打开后截图对比。所有方案均保持暗色风格。</p>
+
+</body>
+</html>
