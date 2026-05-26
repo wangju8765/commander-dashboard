@@ -377,24 +377,24 @@ body{background:#0f0f13;color:#e8e8ed}
 .panel-stats .stat .lbl{font-size:0.6rem;color:#888;margin-top:0.2rem}
 
 /* Agent group (for project page) */
-.agent-group{margin-bottom:1.25rem}
-.agent-header{display:flex;align-items:center;gap:0.5rem;padding:0.375rem 0;margin-bottom:0.375rem}
-.agent-avatar{width:1.75rem;height:1.75rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;color:#fff;flex-shrink:0}
-.agent-name{font-size:0.82rem;font-weight:600;color:#ccc}
-.agent-count{font-size:0.6rem;color:#444;margin-left:auto}
+.agent-group{margin-bottom:1.5rem}
+.agent-header{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;margin-bottom:0.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}
+.agent-avatar{width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;flex-shrink:0}
+.agent-name{font-size:0.9rem;font-weight:600;color:#e8e8ed}
+.agent-count{font-size:0.65rem;color:#666;margin-left:auto}
 
 /* Simplified project card */
-.sproj-card{display:flex;align-items:center;gap:0.625rem;padding:0.5rem 0;cursor:pointer;transition:all 0.12s;border-bottom:1px solid rgba(255,255,255,0.04)}
-.sproj-card:last-child{border-bottom:none}
-.sproj-card:hover{background:rgba(255,255,255,0.02);margin:0 -0.375rem;padding:0.5rem 0.375rem;border-radius:0.375rem;border-bottom-color:transparent}
-.sproj-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sproj-card{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.75rem;margin-bottom:0.375rem;cursor:pointer;transition:all 0.12s;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem}
+.sproj-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1)}
+.sproj-card:active{background:rgba(91,154,255,0.06)}
+.sproj-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .sproj-dot.planning{background:#a078ff}
 .sproj-dot.in_progress{background:#5b9aff}
 .sproj-dot.completed{background:#2ed573}
 .sproj-dot.archived{background:#555}
 .sproj-body{flex:1;min-width:0}
-.sproj-name{font-size:0.82rem;font-weight:500;color:#e8e8ed}
-.sproj-meta{font-size:0.62rem;color:#555;margin-top:0.1rem}
+.sproj-name{font-size:0.85rem;font-weight:600;color:#fff}
+.sproj-meta{font-size:0.65rem;color:#888;margin-top:0.2rem}
 .sproj-updated{font-size:0.6rem;color:#444;white-space:nowrap}
 
 /* Completed section */
@@ -409,15 +409,15 @@ body{background:#0f0f13;color:#e8e8ed}
 
 /* Project detail popup */
 .proj-detail{padding:0}
-.proj-detail .pd-header{display:flex;align-items:flex-start;gap:0.625rem;margin-bottom:0.75rem}
-.proj-detail .pd-icon{width:2.25rem;height:2.25rem;border-radius:0.625rem;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-.proj-detail .pd-name{font-size:1.05rem;font-weight:600;color:#fff;line-height:1.3}
-.proj-detail .pd-status{display:flex;align-items:center;gap:0.375rem;margin-top:0.25rem;font-size:0.78rem;color:#888}
-.proj-detail .pd-row{display:flex;gap:0.5rem;padding:0.375rem 0;font-size:0.8rem;border-bottom:1px solid rgba(255,255,255,0.04)}
+.proj-detail .pd-header{display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:1rem}
+.proj-detail .pd-icon{width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.proj-detail .pd-name{font-size:1.1rem;font-weight:600;color:#fff;line-height:1.3}
+.proj-detail .pd-status{display:flex;align-items:center;gap:0.375rem;margin-top:0.3rem;font-size:0.78rem;color:#888}
+.proj-detail .pd-row{display:flex;gap:0.5rem;padding:0.5rem 0;font-size:0.82rem;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center}
 .proj-detail .pd-row:last-child{border-bottom:none}
 .proj-detail .pd-label{color:#666;width:4rem;flex-shrink:0;font-size:0.72rem}
 .proj-detail .pd-value{color:#e8e8ed;flex:1}
-.proj-detail .pd-desc{font-size:0.8rem;color:#bbb;line-height:1.5;margin-bottom:0.75rem;padding:0.625rem;background:rgba(255,255,255,0.02);border-radius:0.5rem}
+.proj-detail .pd-desc{font-size:0.82rem;color:#bbb;line-height:1.6;margin-bottom:0.75rem;padding:0.75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.5rem}
 .proj-detail .pd-actions{display:flex;gap:0.5rem;margin-top:0.75rem}
 .proj-detail .pd-btn{flex:1;padding:0.5rem;border-radius:0.5rem;font-size:0.78rem;font-weight:500;cursor:pointer;text-align:center;transition:all 0.12s;font-family:inherit}
 .proj-detail .pd-btn.edit{background:#5b9aff;border:none;color:#fff}
@@ -909,9 +909,10 @@ function renderProj() {
     var items=groups[a];
     if(!items||!items.length)return;
     var avatar=ae[a]||'👤';
-    html+='<div class="agent-group"><div class="agent-header"><div class="agent-avatar" style="background:'+(a==='主宰'?'#5b9aff':a==='史蒂夫老师'?'#a078ff':a==='Erickson'?'#ff6b9d':a==='笔杆子'?'#2ed573':a==='参谋'?'#ff9f43':a==='运营官'?'#ff6b6b':'#888')+'">'+avatar+'</div><span class="agent-name">'+a+'</span><span class="agent-count">'+items.length+'个项目</span></div>';
+    html+='<div class="agent-group"><div class="agent-header"><div class="agent-avatar" style="background:'+(ac[a]||'#888')+'">'+avatar+'</div><span class="agent-name">'+a+'</span><span class="agent-count">'+items.length+'个</span></div>';
     items.forEach(function(p){
-      html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'planning')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(p.status==='planning'?'🎯 规划中':'🚧 进行中')+'</div></div><span class="sproj-updated">'+(p.updated_at?(p.updated_at.slice(0,10)):'')+'</span></div>';
+      var updated=p.updated_at?p.updated_at.slice(0,10):'';
+      html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'planning')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(sm[p.status]||p.status)+'</div></div>'+(updated?'<span class="sproj-updated">'+updated+'</span>':'')+'</div>';
     });
     html+='</div>';
   });
@@ -921,13 +922,14 @@ function renderProj() {
     var av=ae[l]||'👤';
     html+='<div class="agent-group"><div class="agent-header"><div class="agent-avatar" style="background:#888">'+av+'</div><span class="agent-name">'+l+'</span><span class="agent-count">'+groups[l].length+'个项目</span></div>';
     groups[l].forEach(function(p){
-      html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'planning')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(p.status==='planning'?'🎯 规划中':'🚧 进行中')+'</div></div><span class="sproj-updated">'+(p.updated_at?(p.updated_at.slice(0,10)):'')+'</span></div>';
+      var updated=p.updated_at?p.updated_at.slice(0,10):'';
+      html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'planning')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(sm[p.status]||p.status)+'</div></div>'+(updated?'<span class="sproj-updated">'+updated+'</span>':'')+'</div>';
     });
     html+='</div>';
   });
   // Completed/archived section
   if(done.length){
-    html+='<div class="done-section"><div class="done-toggle" onclick="this.classList.toggle(\'open\');var n=this.nextElementSibling;if(n)n.classList.toggle(\'hidden\');"><span class="done-arrow">▶</span> 已完成 / 已归档 <span style="margin-left:auto;font-size:0.6rem;color:#444">'+done.length+'个项目</span></div><div class="done-list hidden">';
+    html+='<div class="done-section"><div class="done-toggle" onclick="this.classList.toggle(\'open\');var n=this.nextElementSibling;if(n)n.classList.toggle(\'hidden\');"><span class="done-arrow">▶</span> 已完成 / 已归档 <span style="margin-left:auto;font-size:0.6rem;color:#555">'+done.length+'个</span></div><div class="done-list hidden">';
     done.forEach(function(p){
       html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'archived')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(p.status==='completed'?'✅ 已完成':'📦 已归档')+(p.lead?' · '+p.lead:'')+'</div></div></div>';
     });
