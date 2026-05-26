@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>项目详情页 v2 · 有价值版</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;padding:2rem;display:flex;align-items:center;justify-content:center;min-height:100vh}
+  
+  .phone-frame{width:390px;background:#1a1a20;border-radius:2rem;padding:1.25rem;box-shadow:0 1rem 3rem rgba(0,0,0,0.5)}
+  .status-bar{display:flex;justify-content:space-between;font-size:0.7rem;color:#888;margin-bottom:1rem;padding:0 0.25rem}
+  .top-bar{display:flex;align-items:center;gap:0.5rem;margin-bottom:1.25rem}
+  .top-bar .back{color:#5b9aff;cursor:pointer;font-size:0.85rem}
+  .top-bar .title{font-size:0.9rem;font-weight:600;color:#aaa;margin-left:auto}
+
+  /* ===== HEADER ===== */
+  .header{display:flex;align-items:flex-start;gap:0.625rem;margin-bottom:1rem}
+  .header-icon{width:2.25rem;height:2.25rem;border-radius:0.625rem;background:rgba(91,154,255,0.12);color:#5b9aff;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+  .header-info{flex:1}
+  .header-name{font-size:1.05rem;font-weight:600;color:#fff}
+  .header-meta{font-size:0.75rem;color:#888;margin-top:0.25rem;display:flex;align-items:center;gap:0.5rem}
+  .meta-dot{width:0.375rem;height:0.375rem;border-radius:50%}
+  .meta-dot.ip{background:#5b9aff}
+
+  /* ===== INFO ROW ===== */
+  .info-row{display:flex;gap:0.5rem;padding:0.5rem 0;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .info-row:last-child{border-bottom:none}
+  .info-label{font-size:0.7rem;color:#555;width:3.5rem;flex-shrink:0}
+  .info-value{font-size:0.82rem;color:#e8e8ed;flex:1}
+
+  /* ===== STATUS SECTION ===== */
+  .section{margin-bottom:1rem}
+  .section-title{font-size:0.6rem;font-weight:600;color:#555;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.5rem;display:flex;align-items:center;gap:0.375rem}
+  .section-title .bar{flex:1;height:1px;background:rgba(255,255,255,0.06)}
+
+  /* Current focus */
+  .focus-box{background:rgba(91,154,255,0.04);border:1px solid rgba(91,154,255,0.12);border-radius:0.625rem;padding:0.75rem}
+  .focus-box .text{font-size:0.82rem;color:#ccc;line-height:1.6}
+  .focus-box .text strong{color:#5b9aff}
+
+  /* Activity log */
+  .activity-item{display:flex;gap:0.5rem;padding:0.375rem 0;align-items:flex-start}
+  .activity-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.08);margin-top:0.3rem;flex-shrink:0}
+  .activity-dot.active{background:#2ed573}
+  .activity-body{flex:1}
+  .activity-body .text{font-size:0.75rem;color:#aaa;line-height:1.4}
+  .activity-body .time{font-size:0.6rem;color:#444;margin-top:0.1rem}
+
+  /* Link buttons */
+  .links-row{display:flex;gap:0.5rem;flex-wrap:wrap}
+  .link-btn{display:inline-flex;align-items:center;gap:0.25rem;padding:0.35rem 0.625rem;border-radius:0.375rem;font-size:0.72rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);color:#888;cursor:pointer;transition:all 0.12s;text-decoration:none}
+  .link-btn:hover{background:rgba(91,154,255,0.08);border-color:rgba(91,154,255,0.2);color:#5b9aff}
+
+  /* Related entries */
+  .entry-item{display:flex;gap:0.5rem;padding:0.5rem 0;align-items:flex-start;border-bottom:1px solid rgba(255,255,255,0.04)}
+  .entry-item:last-child{border-bottom:none}
+  .entry-icon{font-size:0.85rem;flex-shrink:0;margin-top:0.05rem}
+  .entry-body{flex:1}
+  .entry-body .text{font-size:0.78rem;color:#bbb;line-height:1.4}
+  .entry-body .meta{font-size:0.6rem;color:#444;margin-top:0.1rem}
+  .entry-more{font-size:0.7rem;color:#5b9aff;cursor:pointer;margin-top:0.375rem;display:inline-block}
+
+  /* Notes */
+  .notes-box{border:1px dashed rgba(255,255,255,0.1);border-radius:0.5rem;padding:0.625rem;background:rgba(255,159,67,0.02)}
+  .notes-box .text{font-size:0.78rem;color:#888;line-height:1.5}
+
+  /* ===== BUTTONS ===== */
+  .btn-row{display:flex;gap:0.5rem;margin-top:0.75rem}
+  .btn{flex:1;padding:0.5rem;border-radius:0.5rem;font-size:0.78rem;font-weight:500;cursor:pointer;text-align:center;transition:all 0.12s;font-family:inherit}
+  .btn-primary{background:#5b9aff;border:none;color:#fff}
+  .btn-secondary{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#888}
+  .btn-danger{background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.15);color:#ff6b6b}
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <div class="status-bar">9:41 <span>🔋</span></div>
+
+  <div class="top-bar">
+    <span class="back">‹ 返回</span>
+    <span class="title">项目详情</span>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-icon">📊</div>
+    <div class="header-info">
+      <div class="header-name">主宰面板</div>
+      <div class="header-meta">
+        <span class="meta-dot ip"></span> 进行中
+        <span style="color:#444">·</span>
+        👑 主宰
+        <span style="color:#444">·</span>
+        <span style="color:#666">启动 2026-05-25</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Current Focus -->
+  <div class="section">
+    <div class="section-title">📌 当前焦点 <span class="bar"></span></div>
+    <div class="focus-box">
+      <div class="text">
+        <strong>正在做：</strong>项目看板界面设计（Agent分组方案）。<br>
+        <strong>下一步：</strong>数据库加 lead 字段，代码实现新看板。<br>
+        <strong>卡住：</strong>暂无。
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Links -->
+  <div class="section">
+    <div class="section-title">🔗 链接 <span class="bar"></span></div>
+    <div class="links-row">
+      <a class="link-btn" href="#">🌐 线上地址</a>
+      <a class="link-btn" href="#">📦 GitHub</a>
+    </div>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="section">
+    <div class="section-title">🕐 最近动态 <span class="bar"></span></div>
+    <div class="activity-item">
+      <div class="activity-dot active"></div>
+      <div class="activity-body">
+        <div class="text">推送：电脑端视图切换 + SW离线缓存 + 项目看板示意</div>
+        <div class="time">今天 20:00</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot active"></div>
+      <div class="activity-body">
+        <div class="text">推送：手机端可读性全面提升</div>
+        <div class="time">今天 15:47</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-body">
+        <div class="text">修复：日期时间合并一行 + 表单提交重写</div>
+        <div class="time">今天 14:47</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-body">
+        <div class="text">时间选择器15分钟间隔 + 结束时间可选</div>
+        <div class="time">今天 13:24</div>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-dot"></div>
+      <div class="activity-body">
+        <div class="text">项目启动：两天从零到MVP</div>
+        <div class="time">2026-05-25</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Related Entries -->
+  <div class="section">
+    <div class="section-title">📝 关联记录 <span class="bar"></span></div>
+    <div class="entry-item">
+      <div class="entry-icon">💭</div>
+      <div class="entry-body">
+        <div class="text">关于项目管理的思路：Agent分组展示比状态列更直观，已完成统一收到底部</div>
+        <div class="meta">今天 · 思考</div>
+      </div>
+    </div>
+    <div class="entry-item">
+      <div class="entry-icon">✅</div>
+      <div class="entry-body">
+        <div class="text">电脑端优化完成：视图切换、日历/项目/目标/库各页面已实现</div>
+        <div class="meta">今天 · 行动</div>
+      </div>
+    </div>
+    <div class="entry-more">查看全部 7 条关联记录 →</div>
+  </div>
+
+  <!-- Notes -->
+  <div class="section">
+    <div class="section-title">📝 备注 <span class="bar"></span></div>
+    <div class="notes-box">
+      <div class="text">离线缓存和推送通知是第二轮迭代的内容。先确保核心功能完善。电脑端目前是diff对照mockup做的，后续再看还需要对齐哪些细节。</div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="btn-row">
+    <button class="btn btn-primary">✏️ 编辑</button>
+    <button class="btn btn-secondary">📋 复制</button>
+    <button class="btn btn-danger">🗑️ 删除</button>
+  </div>
+
+</div>
+
+</body>
+</html>

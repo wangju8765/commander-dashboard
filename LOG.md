@@ -209,7 +209,23 @@
 - 策略：静态文件 cache-first，Supabase API network-first
 - 注册代码已注入 index.html
 
-**待办：** commit 已本地 `8f32186`，网络恢复后 push
+### 20:20-20:40 项目看板 Agent 分组实现
+
+**设计决策：**
+- 按Agent分组取代按状态分列
+- 去掉进度条，去掉标签
+- 已完成项目收到底部折叠区
+- 详情页做最小可用版（名称/状态/负责人/描述 + 编辑/删除），后续可扩展
+
+**代码改动：**
+- `renderProj()` 重写：按 Agent 分组，固定排序（主宰→史蒂夫老师→Erickson→笔杆子→参谋→运营官），已完成项目折叠
+- `rDProjects()` 同步重写（桌面版）
+- 项目卡片点击 → `openProjectDetail()` 弹窗显示基本信息
+- `editProject()` 编辑表单（含 lead 字段下拉选择）
+- 新建项目表单：去掉进度和标签，改为负责人下拉 + 状态 + 描述
+- `rDashProj()` 简化（去掉进度条）
+
+**数据库改动：** projects 表需加 `lead TEXT` 字段（需在Supabase SQL Editor运行迁移脚本）
 
 ---
 
