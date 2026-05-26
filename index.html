@@ -216,7 +216,7 @@ body{background:#0f0f13;color:#e8e8ed}
 <!-- ===== DESKTOP CSS ===== -->
 <style>
 @media(min-width:768px){
-html{font-size:16px}
+html{font-size:clamp(16px,1.2vw,24px)}
 body{background:#0f0f13;color:#e8e8ed}
 .app{display:flex;min-height:100vh}
 #desktopView{display:flex;min-height:100vh}
@@ -310,12 +310,16 @@ body{background:#0f0f13;color:#e8e8ed}
 
 /* Mini calendar */
 .mini-cal{display:flex;gap:0.25rem}
-.mini-day{flex:1;text-align:center;padding:0.3rem 0;border-radius:0.375rem}
+.mini-day{flex:1;text-align:center;padding:0.3rem 0;border-radius:0.375rem;cursor:pointer;border:1px solid transparent;transition:all 0.12s}
+.mini-day:hover{background:rgba(255,255,255,0.04)}
 .mini-day .dow{font-size:0.6rem;color:#aaa}
 .mini-day .num{font-size:0.8rem;font-weight:500;color:#aaa;margin-top:0.1rem}
 .mini-day.today{background:rgba(91,154,255,0.12)}
 .mini-day.today .num{color:#5b9aff;font-weight:600}
 .mini-day.today .dow{color:#5b9aff}
+.mini-day.selected{background:rgba(91,154,255,0.2);border:1px solid #5b9aff;box-shadow:0 0 0 1px rgba(91,154,255,0.4)}
+.mini-day.selected .num{color:#fff}
+.mini-day.selected .dow{color:#5b9aff;font-weight:600}
 
 /* Event row in panel */
 .event-row{display:flex;gap:0.5rem;padding:0.375rem 0;align-items:flex-start}
@@ -957,12 +961,12 @@ function renderEntries() {
 function rDashCal() {
   var el=document.getElementById('dCal');if(!el)return;
   var h='';
-  for(var i=0;i<7;i++){var d=new Date(S.today.getTime()+i*D);h+='<div class="mini-day'+(isT(d)?' today':'')+'"><div class="dow">'+dow(d)+'</div><div class="num">'+d.getDate()+'</div></div>';}
+  for(var i=0;i<7;i++){var d=new Date(S.today.getTime()+i*D);var c=isT(d)?'today':'';if(!c&&S.selDate&&fmt(d)===fmt(S.selDate))c='selected';h+='<div class="mini-day '+c+'" data-d="'+fmt(d)+'"><div class="dow">'+dow(d)+'</div><div class="num">'+d.getDate()+'</div></div>';}
   el.innerHTML='<div class="mini-cal">'+h+'</div>';
 }
 function rDashToday() {
   var el=document.getElementById('dToday');if(!el)return;
-  var ts=fmt(S.today);var items=S.events.filter(function(e){return e.event_date===ts&&!isPast(e)}).sort(function(a,b){return(a.start_time||'')>(b.start_time||'')?1:-1;}).slice(0,5);
+  var ts=fmt(S.today);var items=S.events.filter(function(e){return e.event_date===ts}).sort(function(a,b){return(a.start_time||'')>(b.start_time||'')?1:-1;}).slice(0,5);
   if(!items.length){el.innerHTML='<div style="font-size:0.8rem;color:#888;padding:0.5rem 0">✅ 今天暂无待办</div>';return;}
   el.innerHTML=items.map(function(e){
     return'<div class="event-row"><div class="event-dot" style="background:'+(e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d')+'"></div><div class="event-info"><div class="title">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+'</div></div></div>';
@@ -1208,6 +1212,16 @@ function editProject(p){
   };
   document.getElementById('epCancel').onclick=function(){openProjectDetail(p.id);};
 }
+
+// Desktop mini-cal day click
+document.addEventListener('click',function(e){
+  var m=e.target.closest('.mini-day[data-d]');
+  if(m){
+    S.selDate=new Date(m.dataset.d+'T12:00:00');
+    rDashCal();
+    rDashToday();
+  }
+});
 
 // Calendar day click
 document.addEventListener('click',function(e){
