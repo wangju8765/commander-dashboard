@@ -124,6 +124,26 @@
 #### 提交
 - `4806107` fix: form-row未关闭导致备注和textarea被包进flex容器
 
+### 14:25 修复 session — 表单提交重写
+
+#### 问题
+- 新建事件返回「保存失败」，编辑无效果
+
+#### 根因
+- 时/分双select的FormData到start_time的转换逻辑有bug，导致数据未正确发送
+
+#### 修复
+- 用`timeSel()`函数生成扁平select（06:00-23:45，15分钟间隔，18h×4=72选项）
+- 创建表单：`<select name="start_time">`和`<select name="end_time">`，FormData直接捕获
+- 编辑表单：`<select id="editTime">`和`<select id="editEndTime">`，直接读DOM值
+- 无需额外转换逻辑，`if(!obj.start_time)delete obj.start_time;` 恢复原有模式
+- 移除了hrOpts/minOpts函数
+
+#### 提交
+- `9558eff` fix: 表单提交修复 — 用单select替代双select转换
+
+### 14:30 暂停
+
 暂停，下次继续。
 
 ---
