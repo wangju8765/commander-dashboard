@@ -896,24 +896,19 @@ function showEditForm(e,d){
   html+='<div style="display:flex;gap:0.5rem"><button class="btn-submit" id="saveEditBtn" style="flex:1">💾 保存</button><button class="btn-submit" id="cancelEditBtn" style="flex:1;background:rgba(255,255,255,0.06);color:#888">取消</button></div></form>';
   d.innerHTML=html;
   d.querySelectorAll('.type-btn').forEach(function(b){b.onclick=function(){d.querySelectorAll('.type-btn').forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById('editEventType').value=this.dataset.value;};});
-  var closeDetail = function(){closeModal();};
   document.getElementById('saveEditBtn').onclick=function(){
     var title=document.getElementById('editTitle').value.trim();
     var desc=document.getElementById('editDesc').value.trim();
     var newType=document.getElementById('editEventType').value;
+    var newDate=document.getElementById('editDate').value;
+    var newTime=document.getElementById('editTime').value||null;
     if(!title)return;
-    var data={};
-    if(title!==e.title)data.title=title;
-    if(desc!==(e.description||''))data.description=desc;if(data.description==='')delete data.description;
-    if(newType!==e.event_type)data.event_type=newType;
-    var newDate=document.getElementById('editDate').value;var newTime=document.getElementById('editTime').value||null;if(newDate!==e.event_date)data.event_date=newDate;var oldStart=e.start_time||null;if(newTime!==oldStart){var oldParts=oldStart?oldStart.slice(0,5):null;if(newTime!==oldParts)data.start_time=newTime;}if(Object.keys(data).length===0){renderDetail(e,d);return;}
-    console.log('💾 save:',JSON.stringify(data),'eid:',e.id);
-    updateEvent(e.id,data).then(function(ok){
-      console.log('💾 updateEvent ok:',ok);
-      if(ok){
-        var updated=S.events.find(function(ev){return ev.id===e.id;});
-        if(updated)renderDetail(updated,d);
-        else renderDetail(e,d);
+    var data={title:title,description:desc||null,event_type:newType,event_date:newDate,start_time:newTime};
+    if(!data.description)delete data.description;
+    api('PATCH','calendar_events','id=eq.'+e.id,data).then(function(r){
+      if(r.ok){
+        e.title=title;e.description=desc||null;e.event_type=newType;e.event_date=newDate;e.start_time=newTime;
+        renderDetail(e,d);
       }else{alert('保存失败');}
     });
   };
