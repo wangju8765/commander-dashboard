@@ -888,7 +888,7 @@ function renderEvents() {
 function renderProj() {
   var el=document.getElementById('projGrid');
   if(!el) return;
-  if(!S.projects.length){el.innerHTML='<div class="empty-state"><div class="icon">📦</div><div class="msg">暂无项目</div></div>';return;}
+  if(!S.projects.length){el.innerHTML='<div class="empty-state"><div class="icon">📦</div><div class="msg">暂无项目</div><div style="font-size:0.7rem;color:#555;margin-top:0.25rem">点击右下角 ＋ 新建</div></div>';return;},
   // Agent emoji mapping
   var ae={'主宰':'👑','史蒂夫老师':'🧠','笔杆子':'✍️','参谋':'🔍','运营官':'⚙️','Erickson':'🛠️','默认':'👤'};
   // Fixed agent order
@@ -975,7 +975,7 @@ function rDashToday() {
 function rDashProj() {
   var el=document.getElementById('dProj');if(!el)return;
   var items=S.projects.filter(function(p){return p.status==='planning'||p.status==='in_progress'}).slice(0,5);
-  if(!items.length){el.innerHTML='<div style="font-size:0.8rem;color:#888;padding:0.5rem 0">暂无项目</div>';return;}
+  if(!items.length){el.innerHTML='<div style="font-size:0.75rem;color:#888;padding:0.5rem 0">暂无项目</div>';return;},
   el.innerHTML=items.map(function(p){
     return'<div class="project-mini"><div class="project-mini-info"><div class="project-mini-name">'+esc(p.name)+'</div><div style="font-size:0.6rem;color:#555;margin-top:0.1rem">'+(p.lead||'')+'</div></div></div>';
   }).join('');
@@ -1082,7 +1082,7 @@ function rDCalEvents(){
 function rDProjects(){
   var el = document.getElementById('dProjGrid');
   if(!el) return;
-  if(!S.projects.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">📦</div><div class="msg">暂无项目</div></div>';return;}
+  if(!S.projects.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">📦</div><div class="msg">暂无项目</div><div style="font-size:0.7rem;color:#555;margin-top:0.25rem">点击顶部 ＋ 快速添加 新建</div></div>';return;},
   var ae={'主宰':'👑','史蒂夫老师':'🧠','笔杆子':'✍️','参谋':'🔍','运营官':'⚙️','Erickson':'🛠️','默认':'👤'};
   var ao=['主宰','史蒂夫老师','Erickson','笔杆子','参谋','运营官'];
   var active=S.projects.filter(function(p){return p.status==='planning'||p.status==='in_progress';});
