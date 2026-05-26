@@ -21,6 +21,7 @@ html{font-size:calc(100vw/375*18);touch-action:manipulation}
 body{background:#0f0f13;color:#e8e8ed}
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh}
 #mobileView{display:flex;flex-direction:column;flex:1;overflow:hidden}
+#desktopView{display:none}
 
 /* Header */
 .header{padding:calc(1.25rem + env(safe-area-inset-top,0px)) 1rem 0.5rem;background:#0f0f13;position:sticky;top:0;z-index:10}
@@ -212,6 +213,16 @@ body{background:#0f0f13;color:#e8e8ed}
 .course-btn{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);color:#e8e8ed;padding:0.4rem 0.75rem;border-radius:0.5rem;font-size:0.8rem;cursor:pointer}
 .course-btn:active{background:rgba(255,107,157,0.12);border-color:#ff6b9d}
 }
+/* Desktop side panel (global) */
+#dPanel{position:fixed;top:0;right:0;width:420px;max-width:90vw;height:100vh;height:100dvh;background:#1a1a20;z-index:150;transform:translateX(100%);transition:transform 0.2s ease;border-left:1px solid rgba(255,255,255,0.06);overflow-y:auto;display:flex;flex-direction:column}
+#dPanel.open{transform:translateX(0)}
+#dPanelBackdrop{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);z-index:149;display:none}
+#dPanelBackdrop.show{display:block}
+#dPanel .p-head{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0}
+#dPanel .p-head .p-title{font-size:0.85rem;font-weight:600;color:#aaa}
+#dPanel .p-head .p-close{background:none;border:none;color:#888;font-size:1.1rem;cursor:pointer;padding:0.2rem;line-height:1}
+#dPanel .p-head .p-close:hover{color:#fff}
+#dPanel .p-body{padding:1rem;flex:1;overflow-y:auto}
 </style>
 <!-- ===== DESKTOP CSS ===== -->
 <style>
@@ -418,17 +429,6 @@ body{background:#0f0f13;color:#e8e8ed}
 .proj-detail .pd-label{color:#666;width:4rem;flex-shrink:0;font-size:0.72rem}
 .proj-detail .pd-value{color:#e8e8ed;flex:1}
 .proj-detail .pd-desc{font-size:0.82rem;color:#bbb;line-height:1.6;margin-bottom:0.75rem;padding:0.75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.5rem}
-
-/* Desktop side panel */
-#dPanel{position:fixed;top:0;right:0;width:420px;max-width:90vw;height:100vh;height:100dvh;background:#1a1a20;z-index:150;transform:translateX(100%);transition:transform 0.2s ease;border-left:1px solid rgba(255,255,255,0.06);overflow-y:auto;display:flex;flex-direction:column}
-#dPanel.open{transform:translateX(0)}
-#dPanelBackdrop{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);z-index:149;display:none}
-#dPanelBackdrop.show{display:block}
-#dPanel .p-head{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0}
-#dPanel .p-head .p-title{font-size:0.85rem;font-weight:600;color:#aaa}
-#dPanel .p-head .p-close{background:none;border:none;color:#888;font-size:1.1rem;cursor:pointer;padding:0.2rem;line-height:1}
-#dPanel .p-head .p-close:hover{color:#fff}
-#dPanel .p-body{padding:1rem;flex:1;overflow-y:auto}
 .proj-detail .pd-actions{display:flex;gap:0.5rem;margin-top:0.75rem}
 .proj-detail .pd-btn{flex:1;padding:0.5rem;border-radius:0.5rem;font-size:0.78rem;font-weight:500;cursor:pointer;text-align:center;transition:all 0.12s;font-family:inherit}
 .proj-detail .pd-btn.edit{background:#5b9aff;border:none;color:#fff}
@@ -680,16 +680,6 @@ body{background:#0f0f13;color:#e8e8ed}
   </div>
 </div>
 
-  <!-- Desktop side panel -->
-  <div id="dPanelBackdrop" onclick="closeDesktopPanel()"></div>
-  <div id="dPanel">
-    <div class="p-head">
-      <span class="p-title">详情</span>
-      <button class="p-close" onclick="closeDesktopPanel()">✕</button>
-    </div>
-    <div class="p-body" id="dPanelBody"></div>
-  </div>
-
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal">
@@ -701,8 +691,17 @@ body{background:#0f0f13;color:#e8e8ed}
     <div id="detailBody" class="detail-body" style="display:none"></div>
   </div>
 </div>
-
 </div>
+
+  <!-- Desktop side panel (global) -->
+  <div id="dPanelBackdrop" onclick="closeDesktopPanel()"></div>
+  <div id="dPanel">
+    <div class="p-head">
+      <span class="p-title">详情</span>
+      <button class="p-close" onclick="closeDesktopPanel()">✕</button>
+    </div>
+    <div class="p-body" id="dPanelBody"></div>
+  </div>
 
 <script>
 // ==================== SHOW/HIDE MOBILE VS DESKTOP ====================
