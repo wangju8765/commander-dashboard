@@ -580,7 +580,7 @@ function trunc(s,n){return s&&s.length>n?s.slice(0,n)+'…':s||'';}
 function isPast(e) {
   if(e.event_date<fmt(S.today))return true;
   if(e.event_date===fmt(S.today)){
-    if(!e.start_time)return false;
+    if(!e.start_time)return false; // 无时间 → 当天24:00才过期（即次日才变灰）
     var n=new Date(),p=e.start_time.split(':');
     var t=new Date();t.setHours(parseInt(p[0]),parseInt(p[1]),0);
     if(e.end_time){var ep=e.end_time.split(':');t.setHours(parseInt(ep[0]),parseInt(ep[1]),0);}
