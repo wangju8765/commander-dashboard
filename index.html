@@ -907,7 +907,9 @@ function showEditForm(e,d){
     if(desc!==(e.description||''))data.description=desc;if(data.description==='')delete data.description;
     if(newType!==e.event_type)data.event_type=newType;
     var newDate=document.getElementById('editDate').value;var newTime=document.getElementById('editTime').value||null;if(newDate!==e.event_date)data.event_date=newDate;var oldStart=e.start_time||null;if(newTime!==oldStart){var oldParts=oldStart?oldStart.slice(0,5):null;if(newTime!==oldParts)data.start_time=newTime;}if(Object.keys(data).length===0){renderDetail(e,d);return;}
+    console.log('💾 save:',JSON.stringify(data),'eid:',e.id);
     updateEvent(e.id,data).then(function(ok){
+      console.log('💾 updateEvent ok:',ok);
       if(ok){
         var updated=S.events.find(function(ev){return ev.id===e.id;});
         if(updated)renderDetail(updated,d);
