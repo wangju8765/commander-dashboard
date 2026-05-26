@@ -958,6 +958,8 @@ function showEditForm(e,d){
       if(r.ok){
         e.title=title;e.description=desc||null;e.event_type=newType;e.event_date=newDate;e.start_time=newTime;
         renderDetail(e,d);
+        renderEvents();
+        renderCal();
       }else{alert('保存失败');}
     });
   };
