@@ -593,7 +593,14 @@ async function crudUpdate(table, id, data) {
   if (!r.ok) { console.error(await r.text()); return false; }
   return true;
 }
-async function updateEvent(id, data) { if(await crudUpdate('calendar_events',id,data)) { await loadAll(); return true; } return false; }
+async function updateEvent(id, data, keepDetail) {
+  if(await crudUpdate('calendar_events',id,data)) {
+    // 刷新数据但不重绘UI——Save回调里自己处理
+    for(var j=0;j<S.events.length;j++){if(S.events[j].id===id){Object.assign(S.events[j],data);break;}}
+    return true;
+  }
+  return false;
+}
 async function crudDelete(table, id) {
   var r = await api('DELETE', table, 'id=eq.'+id);
   if (!r.ok) { console.error(await r.text()); return false; }
@@ -859,7 +866,6 @@ function renderDetail(e,d){
   html+='<div class="detail-meta">'+esc(e.event_date)+tm+' · '+ty+'</div>';
   var notes='';
   if(e.description)notes+=mdToHtml(e.description,e.id);
-  if(e.detail_html)notes+='<div class="detail-html">'+e.detail_html+'</div>';
   if(notes)html+='<div class="detail-desc" style="margin-top:0.625rem">'+notes+'</div>';
   d.innerHTML=html;
   d.querySelectorAll('.md-cb input[type=checkbox]').forEach(function(cb){
@@ -890,6 +896,7 @@ function showEditForm(e,d){
   html+='<div style="display:flex;gap:0.5rem"><button class="btn-submit" id="saveEditBtn" style="flex:1">💾 保存</button><button class="btn-submit" id="cancelEditBtn" style="flex:1;background:rgba(255,255,255,0.06);color:#888">取消</button></div></form>';
   d.innerHTML=html;
   d.querySelectorAll('.type-btn').forEach(function(b){b.onclick=function(){d.querySelectorAll('.type-btn').forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById('editEventType').value=this.dataset.value;};});
+  var closeDetail = function(){closeModal();};
   document.getElementById('saveEditBtn').onclick=function(){
     var title=document.getElementById('editTitle').value.trim();
     var desc=document.getElementById('editDesc').value.trim();
@@ -902,12 +909,14 @@ function showEditForm(e,d){
     var newDate=document.getElementById('editDate').value;var newTime=document.getElementById('editTime').value||null;if(newDate!==e.event_date)data.event_date=newDate;var oldStart=e.start_time||null;if(newTime!==oldStart){var oldParts=oldStart?oldStart.slice(0,5):null;if(newTime!==oldParts)data.start_time=newTime;}if(Object.keys(data).length===0){renderDetail(e,d);return;}
     updateEvent(e.id,data).then(function(ok){
       if(ok){
-        for(var j=0;j<S.events.length;j++){if(S.events[j].id===e.id){S.events[j].title=data.title||e.title;S.events[j].description=data.description||null;S.events[j].event_type=data.event_type||e.event_type;S.events[j].event_date=data.event_date||e.event_date;S.events[j].start_time=data.start_time||e.start_time;break;}}
-        renderDetail(S.events.find(function(ev){return ev.id===e.id;})||e,d);
+        var updated=S.events.find(function(ev){return ev.id===e.id;});
+        if(updated)renderDetail(updated,d);
+        else renderDetail(e,d);
       }else{alert('保存失败');}
     });
   };
   document.getElementById('cancelEditBtn').onclick=function(){renderDetail(e,d);};
+  d.addEventListener('keydown',function(ke){if(ke.key==='Escape'){renderDetail(e,d);}});
 }
 
 // Export
