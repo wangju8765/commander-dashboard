@@ -1,5 +1,5 @@
 ---
-name: event-detail-creator
+name: commander-calendar
 description: Create and manage Commander Dashboard calendar events via Supabase REST API. Use when the user asks to create, update, or manage calendar events in the Commander Dashboard (主宰面板) — including simple events (e.g. "下周三上午9点开会") and complex multi-step events requiring rich detail pages (trips with transit, packing lists, timelines). For simple events, create a basic entry with title/time/description. For complex events, generate structured detail_html with packing tags and timeline views. Not for iPhone calendar — only for Commander Dashboard.
 ---
 
