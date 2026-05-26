@@ -418,6 +418,17 @@ body{background:#0f0f13;color:#e8e8ed}
 .proj-detail .pd-label{color:#666;width:4rem;flex-shrink:0;font-size:0.72rem}
 .proj-detail .pd-value{color:#e8e8ed;flex:1}
 .proj-detail .pd-desc{font-size:0.82rem;color:#bbb;line-height:1.6;margin-bottom:0.75rem;padding:0.75rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:0.5rem}
+
+/* Desktop side panel */
+#dPanel{position:fixed;top:0;right:0;width:420px;max-width:90vw;height:100vh;height:100dvh;background:#1a1a20;z-index:150;transform:translateX(100%);transition:transform 0.2s ease;border-left:1px solid rgba(255,255,255,0.06);overflow-y:auto;display:flex;flex-direction:column}
+#dPanel.open{transform:translateX(0)}
+#dPanelBackdrop{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.3);z-index:149;display:none}
+#dPanelBackdrop.show{display:block}
+#dPanel .p-head{display:flex;align-items:center;justify-content:space-between;padding:0.85rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0}
+#dPanel .p-head .p-title{font-size:0.85rem;font-weight:600;color:#aaa}
+#dPanel .p-head .p-close{background:none;border:none;color:#888;font-size:1.1rem;cursor:pointer;padding:0.2rem;line-height:1}
+#dPanel .p-head .p-close:hover{color:#fff}
+#dPanel .p-body{padding:1rem;flex:1;overflow-y:auto}
 .proj-detail .pd-actions{display:flex;gap:0.5rem;margin-top:0.75rem}
 .proj-detail .pd-btn{flex:1;padding:0.5rem;border-radius:0.5rem;font-size:0.78rem;font-weight:500;cursor:pointer;text-align:center;transition:all 0.12s;font-family:inherit}
 .proj-detail .pd-btn.edit{background:#5b9aff;border:none;color:#fff}
@@ -668,6 +679,16 @@ body{background:#0f0f13;color:#e8e8ed}
     </div>
   </div>
 </div>
+
+  <!-- Desktop side panel -->
+  <div id="dPanelBackdrop" onclick="closeDesktopPanel()"></div>
+  <div id="dPanel">
+    <div class="p-head">
+      <span class="p-title">详情</span>
+      <button class="p-close" onclick="closeDesktopPanel()">✕</button>
+    </div>
+    <div class="p-body" id="dPanelBody"></div>
+  </div>
 
 <!-- ===== MODAL ===== -->
 <div class="modal-overlay" id="modalOverlay">
@@ -972,7 +993,7 @@ function rDashToday() {
   var ts=fmt(S.today);var items=S.events.filter(function(e){return e.event_date===ts}).sort(function(a,b){return(a.start_time||'')>(b.start_time||'')?1:-1;}).slice(0,5);
   if(!items.length){el.innerHTML='<div style="font-size:0.8rem;color:#888;padding:0.5rem 0">✅ 今天暂无待办</div>';return;}
   el.innerHTML=items.map(function(e){
-    return'<div class="event-row"><div class="event-dot" style="background:'+(e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d')+'"></div><div class="event-info"><div class="title">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+'</div></div></div>';
+    return'<div class="event-row" onclick="openEventInPanel(\'"+e.id+"\')"><div class="event-dot" style="background:'+(e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d')+'"></div><div class="event-info"><div class="title">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+'</div></div></div>';
   }).join('');
 }
 function rDashProj() {
@@ -1077,7 +1098,7 @@ function rDCalEvents(){
   el.innerHTML='<div style="font-size:0.75rem;color:#888;margin-bottom:0.75rem;font-weight:500">'+ts+' · '+dow(new Date(ts+'T12:00'))+'</div>'+
     items.map(function(e){
       var c=e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d';
-      return '<div class="event-row" style="cursor:pointer" onclick="openEventDetail(\''+e.id+'\')"><div class="event-dot" style="background:'+c+'"></div><div class="event-info"><div class="title'+(isPast(e)?' style=\"opacity:0.4\"':'')+'">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div>';
+      return '<div class="event-row" style="cursor:pointer" onclick="openEventInPanel(\'+e.id+\')"><div class="event-dot" style="background:'+c+'"></div><div class="event-info"><div class="title'+(isPast(e)?' style=\"opacity:0.4\"':'')+'">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div>';
     }).join('');
   // Bind cal day clicks
   strip.querySelectorAll('.day-pill').forEach(function(p){p.onclick=function(){S.selDate=new Date(p.dataset.d+'T12:00:00');strip.querySelectorAll('.day-pill.selected').forEach(function(x){x.classList.remove('selected');});if(!isT(S.selDate))p.classList.add('selected');rDCalEvents();};});
@@ -1167,7 +1188,7 @@ document.addEventListener('click',function(e){
 // Project click (mobile + desktop)
 document.addEventListener('click',function(e){
   var pc=e.target.closest('[data-pid]');
-  if(pc&&pc.dataset.pid)openProjectDetail(pc.dataset.pid);
+  if(pc&&pc.dataset.pid){if(window.innerWidth>=768)openProjectInPanel(pc.dataset.pid);else openProjectDetail(pc.dataset.pid);}
 });
 
 // ==================== PROJECT DETAIL ====================
