@@ -892,47 +892,25 @@ function renderDetail(e,d){
   var ty='<span class="type-dot" style="background:'+(e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d')+';vertical-align:middle;margin-right:0.25rem"></span>'+(e.event_type==='work'?'工作':e.event_type==='course'?'课程':'生活');
   var html='<div class="detail-title">'+tl+'</div>';
   html+='<div class="detail-meta">'+esc(e.event_date)+tm+' · '+ty+'</div>';
+  // AI-generated detail_html (structured layout)
   if(e.detail_html){
-    // AI-generated rich layout
     html+='<div class="detail-html" style="margin-top:0.625rem">'+e.detail_html+'</div>';
-    d.innerHTML=html;
-    // Click handler for packing tags (toggle done)
-    d.querySelectorAll('.detail-pack-tag').forEach(function(tag){
-      tag.onclick=function(){this.classList.toggle('done');};
-    });
-  } else if(e.description){
-    // Fallback: Markdown description
-    var notes=mdToHtml(e.description,e.id);
-    if(notes)html+='<div class="detail-desc" style="margin-top:0.625rem">'+notes+'</div>';
-    d.innerHTML=html;
-    d.querySelectorAll('.md-cb input[type=checkbox]').forEach(function(cb){
-      cb.onchange=function(){
-        var eid=this.dataset.eid;
-        for(var j=0;j<S.events.length;j++){if(S.events[j].id===eid){var ev=S.events[j];break;}}
-        if(!ev||!ev.description)return;
-        var label=this.nextElementSibling.textContent.trim();
-        var lines=ev.description.split('\n');
-        var found=false;
-        for(var k=0;k<lines.length;k++){
-          var m=lines[k].match(/^- \[([ x])\] (.+)$/);
-          if(m&&m[2].trim()===label){lines[k]=this.checked?'- [x] '+m[2]:'- [ ] '+m[2];found=true;break;}
-        }
-        if(!found)return;
-        var newDesc=lines.join('\n');
-        updateEvent(eid,{description:newDesc}).then(function(ok){
-          if(ok){for(var j2=0;j2<S.events.length;j2++){if(S.events[j2].id===eid){S.events[j2].description=newDesc;break;}}renderDetail(S.events.find(function(ev){return ev.id===eid;})||ev,d);}
-        });
-      };
-    });
-  } else {
-    d.innerHTML=html;
   }
+  // User-editable description (plain text, no Markdown)
+  if(e.description){
+    html+='<div class="detail-desc" style="margin-top:0.625rem">'+esc(e.description)+'</div>';
+  }
+  d.innerHTML=html;
+  // Packing tag click handlers (toggle done)
+  d.querySelectorAll('.detail-pack-tag').forEach(function(tag){
+    tag.onclick=function(){this.classList.toggle('done');};
+  });
 }
 function showEditForm(e,d){
   var ty=e.event_type||'life';
   var tyBtn='<div class="type-buttons"><button type="button" class="type-btn'+(ty==='life'?' active':'')+'" data-value="life" style="--type-color:#a078ff;--type-bg:rgba(160,120,255,0.15)"><span class="type-dot" style="background:#a078ff"></span>生活</button><button type="button" class="type-btn'+(ty==='work'?' active':'')+'" data-value="work" style="--type-color:#ff9f43;--type-bg:rgba(255,159,67,0.15)"><span class="type-dot" style="background:#ff9f43"></span>工作</button><button type="button" class="type-btn'+(ty==='course'?' active':'')+'" data-value="course" style="--type-color:#ff6b9d;--type-bg:rgba(255,107,157,0.15)"><span class="type-dot" style="background:#ff6b9d"></span>课程</button></div><input type="hidden" id="editEventType" value="'+ty+'">';
   var html='<form style="display:flex;flex-direction:column;gap:0.5rem" onsubmit="return false"><label>类型</label>'+tyBtn+'<label>标题</label><input id="editTitle" value="'+esc(e.title)+'" required><div class="form-row"><div class="date-field"><label>日期</label><input id="editDate" type="date" value="'+e.event_date+'"></div><div class="time-field"><label>时间</label><input id="editTime" type="time" value="'+(e.start_time||'')+'" step="900"></div></div>'
-  html+='<label>备注 <span style="color:#555;font-weight:400">(支持 # 标题、**加粗**、- 列表)</span></label><textarea id="editDesc" rows="6" style="font-family:monospace;font-size:0.8rem">'+(e.description||'')+'</textarea>';
+  html+='<label>备注</label><textarea id="editDesc" rows="4" style="font-size:0.8rem">'+(e.description||'')+'</textarea>';
   html+='<div style="display:flex;gap:0.5rem"><button type="button" class="btn-submit" id="saveEditBtn" style="flex:1">💾 保存</button><button type="button" class="btn-submit" id="cancelEditBtn" style="flex:1;background:rgba(255,255,255,0.06);color:#888">取消</button></div></form>';
   d.innerHTML=html;
   d.querySelectorAll('.type-btn').forEach(function(b){b.onclick=function(){d.querySelectorAll('.type-btn').forEach(function(x){x.classList.remove('active');});this.classList.add('active');document.getElementById('editEventType').value=this.dataset.value;};});

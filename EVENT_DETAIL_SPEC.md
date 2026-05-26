@@ -232,7 +232,7 @@ AI 生成输出：
 
 ### 纯提醒
 
-1. **不生成 detail_html**，只用 `description` 写 Markdown 备注
+1. **不生成 detail_html**，只用 `description` 写纯文本备注
 
 ---
 
@@ -243,5 +243,5 @@ AI 生成输出：
 3. agent **主动推理补齐**缺失环节（交通接驳、用餐、时间衔接）
 4. agent 按本规范生成完整 `detail_html` HTML
 5. agent 调用 Supabase API 创建或更新 `calendar_events` 记录
-   - 写入：`title`, `event_date`, `start_time`, `end_time`, `event_type`, `detail_html`, `description`（Markdown 摘要，备查）
+   - 写入：`title`, `event_date`, `start_time`, `end_time`, `event_type`, `detail_html`, `description`（纯文本摘要，用户可在界面上编辑修改）
 6. 呈报用户确认
