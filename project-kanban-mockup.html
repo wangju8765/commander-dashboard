@@ -3,205 +3,356 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>项目看板 · 方案示意</title>
+<title>项目看板 · v2方案</title>
 <style>
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;padding:2rem}
-  h1{font-size:1.25rem;margin-bottom:0.25rem;display:flex;align-items:center;gap:0.5rem}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;padding:2rem;max-width:800px;margin:auto}
+  h1{font-size:1.2rem;margin-bottom:0.25rem}
   .sub{font-size:0.75rem;color:#888;margin-bottom:1.5rem}
 
-  /* ===== KANBAN (desktop) ===== */
-  .kanban{display:flex;gap:0.75rem;overflow-x:auto;padding-bottom:1rem}
-  .kanban-col{flex:1;min-width:260px;max-width:320px}
-  .col-header{display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;font-weight:600;color:#999;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.625rem}
-  .col-header .count{font-size:0.65rem;background:rgba(255,255,255,0.06);padding:0.1rem 0.35rem;border-radius:0.75rem;color:#666}
+  /* ===== AGENT GROUP ===== */
+  .agent-group{margin-bottom:1.5rem}
+  .agent-header{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0;margin-bottom:0.5rem;border-bottom:1px solid rgba(255,255,255,0.06)}
+  .agent-avatar{width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;flex-shrink:0}
+  .agent-name{font-size:0.9rem;font-weight:600;color:#e8e8ed}
+  .agent-count{font-size:0.65rem;color:#666;margin-left:auto}
 
-  .project-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:0.75rem;margin-bottom:0.5rem;cursor:pointer;transition:all 0.12s}
+  /* ===== PROJECT CARD ===== */
+  .project-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:0.75rem 0.85rem;margin-bottom:0.375rem;cursor:pointer;transition:all 0.12s;display:flex;align-items:center;gap:0.75rem}
   .project-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1)}
+  .project-card:active{background:rgba(91,154,255,0.06)}
 
-  .card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:0.5rem}
-  .card-name{font-size:0.88rem;font-weight:600;color:#fff;line-height:1.3}
-  .card-lead{font-size:0.65rem;color:#666;margin-top:0.2rem;display:flex;align-items:center;gap:0.25rem}
-  .card-lead .avatar{width:1rem;height:1rem;border-radius:50%;background:#5b9aff;display:inline-flex;align-items:center;justify-content:center;font-size:0.5rem;color:#fff;font-weight:600}
-  .card-tags{display:flex;flex-wrap:wrap;gap:0.2rem;margin-top:0.375rem}
-  .card-tag{font-size:0.55rem;padding:0.1rem 0.3rem;border-radius:0.2rem}
-  .card-tag.work{background:rgba(255,159,67,0.12);color:#ff9f43}
-  .card-tag.life{background:rgba(46,213,115,0.12);color:#2ed573}
-  .card-tag.think{background:rgba(160,120,255,0.12);color:#a078ff}
-  .card-tag.family{background:rgba(255,107,107,0.12);color:#ff6b6b}
-  .card-tag.tech{background:rgba(91,154,255,0.12);color:#5b9aff}
-  .card-tag.edu{background:rgba(255,107,157,0.12);color:#ff6b9d}
+  .p-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+  .p-status-dot.planning{background:#a078ff}
+  .p-status-dot.in_progress{background:#5b9aff}
+  .p-status-dot.completed{background:#2ed573}
+  .p-status-dot.archived{background:#555}
+  
+  .p-body{flex:1;min-width:0}
+  .p-name{font-size:0.88rem;font-weight:600;color:#fff}
+  .p-meta-row{display:flex;align-items:center;gap:0.5rem;margin-top:0.2rem}
+  .p-status-text{font-size:0.65rem;padding:0.1rem 0.35rem;border-radius:0.25rem}
+  .p-status-text.planning{background:rgba(160,120,255,0.12);color:#a078ff}
+  .p-status-text.in_progress{background:rgba(91,154,255,0.12);color:#5b9aff}
+  .p-status-text.completed{background:rgba(46,213,115,0.12);color:#2ed573}
+  .p-status-text.archived{background:rgba(85,85,85,0.12);color:#666}
+  .p-tags{display:flex;gap:0.2rem;flex-wrap:wrap}
+  .p-tag{font-size:0.5rem;padding:0.05rem 0.2rem;border-radius:0.15rem}
+  .p-tag.tech{background:rgba(91,154,255,0.12);color:#5b9aff}
+  .p-tag.edu{background:rgba(255,107,157,0.12);color:#ff6b9d}
+  .p-tag.family{background:rgba(255,107,107,0.12);color:#ff6b6b}
+  .p-tag.think{background:rgba(160,120,255,0.12);color:#a078ff}
+  .p-tag.business{background:rgba(255,159,67,0.12);color:#ff9f43}
+  .p-updated{font-size:0.6rem;color:#444;white-space:nowrap}
 
-  .card-progress{margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem}
-  .card-bar{flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:2px;overflow:hidden}
-  .card-bar .fill{height:100%;border-radius:2px;transition:width 0.3s}
-  .card-pct{font-size:0.65rem;font-weight:600;color:#666;min-width:2rem;text-align:right}
-  .card-desc{font-size:0.7rem;color:#888;margin-top:0.375rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .card-meta{font-size:0.6rem;color:#444;margin-top:0.375rem;display:flex;gap:0.5rem;justify-content:space-between}
-  .card-updated{color:#444}
+  /* Phase bar (replaces progress %) */
+  .p-phase{display:flex;gap:0.25rem;margin-top:0.375rem;align-items:center}
+  .p-phase-step{width:2rem;height:3px;border-radius:2px;background:rgba(255,255,255,0.06)}
+  .p-phase-step.done{background:#5b9aff}
+  .p-phase-step.current{background:#5b9aff;box-shadow:0 0 4px rgba(91,154,255,0.5)}
+  .p-phase-label{font-size:0.55rem;color:#444;margin-left:0.25rem}
 
-  /* Status-specific card styling */
-  .col-planning .project-card{border-left:2px solid #a078ff}
-  .col-in_progress .project-card{border-left:2px solid #5b9aff}
-  .col-completed .project-card{border-left:2px solid #2ed573;opacity:0.8}
-  .col-archived .project-card{border-left:2px solid #555;opacity:0.5}
+  /* ===== COMPLETED SECTION ===== */
+  .archived-section{margin-top:2rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.06)}
+  .archived-header{display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:#666;cursor:pointer;padding:0.5rem 0}
+  .archived-header:hover{color:#888}
+  .archived-header .arrow{transition:transform 0.15s;font-size:0.7rem}
+  .archived-header .arrow.open{transform:rotate(90deg)}
+  .archived-list{margin-top:0.375rem}
+  .archived-list .project-card{opacity:0.6}
+  .archived-list.collapsed{display:none}
 
-  /* ===== MOBILE VIEW ===== */
-  @media(max-width:768px){
-    body{padding:1rem}
-    .kanban{flex-direction:column;gap:1.25rem}
-    .kanban-col{max-width:none}
-  }
+  /* ===== PROJECT DETAIL MODAL ===== */
+  .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:200;display:none;align-items:center;justify-content:center}
+  .modal-overlay.show{display:flex}
+  .modal{background:#1a1a20;border-radius:1rem;width:100%;max-width:460px;max-height:80vh;overflow-y:auto;padding:1.25rem;animation:slideUp 0.2s ease}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .modal-close{float:right;background:none;border:none;color:#aaa;font-size:1.2rem;cursor:pointer;padding:0.2rem}
+  .modal-title{font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:0.5rem;padding-right:2rem}
+  .modal-status{margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
+  .modal-lead{display:flex;align-items:center;gap:0.375rem;font-size:0.8rem;color:#888;margin-bottom:0.75rem}
+  .modal-desc{font-size:0.82rem;color:#bbb;line-height:1.6;margin-bottom:1rem;padding:0.75rem;background:rgba(255,255,255,0.02);border-radius:0.5rem}
+  .modal-field{display:flex;flex-direction:column;gap:0.2rem;margin-bottom:0.625rem}
+  .modal-field label{font-size:0.65rem;color:#666;font-weight:500;text-transform:uppercase;letter-spacing:0.03em}
+  .modal-field .value{font-size:0.82rem;color:#e8e8ed}
+  .modal-tags{display:flex;gap:0.3rem;flex-wrap:wrap;margin-bottom:0.75rem}
+  .modal-tag{font-size:0.65rem;padding:0.15rem 0.4rem;border-radius:0.25rem;background:rgba(255,255,255,0.04);color:#aaa}
+  .modal-notes{font-size:0.75rem;color:#888;margin-top:0.5rem;padding:0.625rem;border:1px dashed rgba(255,255,255,0.08);border-radius:0.5rem;font-style:italic}
 
-  /* ===== COLOR SUMMARY ===== */
-  .legend{display:flex;gap:1.5rem;flex-wrap:wrap;margin-top:1.5rem;padding:1rem;background:rgba(255,255,255,0.02);border-radius:0.75rem;font-size:0.65rem;color:#888}
-  .legend-item{display:flex;align-items:center;gap:0.375rem}
-  .legend-dot{width:0.5rem;height:0.5rem;border-radius:50%}
-
-  .note{font-size:0.75rem;color:#888;margin-top:1rem;padding:0.75rem;border:1px solid rgba(255,159,67,0.2);border-radius:0.5rem;background:rgba(255,159,67,0.04)}
+  /* ===== PROGRESS EXPLANATION NOTE ===== */
+  .note{padding:1rem;background:rgba(255,159,67,0.04);border-left:2px solid rgba(255,159,67,0.3);border-radius:0 0.5rem 0.5rem 0;margin-top:1.5rem;font-size:0.78rem;color:#aaa;line-height:1.5}
   .note strong{color:#ff9f43}
+  .note .head{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.375rem}
 </style>
 </head>
 <body>
 
-<h1>📊 项目看板 · 方案示意</h1>
-<div class="sub">按状态分列，一目了然。每条卡显示：名称 / 负责人 / 进度 / 标签 / 最近更新</div>
+<h1>📊 项目 · Agent 分组方案</h1>
+<div class="sub">点击项目卡片看详情页示意</div>
 
-<div class="kanban">
-  <!-- Column: 进行中 -->
-  <div class="kanban-col col-in_progress">
-    <div class="col-header">🚧 进行中 <span class="count">3</span></div>
-
-    <div class="project-card">
-      <div class="card-top">
-        <div>
-          <div class="card-name">语文写字小程序</div>
-          <div class="card-lead"><span class="avatar">S</span> 史蒂夫老师</div>
-        </div>
+<!-- ===== AGENT GROUP: 主宰 ===== -->
+<div class="agent-group">
+  <div class="agent-header">
+    <div class="agent-avatar" style="background:#5b9aff">👑</div>
+    <span class="agent-name">主宰</span>
+    <span class="agent-count">2个进行中</span>
+  </div>
+  <div class="project-card" onclick="openDetail('master')">
+    <div class="p-status-dot in_progress"></div>
+    <div class="p-body">
+      <div class="p-name">主宰面板</div>
+      <div class="p-meta-row">
+        <span class="p-status-text in_progress">进行中</span>
+        <span class="p-tags"><span class="p-tag tech">技术</span><span class="p-tag think">务虚</span></span>
+        <span class="p-updated">今天</span>
       </div>
-      <div class="card-tags">
-        <span class="card-tag tech">技术</span>
-        <span class="card-tag edu">教育</span>
+      <div class="p-phase">
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step current"></span>
+        <span class="p-phase-step"></span>
+        <span class="p-phase-label">阶段 3/5</span>
       </div>
-      <div class="card-progress">
-        <div class="card-bar"><div class="fill" style="width:60%;background:#5b9aff"></div></div>
-        <div class="card-pct">60%</div>
-      </div>
-      <div class="card-desc">微信小程序：写字笔顺、自评、AI评语。基础功能可用，交互层待打磨。</div>
-      <div class="card-meta"><span class="card-updated">🕐 2天前更新</span><span>📝 有备注</span></div>
-    </div>
-
-    <div class="project-card">
-      <div class="card-top">
-        <div>
-          <div class="card-name">主宰面板</div>
-          <div class="card-lead"><span class="avatar">👑</span> 主宰</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="card-tag tech">技术</span>
-        <span class="card-tag think">务虚</span>
-      </div>
-      <div class="card-progress">
-        <div class="card-bar"><div class="fill" style="width:40%;background:#5b9aff"></div></div>
-        <div class="card-pct">40%</div>
-      </div>
-      <div class="card-desc">个人管理面板。日历事件已可用，电脑端、看板、离线缓存待完善。</div>
-      <div class="card-meta"><span class="card-updated">🕐 今天</span></div>
-    </div>
-
-    <div class="project-card">
-      <div class="card-top">
-        <div>
-          <div class="card-name">速算24点游戏</div>
-          <div class="card-lead"><span class="avatar">E</span> Erickson</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="card-tag tech">技术</span>
-        <span class="card-tag edu">教育</span>
-      </div>
-      <div class="card-progress">
-        <div class="card-bar"><div class="fill" style="width:85%;background:#2ed573"></div></div>
-        <div class="card-pct">85%</div>
-      </div>
-      <div class="card-desc">Minecraft主题24点游戏。核心玩法+排行榜已完成，等待上线。</div>
-      <div class="card-meta"><span class="card-updated">🕐 已停滞</span></div>
     </div>
   </div>
-
-  <!-- Column: 规划中 -->
-  <div class="kanban-col col-planning">
-    <div class="col-header">🎯 规划中 <span class="count">2</span></div>
-
-    <div class="project-card">
-      <div class="card-top">
-        <div>
-          <div class="card-name">神经功能训练</div>
-          <div class="card-lead"><span class="avatar">S</span> 史蒂夫老师</div>
-        </div>
+  <div class="project-card" onclick="openDetail('xiaowang')">
+    <div class="p-status-dot planning"></div>
+    <div class="p-body">
+      <div class="p-name">[新项目] 奥数学习系统</div>
+      <div class="p-meta-row">
+        <span class="p-status-text planning">规划中</span>
+        <span class="p-tags"><span class="p-tag edu">教育</span><span class="p-tag think">务虚</span></span>
+        <span class="p-updated">暂无进展</span>
       </div>
-      <div class="card-tags">
-        <span class="card-tag tech">技术</span>
-        <span class="card-tag edu">教育</span>
-        <span class="card-tag family">家庭</span>
+      <div class="p-phase">
+        <span class="p-phase-step current"></span>
+        <span class="p-phase-step"></span>
+        <span class="p-phase-step"></span>
+        <span class="p-phase-step"></span>
+        <span class="p-phase-label">阶段 1/5</span>
       </div>
-      <div class="card-progress">
-        <div class="card-bar"><div class="fill" style="width:15%;background:#a078ff"></div></div>
-        <div class="card-pct">15%</div>
-      </div>
-      <div class="card-desc">针对儿子的注意力和执行功能训练游戏。需求调研中。</div>
-      <div class="card-meta"><span class="card-updated">🕐 暂停中</span></div>
     </div>
-  </div>
-
-  <!-- Column: 已完成 -->
-  <div class="kanban-col col-completed">
-    <div class="col-header">✅ 已完成 <span class="count">1</span></div>
-
-    <div class="project-card">
-      <div class="card-top">
-        <div>
-          <div class="card-name">小王数学</div>
-          <div class="card-lead"><span class="avatar">👑</span> 主宰</div>
-        </div>
-      </div>
-      <div class="card-tags">
-        <span class="card-tag edu">教育</span>
-        <span class="card-tag think">务虚</span>
-      </div>
-      <div class="card-progress">
-        <div class="card-bar"><div class="fill" style="width:100%;background:#2ed573"></div></div>
-        <div class="card-pct">100%</div>
-      </div>
-      <div class="card-desc">已完成归档。数学思维训练内容已整合至其他项目。</div>
-      <div class="card-meta"><span class="card-updated">🕐 已归档</span></div>
-    </div>
-  </div>
-
-  <!-- Column: 已归档 -->
-  <div class="kanban-col col-archived">
-    <div class="col-header">📦 已归档 <span class="count">0</span></div>
-    <div style="font-size:0.75rem;color:#555;padding:1rem 0.5rem;text-align:center">暂无归档项目</div>
   </div>
 </div>
 
-<div class="legend">
-  <span class="legend-item"><span class="legend-dot" style="background:#a078ff"></span> 紫色边 = 规划中</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#5b9aff"></span> 蓝色边 = 进行中</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#2ed573"></span> 绿色边 = 已完成</span>
-  <span class="legend-item"><span class="legend-dot" style="background:#555"></span> 灰色边 = 已归档</span>
-  <span class="legend-item" style="margin-left:auto"><span class="legend-dot" style="background:#ff9f43"></span> 金色 = 建议新增字段</span>
+<!-- ===== AGENT GROUP: 史蒂夫老师 ===== -->
+<div class="agent-group">
+  <div class="agent-header">
+    <div class="agent-avatar" style="background:#a078ff">🧠</div>
+    <span class="agent-name">史蒂夫老师</span>
+    <span class="agent-count">2个进行中</span>
+  </div>
+  <div class="project-card" onclick="openDetail('write')">
+    <div class="p-status-dot in_progress"></div>
+    <div class="p-body">
+      <div class="p-name">语文写字小程序</div>
+      <div class="p-meta-row">
+        <span class="p-status-text in_progress">进行中</span>
+        <span class="p-tags"><span class="p-tag tech">技术</span><span class="p-tag edu">教育</span></span>
+        <span class="p-updated">2天前</span>
+      </div>
+      <div class="p-phase">
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step current"></span>
+        <span class="p-phase-label">阶段 4/5</span>
+      </div>
+    </div>
+  </div>
+  <div class="project-card" onclick="openDetail('neural')">
+    <div class="p-status-dot planning"></div>
+    <div class="p-body">
+      <div class="p-name">神经功能训练</div>
+      <div class="p-meta-row">
+        <span class="p-status-text planning">规划中</span>
+        <span class="p-tags"><span class="p-tag tech">技术</span><span class="p-tag family">家庭</span><span class="p-tag edu">教育</span></span>
+        <span class="p-updated">暂停中</span>
+      </div>
+      <div class="p-phase">
+        <span class="p-phase-step current"></span>
+        <span class="p-phase-step"></span>
+        <span class="p-phase-step"></span>
+        <span class="p-phase-step"></span>
+        <span class="p-phase-label">阶段 1/5</span>
+      </div>
+    </div>
+  </div>
 </div>
 
+<!-- ===== AGENT GROUP: Erickson ===== -->
+<div class="agent-group">
+  <div class="agent-header">
+    <div class="agent-avatar" style="background:#ff6b9d">🛠️</div>
+    <span class="agent-name">Erickson</span>
+    <span class="agent-count">1个进行中</span>
+  </div>
+  <div class="project-card" onclick="openDetail('game')">
+    <div class="p-status-dot in_progress"></div>
+    <div class="p-body">
+      <div class="p-name">速算24点游戏</div>
+      <div class="p-meta-row">
+        <span class="p-status-text in_progress">进行中</span>
+        <span class="p-tags"><span class="p-tag tech">技术</span><span class="p-tag edu">教育</span></span>
+        <span class="p-updated">已停滞</span>
+      </div>
+      <div class="p-phase">
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step done"></span>
+        <span class="p-phase-step current"></span>
+        <span class="p-phase-label">阶段 5/5 · 待上线</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPLETED / ARCHIVED ===== -->
+<div class="archived-section">
+  <div class="archived-header" onclick="toggleArchived()">
+    <span class="arrow" id="archArrow">▶</span>
+    📦 已完成 / 已归档
+    <span style="font-size:0.65rem;color:#444;margin-left:auto">1个项目</span>
+  </div>
+  <div class="archived-list" id="archList">
+    <div class="project-card" onclick="openDetail('archived')">
+      <div class="p-status-dot archived"></div>
+      <div class="p-body">
+        <div class="p-name">小王数学</div>
+        <div class="p-meta-row">
+          <span class="p-status-text archived">已归档</span>
+          <span class="p-tags"><span class="p-tag edu">教育</span></span>
+          <span class="p-updated">👑 主宰</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROJECT DETAIL MODAL ===== -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="mTitle">项目名</div>
+    <div class="modal-status" id="mStatus"></div>
+    <div class="modal-lead" id="mLead"></div>
+    <div id="mTags" class="modal-tags"></div>
+    <div id="mDesc" class="modal-desc"></div>
+    <div class="modal-field">
+      <label>阶段</label>
+      <div class="value" id="mPhase"></div>
+    </div>
+    <div class="modal-field">
+      <label>上次活动</label>
+      <div class="value" id="mUpdated"></div>
+    </div>
+    <div class="modal-field">
+      <label>起始时间</label>
+      <div class="value" id="mCreated">2026-05-25</div>
+    </div>
+    <div id="mNotes" class="modal-notes">💡 项目备注（自由格式，不要求统一，想到什么写什么）</div>
+  </div>
+</div>
+
+<!-- ===== NOTES ===== -->
 <div class="note">
-  <strong>💡 值得探讨的点：</strong><br>
-  · 项目卡片上除了标签外，要不要加「最后一次活动时间」？方便知道哪个项目最近有进展<br>
-  · 负责人字段我建议加到数据库的 projects 表里。不强制填，但填了就在卡片上显示头像<br>
-  · 在手机端看板会变成纵向排列，每列一张列表<br>
-  · 点击卡片可以展开看详情/备注/最近操作记录<br>
-  · 对于"边做边想"的项目，可以加一个"自由备注"栏，不要求统一格式
+  <div class="head">🤔 关于「进度」的思考</div>
+  <p>数值百分比（如 40%、85%）对"边做边想"的项目没有意义——因为没人知道"100%"长什么样。<strong>我建议替换方案：</strong></p>
+  <br>
+  <p><strong>阶段制（5段），替代百分比：</strong></p>
+  <p>① 需求/构思 → ② 搭建框架 → ③ 核心功能 → ④ 打磨完善 → ⑤ 上线/移交</p>
+  <p>每个阶段没有"完成度"细分——要么到了，要么没到。比"60%"更诚实。</p>
+  <br>
+  <p><strong>完成的判定标准：</strong>{需求明确 + 交付物具体} → 做完了就是做完，不需要百分比。</p>
+  <br>
+  <p><strong>已完成项目存哪？</strong> 每个 Agent 组下面可以加一行灰色"已完成项目 N 个 →"的折叠入口，点开看。或者统一放在页面底部的"📦 已完成/已归档"区。我倾向于后者——清楚、不分散注意力。</p>
 </div>
 
+<script>
+function openDetail(id) {
+  // Demo data
+  var data = {
+    master:{
+      title:'主宰面板',
+      status:'🚧 进行中',
+      statusClass:'in_progress',
+      lead:'👑 主宰',
+      tags:['技术','务虚'],
+      desc:'个人管理面板。日历事件已可用，电脑端离线缓存已部署。项目看板讨论中。',
+      phase:'阶段 3/5 · 搭建完成 → 正在完善细节',
+      updated:'今天'
+    },
+    xiaowang:{
+      title:'[新项目] 奥数学习系统',
+      status:'🎯 规划中',
+      statusClass:'planning',
+      lead:'👑 主宰',
+      tags:['教育','务虚'],
+      desc:'基于16年教学经验的教育内容系统。还在构思阶段。',
+      phase:'阶段 1/5 · 需求构思',
+      updated:'暂无进展'
+    },
+    write:{
+      title:'语文写字小程序',
+      status:'🚧 进行中',
+      statusClass:'in_progress',
+      lead:'🧠 史蒂夫老师',
+      tags:['技术','教育'],
+      desc:'微信小程序：写字笔顺、自评、AI评语。基础可用，交互层待打磨。',
+      phase:'阶段 4/5 · 打磨完善',
+      updated:'2天前'
+    },
+    neural:{
+      title:'神经功能训练',
+      status:'🎯 规划中',
+      statusClass:'planning',
+      lead:'🧠 史蒂夫老师',
+      tags:['技术','家庭','教育'],
+      desc:'针对儿子的注意力和执行功能训练游戏。需求调研中，尚未启动开发。',
+      phase:'阶段 1/5 · 需求调研',
+      updated:'暂停中'
+    },
+    game:{
+      title:'速算24点游戏',
+      status:'🚧 进行中',
+      statusClass:'in_progress',
+      lead:'🛠️ Erickson',
+      tags:['技术','教育'],
+      desc:'Minecraft主题24点游戏。核心玩法完成，待上线发布。',
+      phase:'阶段 5/5 · 待上线',
+      updated:'已停滞'
+    },
+    archived:{
+      title:'小王数学',
+      status:'📦 已归档',
+      statusClass:'archived',
+      lead:'👑 主宰',
+      tags:['教育'],
+      desc:'数学思维训练内容。已完成归档，内容已整合。',
+      phase:'已完成',
+      updated:'2026-05'
+    }
+  };
+  var d = data[id];
+  document.getElementById('mTitle').textContent = d.title;
+  document.getElementById('mStatus').innerHTML = '<span class="p-status-dot '+d.statusClass+'" style="display:inline-block;vertical-align:middle;margin-right:0.25rem"></span> '+d.status;
+  document.getElementById('mLead').innerHTML = '负责人：' + d.lead;
+  document.getElementById('mTags').innerHTML = d.tags.map(function(t){return '<span class="modal-tag">'+t+'</span>';}).join('');
+  document.getElementById('mDesc').textContent = d.desc;
+  document.getElementById('mPhase').textContent = d.phase;
+  document.getElementById('mUpdated').textContent = d.updated;
+  document.getElementById('modal').classList.add('show');
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('show');
+}
+function toggleArchived() {
+  var l=document.getElementById('archList');var a=document.getElementById('archArrow');
+  l.classList.toggle('collapsed');a.classList.toggle('open');
+}
+// Click background to close
+document.getElementById('modal').onclick=function(e){if(e.target===this)closeModal();};
+</script>
 </body>
 </html>
