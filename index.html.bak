@@ -230,57 +230,6 @@ body{background:#0f0f13;color:#e8e8ed}
 .nav-item:hover{background:rgba(255,255,255,0.04);color:#aaa}
 .nav-item.active{background:rgba(91,154,255,0.1);color:#5b9aff;font-weight:500}
 .nav-item .badge{margin-left:auto;font-size:0.65rem;background:rgba(91,154,255,0.15);color:#5b9aff;padding:0.1rem 0.4rem;border-radius:0.75rem;font-weight:500}
-
-/* Desktop view switching */
-.desktop-view{display:none}
-.desktop-view.active{display:block}
-
-/* ===== FULL PAGE VIEWS ===== */
-.d-page{padding:0 0 2rem}
-.d-page-title{font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem}
-.d-page-title small{font-size:0.7rem;color:#666;font-weight:400}
-
-/* Full calendar page */
-.d-cal-strip{display:flex;gap:0.375rem;margin-bottom:1.25rem;overflow-x:auto}
-.d-cal-strip .day-pill{flex-shrink:0;width:3.5rem;padding:0.5rem 0;border-radius:0.625rem;text-align:center;background:rgba(255,255,255,0.04);border:1px solid transparent;cursor:pointer}
-.d-cal-strip .day-pill.today{background:rgba(91,154,255,0.1);border-color:rgba(91,154,255,0.3)}
-.d-cal-strip .day-pill.selected{background:rgba(91,154,255,0.2);border-color:#5b9aff;box-shadow:0 0 0 1px rgba(91,154,255,0.4)}
-.d-cal-strip .day-pill .dow{font-size:0.7rem;color:#888;font-weight:500}
-.d-cal-strip .day-pill.today .dow{color:#5b9aff;font-weight:600}
-.d-cal-strip .day-pill.selected .dow{color:#5b9aff;font-weight:600}
-.d-cal-strip .day-pill .dom{font-size:1rem;font-weight:700;color:#aaa;margin-top:0.1rem}
-.d-cal-strip .day-pill.today .dom{color:#e8e8ed}
-.d-cal-strip .day-pill.selected .dom{color:#fff}
-
-/* Full project grid */
-.d-proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:0.75rem}
-.d-proj-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:0.85rem;cursor:pointer;transition:all 0.12s;border-left:3px solid transparent}
-.d-proj-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1)}
-.d-proj-card.status-planning{border-left-color:#a078ff}
-.d-proj-card.status-in_progress{border-left-color:#5b9aff}
-.d-proj-card.status-completed{border-left-color:#2ed573;opacity:0.8}
-.d-proj-card.status-archived{border-left-color:#555;opacity:0.5}
-.d-proj-card .p-name{font-size:0.88rem;font-weight:600;color:#fff}
-.d-proj-card .p-lead{font-size:0.65rem;color:#666;margin-top:0.2rem}
-.d-proj-card .p-tags{display:flex;gap:0.2rem;margin-top:0.375rem;flex-wrap:wrap}
-.d-proj-card .p-tag{font-size:0.55rem;padding:0.05rem 0.25rem;border-radius:0.2rem}
-
-/* Full goals page */
-.d-goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
-.d-goal-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;padding:0.85rem}
-.d-goal-card .g-title{font-size:0.88rem;font-weight:600;color:#fff;margin-bottom:0.25rem}
-.d-goal-card .g-desc{font-size:0.72rem;color:#888}
-.d-goal-card .g-meta{font-size:0.65rem;color:#555;margin-top:0.25rem}
-.d-goal-card .g-bar{height:4px;background:rgba(255,255,255,0.06);border-radius:2px;margin-top:0.5rem;overflow:hidden}
-.d-goal-card .g-bar .fill{height:100%;border-radius:2px}
-@media(max-width:1100px){.d-goal-grid{grid-template-columns:1fr}}
-
-/* Full library page */
-.d-entry-filter{display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap}
-.d-entry-filter span{padding:0.3rem 0.75rem;border-radius:0.75rem;font-size:0.78rem;color:#888;background:rgba(255,255,255,0.04);cursor:pointer;transition:all 0.12s}
-.d-entry-filter span:hover{background:rgba(255,255,255,0.08)}
-.d-entry-filter span.active{background:rgba(91,154,255,0.12);color:#5b9aff;font-weight:500}
-
 .nav-divider{height:1px;background:rgba(255,255,255,0.06);margin:0.5rem 0.75rem}
 
 /* Main */
@@ -506,11 +455,11 @@ body{background:#0f0f13;color:#e8e8ed}
   <aside class="sidebar">
     <div class="logo">🦞 主宰 <span>面板</span></div>
     <nav>
-      <button class="nav-item active" data-desktop-view="overview">📋 概览</button>
-      <button class="nav-item" data-desktop-view="calendar">📅 日历</button>
-      <button class="nav-item" data-desktop-view="projects">📊 项目 <span class="badge" id="pBadge2">0</span></button>
-      <button class="nav-item" data-desktop-view="goals">🎯 目标 <span class="badge" id="gBadge2">0</span></button>
-      <button class="nav-item" data-desktop-view="library">📚 库</button>
+      <button class="nav-item active" data-tab2="today">📋 概览</button>
+      <button class="nav-item" data-tab2="calendar">📅 日历</button>
+      <button class="nav-item" data-tab2="projects">📊 项目 <span class="badge" id="pBadge">0</span></button>
+      <button class="nav-item" data-tab2="goals">🎯 目标 <span class="badge" id="gBadge">0</span></button>
+      <button class="nav-item" data-tab2="library">📚 库</button>
       <div class="nav-divider"></div>
       <button class="nav-item" id="exportBtn">📥 导出备份</button>
     </nav>
@@ -524,94 +473,49 @@ body{background:#0f0f13;color:#e8e8ed}
       </div>
     </div>
 
-    <!-- Overview view (default) -->
-    <div class="desktop-view active" data-view="overview">
-      <div class="dash-grid" id="dashGrid">
-        <!-- Col 1: Calendar + Today -->
-        <div class="dash-col">
-          <div class="panel">
-            <div class="panel-header"><span class="panel-title">📅 本周日历</span></div>
-            <div class="panel-body" id="dCal"><div class="loading"><div class="spinner"></div></div></div>
-          </div>
-          <div class="panel">
-            <div class="panel-header"><span class="panel-title">📋 今日待办</span> <button class="panel-action" onclick="openModal('event')">+</button></div>
-            <div class="panel-body" id="dToday"><div class="loading"><div class="spinner"></div></div></div>
-          </div>
+    <div class="dash-grid" id="dashGrid">
+      <!-- Col 1: Calendar + Today -->
+      <div class="dash-col">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">📅 本周日历</span></div>
+          <div class="panel-body" id="dCal"><div class="loading"><div class="spinner"></div></div></div>
         </div>
-        <!-- Col 2: Projects + Goals -->
-        <div class="dash-col">
-          <div class="panel">
-            <div class="panel-header"><span class="panel-title">📊 项目快照</span></div>
-            <div class="panel-body" id="dProj"><div class="loading"><div class="spinner"></div></div></div>
-          </div>
-          <div class="panel">
-            <div class="panel-header"><span class="panel-title">🎯 目标进度</span></div>
-            <div class="panel-body" id="dGoal"><div class="loading"><div class="spinner"></div></div></div>
-          </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">📋 今日待办</span> <button class="panel-action" onclick="openModal('event')">+</button></div>
+          <div class="panel-body" id="dToday"><div class="loading"><div class="spinner"></div></div></div>
         </div>
-        <!-- Col 3: Entries + Quick add + Stats -->
-        <div class="dash-col">
-          <div class="panel">
-            <div class="panel-header"><span class="panel-title">💭 最近记录</span></div>
-            <div class="panel-body" id="dEntry"><div class="loading"><div class="spinner"></div></div></div>
-          </div>
-          <div class="panel">
-            <div class="panel-header"><span class="panel-title">💡 快速录入</span></div>
-            <div class="panel-body">
-              <div class="quick-add">
-                <select id="qType"><option value="thought">💭 思考</option><option value="action">✅ 行动</option><option value="plan">🗓️ 规划</option></select>
-                <input id="qInput" placeholder="随手记录一条..." />
-                <button id="qSave">保存</button>
-              </div>
+      </div>
+      <!-- Col 2: Projects + Goals -->
+      <div class="dash-col">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">📊 项目快照</span></div>
+          <div class="panel-body" id="dProj"><div class="loading"><div class="spinner"></div></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">🎯 目标进度</span></div>
+          <div class="panel-body" id="dGoal"><div class="loading"><div class="spinner"></div></div></div>
+        </div>
+      </div>
+      <!-- Col 3: Entries + Quick add + Stats -->
+      <div class="dash-col">
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">💭 最近记录</span></div>
+          <div class="panel-body" id="dEntry"><div class="loading"><div class="spinner"></div></div></div>
+        </div>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">💡 快速录入</span></div>
+          <div class="panel-body">
+            <div class="quick-add">
+              <select id="qType"><option value="thought">💭 思考</option><option value="action">✅ 行动</option><option value="plan">🗓️ 规划</option></select>
+              <input id="qInput" placeholder="随手记录一条..." />
+              <button id="qSave">保存</button>
             </div>
           </div>
-          <div class="panel">
-            <div class="panel-header"><span class="panel-title">📊 本周统计</span></div>
-            <div class="panel-body" id="dStat"><div class="loading"><div class="spinner"></div></div></div>
-          </div>
         </div>
-      </div>
-    </div>
-
-    <!-- Calendar view -->
-    <div class="desktop-view" data-view="calendar">
-      <div class="d-page">
-        <div class="d-page-title">📅 日历 <small>选择日期查看事件</small></div>
-        <div class="d-cal-strip" id="dCalStrip"></div>
-        <div id="dCalEvents"><div class="loading" style="padding:2rem 0"><div class="spinner"></div>加载中...</div></div>
-      </div>
-    </div>
-
-    <!-- Projects view -->
-    <div class="desktop-view" data-view="projects">
-      <div class="d-page">
-        <div class="d-page-title">📊 项目 <small>所有项目一览</small></div>
-        <div class="d-proj-grid" id="dProjGrid"><div class="loading" style="grid-column:1/-1;padding:2rem"><div class="spinner"></div>加载中...</div></div>
-      </div>
-    </div>
-
-    <!-- Goals view -->
-    <div class="desktop-view" data-view="goals">
-      <div class="d-page">
-        <div class="d-page-title">🎯 目标 <small>长期 &middot; 短期</small></div>
-        <h3 style="font-size:0.8rem;color:#999;margin-bottom:0.625rem;font-weight:500">🏗️ 长期目标</h3>
-        <div class="d-goal-grid" id="dLongGrid" style="margin-bottom:1.5rem"><div class="loading" style="padding:2rem"><div class="spinner"></div></div></div>
-        <h3 style="font-size:0.8rem;color:#999;margin-bottom:0.625rem;font-weight:500">🎯 短期目标</h3>
-        <div class="d-goal-grid" id="dShortGrid"><div class="loading" style="padding:2rem"><div class="spinner"></div></div></div>
-      </div>
-    </div>
-
-    <!-- Library view -->
-    <div class="desktop-view" data-view="library">
-      <div class="d-page">
-        <div class="d-page-title">📚 库 <small>思考 &middot; 行动 &middot; 规划</small></div>
-        <div class="d-entry-filter" id="dEntryFilter">
-          <span data-f="all" class="active">全部</span>
-          <span data-f="thought">💭 思考</span>
-          <span data-f="action">✅ 行动</span>
-          <span data-f="plan">🗓️ 规划</span>
+        <div class="panel">
+          <div class="panel-header"><span class="panel-title">📊 本周统计</span></div>
+          <div class="panel-body" id="dStat"><div class="loading"><div class="spinner"></div></div></div>
         </div>
-        <div id="dEntryList"><div class="loading" style="padding:2rem"><div class="spinner"></div></div></div>
       </div>
     </div>
   </div>
@@ -789,11 +693,6 @@ function renderAll() {
   rDashGoal();
   rDashEntry();
   rDashStat();
-  // Desktop sub-views
-  rDCalendar();
-  rDProjects();
-  rDGoals();
-  rDLibrary();
 }
 
 function renderCal() {
@@ -925,20 +824,11 @@ document.addEventListener('click',function(e){
   }
 });
 
-// Desktop sidebar view switching
-document.querySelectorAll('.nav-item[data-desktop-view]').forEach(function(b){
+// Desktop sidebar (cal needs special)
+document.querySelectorAll('.nav-item[data-tab2]').forEach(function(b){
   b.addEventListener('click',function(){
     document.querySelectorAll('.nav-item.active').forEach(function(el){el.classList.remove('active');});
     b.classList.add('active');
-    var view = b.dataset.desktopView;
-    document.querySelectorAll('.desktop-view').forEach(function(v){v.classList.remove('active');});
-    var tv = document.querySelector('.desktop-view[data-view="'+view+'"]');
-    if(tv) tv.classList.add('active');
-    // Re-render when switching to a view
-    if(view==='calendar') rDCalendar();
-    else if(view==='projects') rDProjects();
-    else if(view==='goals') rDGoals();
-    else if(view==='library') rDLibrary();
   });
 });
 
@@ -962,85 +852,6 @@ document.querySelectorAll('#entryFilter span').forEach(function(el){
     S.eFilter=this.dataset.f;
     renderEntries();
   });
-});
-
-// ==================== DESKTOP SUB-VIEW RENDER ====================
-function rDCalendar(){
-  var strip = document.getElementById('dCalStrip');
-  if(!strip) return;
-  var h='';
-  for(var i=0;i<=6;i++){var d=new Date(S.today.getTime()+i*D);var c=isT(d)?'today':'';if(!c&&S.selDate&&fmt(d)===fmt(S.selDate))c='selected';h+='<div class="day-pill '+c+'" data-d="'+fmt(d)+'"><div class="dow">'+dow(d)+'</div><div class="dom">'+d.getDate()+'</div></div>';}
-  strip.innerHTML=h;
-  rDCalEvents();
-}
-function rDCalEvents(){
-  var el = document.getElementById('dCalEvents');
-  if(!el) return;
-  var ts=fmt(S.selDate);
-  var items=S.events.filter(function(e){return e.event_date===ts}).sort(function(a,b){return(a.start_time||'')>(b.start_time||'')?1:-1;});
-  if(!items.length){el.innerHTML='<div class="empty-state"><div class="icon">📭</div><div class="msg">'+ts+' 暂无事项</div></div>';return;}
-  el.innerHTML='<div style="font-size:0.75rem;color:#888;margin-bottom:0.75rem;font-weight:500">'+ts+' · '+dow(new Date(ts+'T12:00'))+'</div>'+
-    items.map(function(e){
-      var c=e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d';
-      return '<div class="event-row" style="cursor:pointer" onclick="openEventDetail(\''+e.id+'\')"><div class="event-dot" style="background:'+c+'"></div><div class="event-info"><div class="title'+(isPast(e)?' style=\"opacity:0.4\"':'')+'">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div>';
-    }).join('');
-  // Bind cal day clicks
-  strip.querySelectorAll('.day-pill').forEach(function(p){p.onclick=function(){S.selDate=new Date(p.dataset.d+'T12:00:00');strip.querySelectorAll('.day-pill.selected').forEach(function(x){x.classList.remove('selected');});if(!isT(S.selDate))p.classList.add('selected');rDCalEvents();};});
-}
-function rDProjects(){
-  var el = document.getElementById('dProjGrid');
-  if(!el) return;
-  if(!S.projects.length){el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="icon">📦</div><div class="msg">暂无项目</div></div>';return;}
-  var sm={planning:'🎯 规划中',in_progress:'🚧 进行中',completed:'✅ 已完成',archived:'📦 已归档'};
-  el.innerHTML=S.projects.map(function(p){
-    var c=p.progress>=80?'#2ed573':p.progress>=40?'#5b9aff':'#a078ff';
-    return '<div class="d-proj-card status-'+(p.status||'planning')+'"><div class="p-name">'+esc(p.name)+'</div><div class="p-tags"><span style="font-size:0.6rem;color:#888">'+sm[p.status]+'</span></div><div class="p-bar"><div class="fill" style="width:'+(p.progress||0)+'%;background:'+c+'"></div></div><div class="p-desc">'+(p.description?esc(p.description):'')+'</div></div>';
-  }).join('');
-}
-function rDGoals(){
-  ['Long','Short'].forEach(function(suf){
-    var type=suf==='Long'?'long_term':'short_term';
-    var el=document.getElementById('d'+suf+'Grid');
-    if(!el) return;
-    var items=S.goals.filter(function(g){return g.type===type;});
-    if(!items.length){el.innerHTML='<div style="font-size:0.78rem;color:#888;padding:1rem 0;text-align:center">暂无'+(suf==='Long'?'长期':'短期')+'目标</div>';return;}
-    var c=suf==='Long'?'#a078ff':'#5b9aff';
-    el.innerHTML=items.map(function(g){
-      return '<div class="d-goal-card"><div class="g-title">'+esc(g.title)+'</div><div class="g-meta">'+(g.due_date?'截止 '+g.due_date:'')+(g.description?' · '+esc(g.description):'')+'</div><div class="g-bar"><div class="fill" style="width:'+(g.progress||0)+'%;background:'+c+'"></div></div></div>';
-    }).join('');
-  });
-}
-function rDLibrary(){
-  var el=document.getElementById('dEntryList');
-  if(!el) return;
-  var items=S.entries; if(S.eFilter!=='all')items=items.filter(function(e){return e.type===S.eFilter;});
-  if(!items.length){el.innerHTML='<div class="empty-state" style="padding:2rem 0"><div class="icon">📝</div><div class="msg">暂无记录</div></div>';return;}
-  var im={thought:'💭',action:'✅',plan:'🗓️'};
-  var bg={thought:'rgba(160,120,255,0.12)',action:'rgba(46,213,115,0.12)',plan:'rgba(255,159,67,0.12)'};
-  var cl={thought:'#a078ff',action:'#2ed573',plan:'#ff9f43'};
-  el.innerHTML=items.map(function(e){
-    return '<div class="d-entry-item"><div class="e-icon" style="background:'+(bg[e.type]||'rgba(160,120,255,0.12)')+';color:'+(cl[e.type]||'#a078ff')+'">'+(im[e.type]||'📝')+'</div><div class="e-body"><div class="e-title">'+esc(e.title||'')+'</div><div class="e-text">'+esc(e.content||'')+'</div><div class="e-date">'+(e.entry_date||'')+'</div></div></div>';
-  }).join('');
-}
-// D entry filter
-document.addEventListener('click',function(e){
-  var span = e.target.closest('#dEntryFilter span');
-  if(span){
-    document.querySelectorAll('#dEntryFilter span').forEach(function(s){s.classList.remove('active');});
-    span.classList.add('active');
-    S.eFilter=span.dataset.f;
-    rDLibrary();
-  }
-});
-// Calendar day clicks on strip work globally
-document.addEventListener('click',function(e){
-  var p=e.target.closest('#dCalStrip .day-pill');
-  if(p&&p.dataset.d){
-    S.selDate=new Date(p.dataset.d+'T12:00:00');
-    document.querySelectorAll('#dCalStrip .day-pill.selected').forEach(function(el){el.classList.remove('selected');});
-    if(!isT(S.selDate))p.classList.add('selected');
-    rDCalEvents();
-  }
 });
 
 // Event detail click (mobile)
@@ -1174,11 +985,6 @@ console.log('🚀 主宰面板 v'+VERSION);
 
 // Start
 loadAll();
-
-// Service Worker registration
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('sw.js');
-}
 </script>
 </body>
 </html>

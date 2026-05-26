@@ -137,10 +137,14 @@
 - [x] AI 生成事件详情时推理补齐交通换乘/用餐
 - [x] 创建 Commander Calendar Skill（含决策树、CRUD 操作）
 - [ ] 未来规划模块（时间轴视图）
-- [ ] PWA 配置 / Service Worker
-- [ ] 分享功能（Web Share API）
 - [ ] AI 生成事件详情时补充交通换乘建议
 - [ ] 快速添加今日事件按钮
 
 ### 已决定的待讨论点
 - [ ] 我（主宰）通过飞书远程更新数据的能力
+
+### 🔜 推迟到核心功能完善后
+- [ ] Service Worker 离线缓存
+- [ ] Web Push 推送通知（iOS 16.4+ PWA）
+- [ ] iOS 捷径（快速添加事项）
+- [ ] 分享功能（Web Share API）
