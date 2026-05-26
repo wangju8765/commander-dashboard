@@ -132,7 +132,10 @@
 - [ ] 电脑端与 mockup-desktop 的细节差异
 
 ### 需要完善的功能
-- [ ] 详情页支持可点击 URL 链接
+- [x] 详情页支持可点击 URL 链接
+- [x] 详情页全新布局（携带物品tag + 行程时间线 + AI建议）
+- [x] AI 生成事件详情时推理补齐交通换乘/用餐
+- [x] 创建 Commander Calendar Skill（含决策树、CRUD 操作）
 - [ ] 未来规划模块（时间轴视图）
 - [ ] PWA 配置 / Service Worker
 - [ ] 分享功能（Web Share API）

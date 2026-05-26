@@ -17,6 +17,28 @@
 - `index.html` — 替换旧 `.detail-html` CSS 为新布局样式，renderDetail 支持渲染 detail_html + 点击 tag toggles done 状态
 - 新增 5 个 mockup 文件（v1~v5 迭代过程）
 
+#### 后续代码变更
+
+**description → 纯文本：**
+- 去掉 description 的 Markdown 渲染，改为纯文本显示
+- 编辑框移除 Markdown 语法提示，改为普通文本输入
+- renderDetail 两大字段独立渲染：detail_html + description 并存
+
+**Commander Calendar Skill 创建：**
+- `skills/commander-calendar/SKILL.md` — 完整 skill 文件
+- 覆盖：查询/创建简单事件/创建复杂事件/修改/删除
+- 顶部决策树：agent 根据输入复杂度自动选择路径
+- Supabase API 调用说明 + 硬性规则 + 自查清单
+
+**Skill 注册到 openclaw-workspace，/new 后自动可发现**
+
+**其他文件更新：**
+- TOOLS.md — 新增主宰面板行程创建章节
+- MEMORY.md — 新增 skill 引用 + 交通查证原则
+
+#### 文件重命名
+- `event-detail-creator` → `commander-calendar`（skills 目录 + SKILL.md name + TOOLS.md + MEMORY.md）
+
 #### 数据库操作
 - 更新「哥哥测评」事件的 detail_html → 新布局数据写入
 
