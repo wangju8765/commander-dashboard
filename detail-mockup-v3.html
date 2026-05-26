@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>事件详情 · 布局示意 v3</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:calc(100vw / 375 * 16);touch-action:manipulation}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;padding:1.5rem 1rem}
+  .app{max-width:430px;margin:0 auto}
+  .evt-title{font-size:1.125rem;font-weight:700;color:#fff;margin-bottom:0.25rem}
+  .evt-meta{font-size:0.75rem;color:#555;display:flex;align-items:center;gap:0.375rem;margin-bottom:1.25rem}
+  .type-dot{width:0.375rem;height:0.375rem;border-radius:50%;display:inline-block}
+  .sec{margin-bottom:1.5rem}
+  .sec-title{font-size:0.8rem;font-weight:600;color:#888;margin-bottom:0.625rem;display:flex;align-items:center;gap:0.375rem}
+  .sec-title .emoji{font-size:0.9rem}
+
+  /* Packing tags - two rows */
+  .tag-row{display:flex;flex-wrap:wrap;gap:0.375rem;margin-bottom:0.375rem}
+  .tag-row:last-child{margin-bottom:0}
+  .pack-tag{display:inline-flex;align-items:center;gap:0.25rem;padding:0.375rem 0.625rem;border-radius:1rem;font-size:0.75rem;font-weight:500;cursor:pointer;border:1px solid;transition:all 0.15s;user-select:none}
+  .pack-tag.must{background:rgba(90,155,255,0.12);border-color:rgba(90,155,255,0.25);color:#5b9aff}
+  .pack-tag.suggest{background:rgba(255,159,67,0.1);border-color:rgba(255,159,67,0.2);color:#ff9f43}
+  .pack-tag.done{background:rgba(46,213,115,0.12);border-color:rgba(46,213,115,0.25);color:#2ed573}
+  .pack-tag.done::after{content:' ✓';font-weight:700}
+
+  /* Timeline */
+  .tl{position:relative;padding-left:1.25rem}
+  .tl::before{content:'';position:absolute;left:0.375rem;top:0.5rem;bottom:0.5rem;width:2px;background:rgba(255,255,255,0.06)}
+  .tl-item{position:relative;padding-bottom:0.75rem}
+  .tl-item:last-child{padding-bottom:0}
+  .tl-dot{position:absolute;left:-1.05rem;top:0.2rem;width:0.625rem;height:0.625rem;border-radius:50%;border:2px solid #0f0f13}
+  .tl-dot.train{background:#5b9aff}
+  .tl-dot.location{background:#a078ff}
+  .tl-dot.home{background:#2ed573}
+  .tl-dot.suggest{background:#ff9f43}
+
+  .tl-time{font-size:0.9rem;font-weight:700;color:#fff;margin-bottom:0.125rem;letter-spacing:0.02em}
+  .tl-main{font-size:0.85rem;font-weight:600;color:#e8e8ed;margin-bottom:0.125rem}
+  .tl-sub{font-size:0.75rem;color:#888;margin-bottom:0.125rem}
+  .tl-suggest{font-size:0.75rem;color:#ff9f43;font-weight:500;margin-top:0.25rem;padding:0.5rem 0.625rem;background:rgba(255,159,67,0.06);border-left:2px solid rgba(255,159,67,0.3);border-radius:0 0.375rem 0.375rem 0}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="evt-title">哥哥测评</div>
+  <div class="evt-meta">
+    <span class="type-dot" style="background:#a078ff"></span>
+    生活 · 05月30日 08:25
+  </div>
+
+  <!-- 1. 携带物品 -->
+  <div class="sec">
+    <div class="sec-title"><span class="emoji">🎒</span> 携带物品</div>
+    <div class="tag-row">
+      <span class="pack-tag must">身份证</span>
+      <span class="pack-tag must">病历本</span>
+      <span class="pack-tag must">医保卡</span>
+    </div>
+    <div class="tag-row">
+      <span class="pack-tag suggest done">充电宝</span>
+      <span class="pack-tag suggest">水杯</span>
+      <span class="pack-tag suggest">零食</span>
+      <span class="pack-tag suggest">湿巾</span>
+      <span class="pack-tag suggest">耳机</span>
+    </div>
+  </div>
+
+  <!-- 2. 行程时间线 -->
+  <div class="sec">
+    <div class="sec-title"><span class="emoji">🕐</span> 行程时间线</div>
+
+    <div class="tl">
+
+      <!-- 去程火车 -->
+      <div class="tl-item">
+        <div class="tl-dot train"></div>
+        <div class="tl-time">08:25 → 08:58</div>
+        <div class="tl-main">🚄 G8671 · 永川东 → 重庆北</div>
+        <div class="tl-sub">01车 · 08F 08D</div>
+      </div>
+
+      <!-- AI建议：地铁换乘 -->
+      <div class="tl-item">
+        <div class="tl-dot suggest"></div>
+        <div class="tl-time">09:10 → 09:50</div>
+        <div class="tl-main">🚇 重庆北站 → 礼嘉站（儿童医院）</div>
+        <div class="tl-suggest">
+          环线外环 重庆北站南广场 → 冉家坝（4站）换乘6号线 → 礼嘉（5站）<br>
+          礼嘉站 4A口出 · 步行3分钟到院区
+        </div>
+      </div>
+
+      <!-- 医院 -->
+      <div class="tl-item">
+        <div class="tl-dot location"></div>
+        <div class="tl-time">🔴 10:00</div>
+        <div class="tl-main">📍 重庆儿童医院 · 两江院区 · 7楼C区</div>
+        <div class="tl-sub">重庆市两江新区金渝大道20号</div>
+        <div class="tl-sub">📞 微信联系诸老师</div>
+      </div>
+
+      <!-- 返程火车 -->
+      <div class="tl-item">
+        <div class="tl-dot train"></div>
+        <div class="tl-time">14:37 → 15:08</div>
+        <div class="tl-main">🚄 G8686 · 重庆北 → 永川东</div>
+        <div class="tl-sub">01车 · 09D 09F</div>
+        <div class="tl-sub">检票口 16B/17B</div>
+      </div>
+
+      <!-- 到家 -->
+      <div class="tl-item">
+        <div class="tl-dot home"></div>
+        <div class="tl-time">~15:15</div>
+        <div class="tl-main">🏠 到家</div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
