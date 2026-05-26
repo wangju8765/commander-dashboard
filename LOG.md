@@ -209,23 +209,29 @@
 - 策略：静态文件 cache-first，Supabase API network-first
 - 注册代码已注入 index.html
 
-### 20:20-20:40 项目看板 Agent 分组实现
+### 20:20-23:09 持续迭代（三轮推拉）
 
-**设计决策：**
-- 按Agent分组取代按状态分列
-- 去掉进度条，去掉标签
-- 已完成项目收到底部折叠区
-- 详情页做最小可用版（名称/状态/负责人/描述 + 编辑/删除），后续可扩展
+**项目看板 Agent 分组 ✅**
+- CSS 重写匹配 mockup（卡片背景/边框/圆角）
+- 修复 `ac`/`sm` 变量缺失 → 手机端渲染崩溃
+- 去掉详情页编辑/删除按钮（用户只读）
+- 通过 API 写入5个实际项目数据
 
-**代码改动：**
-- `renderProj()` 重写：按 Agent 分组，固定排序（主宰→史蒂夫老师→Erickson→笔杆子→参谋→运营官），已完成项目折叠
-- `rDProjects()` 同步重写（桌面版）
-- 项目卡片点击 → `openProjectDetail()` 弹窗显示基本信息
-- `editProject()` 编辑表单（含 lead 字段下拉选择）
-- 新建项目表单：去掉进度和标签，改为负责人下拉 + 状态 + 描述
-- `rDashProj()` 简化（去掉进度条）
+**桌面侧边面板 ❌（已回滚）**
+- 尝试方案 B 右滑面板
+- .gitignore 的 `*.js` 导致 sw.js 被忽略需修复
+- 引入多个 JS bug 导致创建事件和详情查看全部失灵
+- 最终回滚到侧面板前稳定版本：`4c61ee7`
 
-**数据库改动：** projects 表需加 `lead TEXT` 字段（需在Supabase SQL Editor运行迁移脚本）
+**.gitignore 修复**
+- 添加 `!sw.js` 排除规则
+- sw.js 已成功推送到 GitHub
+
+**最终状态：**
+- 项目看板 Agent 分组可用（手机端CSS不够精美）
+- 事件/项目详情弹窗正常
+- 创建事件正常
+- 桌面侧面板待后续实现
 
 ---
 
@@ -370,3 +376,23 @@
 #### 提交
 - `a45a3e1` feat: 事件删除功能 + 修复编辑表单类型值为新系统 + 修复创建事件默认类型
 - `b788c65` chore: add .gitignore, stop tracking node_modules/build artifacts
+
+## 2026-05-26
+
+### 23:12-23:25 三个bug修复 session
+
+**用户反馈问题：**
+1. 编辑界面时间 select 显示「no option」，无法修改时间
+2. 创建/编辑界面日期和时间栏没对齐
+3. 创建事件后弹窗不自动关闭，用户多次点击保存导致重复创建
+
+**Bug 1 根因：** `timeSel()` 函数返回完整的 `<select>` 标签，编辑表单的 `showEditForm()` 在外面又包了一层 `<select>`，形成嵌套 select，浏览器只显示空的父级 select。
+**修复：** 把 `timeSel` 重写为 `timeOpts`，只返回 `<option>` 内容，在创建和编辑表单各自合适的位置包 `<select>` 标签。
+
+**Bug 2 根因：** `.date-field` 和 `.time-field` 不是 flex 容器，内部的 label 和 input/select 没有对齐约束。
+**修复：** 添加 CSS 让 `.date-field` 和 `.time-field` 以 flex column 排列，内部 input/select 使用 `flex:1` 填充剩余高度。
+
+**Bug 3 根因：** `addEvent()` 中 `crudInsert` 成功后 `loadAll()` 可能失败，导致 Promise reject，`.then()` 回调不执行，modal 不关闭。
+**修复：** 在 `.then()` 链后加 `.catch(() => o.classList.remove('show'))`，无论刷新是否成功都关闭弹窗。
+
+**提交：** `7ded152`
