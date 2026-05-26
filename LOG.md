@@ -396,3 +396,34 @@
 **修复：** 在 `.then()` 链后加 `.catch(() => o.classList.remove('show'))`，无论刷新是否成功都关闭弹窗。
 
 **提交：** `7ded152`
+
+### 23:25-00:31 连续迭代 session
+
+**背景调亮尝试验证（失败回退）：**
+- 背景 `#0f0f13`→`#1a1a22` 被用户批评「变灰模糊、对比度降低」
+- 回退到 `#0f0f13`，改用其他方式改善可读性
+
+**手机项目页克隆桌面版：**
+- `renderProj()` 完全重写为 `rDProjects()` 的克隆（同一套 HTML+`.d-proj-card`）
+- 手机端项目详情页 CSS 不生效 → 根因：`@media(min-width:768px)` 忘关闭，`.proj-detail` 及以下所有 CSS 都在 media query 内
+- 修复：在 agent-group CSS 后加 `}` 关闭 media query，使 proj-detail/modal/detail-html/markdown/type-button CSS 全局生效
+- 去掉手机项目页顶部的「项目」section-title
+- 手机卡片从圆点改为左边框（同步桌面样式）
+
+**视觉方案对比 HTML：**
+- 创建 `visual-compare.html`，并排展示 5 种方案
+- 用户选择方案 D（大字+实色卡片）
+
+**方案 D 实施：**
+| 项目 | 旧值 | 新值 |
+|------|------|------|
+| 手机基准字号 | 18px (375px) | 24px (375px) |
+| 文字颜色 | `#f0f0f5` | `#fff` |
+| 卡片/日历背景 | rgba(..,0.08) 透明 | `#1e1e28` 实底 |
+| 卡片边框 | rgba(..,0.12) 半透 | `#2a2a38` 实色 |
+| tab bar 背景 | rgba(15,15,19,0.95) | rgba(30,30,40,0.95) |
+| 弹窗背景 | `#1a1a20` | `#1e1e28` |
+| 次要文字 | 偏暗 | 整体提亮一级 |
+| 事件标题字重 | 500 | 600 |
+
+**提交链：** `fe075a9` → `f19f2e3` → `27cf618` → `055ea93` → `dba7e8e` → `dab8ed1` → `d8ccd10`
