@@ -1186,10 +1186,7 @@ function openProjectDetail(id){
   html+='<div class="pd-row"><span class="pd-label">负责人</span><span class="pd-value">'+av+' '+(p.lead||'—')+'</span></div>';
   html+='<div class="pd-row"><span class="pd-label">创建时间</span><span class="pd-value">'+(p.created_at?p.created_at.slice(0,10):'—')+'</span></div>';
   html+='<div class="pd-row"><span class="pd-label">上次更新</span><span class="pd-value">'+(p.updated_at?p.updated_at.slice(0,10):'—')+'</span></div>';
-  html+='<div class="pd-actions"><button class="pd-btn edit" id="pdEditBtn">✏️ 编辑</button><button class="pd-btn del" id="pdDelBtn">🗑️ 删除</button></div></div>';
   d.innerHTML=html;
-  document.getElementById('pdEditBtn').onclick=function(){editProject(p);};
-  document.getElementById('pdDelBtn').onclick=function(){if(confirm('删除「'+p.name+'」？')){crudDelete('projects',p.id).then(function(ok){if(ok)loadAll();closeModal();});}};
 }
 
 function editProject(p){
@@ -1264,6 +1261,12 @@ function closeModal(){
 }
 document.getElementById('modalClose').onclick=closeModal;
 document.getElementById('modalOverlay').onclick=function(e){if(e.target===this)closeModal();};
+
+// Event detail click (mobile)
+document.addEventListener('click',function(e){
+  var ev=e.target.closest('.event-item');
+  if(ev&&ev.dataset.eid)openEventDetail(ev.dataset.eid);
+});
 
 function openEventDetail(id){
   var e=null;
