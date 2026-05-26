@@ -11,19 +11,19 @@
 /* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation}
 html{height:100%;overflow:hidden;overscroll-behavior:none}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#1a1a22;color:#e8e8ed;line-height:1.5;-webkit-font-smoothing:antialiased;height:100%;overflow:hidden;overscroll-behavior:none}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#e8e8ed;line-height:1.5;-webkit-font-smoothing:antialiased;height:100%;overflow:hidden;overscroll-behavior:none}
 .app{width:100%;height:100%;height:100dvh;overflow:hidden}
 </style>
 <!-- ===== MOBILE CSS ===== -->
 <style>
 @media(max-width:767px){
 html{font-size:calc(100vw/375*18);touch-action:manipulation}
-body{background:#1a1a22;color:#e8e8ed}
+body{background:#0f0f13;color:#e8e8ed}
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh}
 #mobileView{display:flex;flex-direction:column;flex:1;overflow:hidden}
 
 /* Header */
-.header{padding:calc(1.25rem + env(safe-area-inset-top,0px)) 1rem 0.5rem;background:#1a1a22;position:sticky;top:0;z-index:10}
+.header{padding:calc(1.25rem + env(safe-area-inset-top,0px)) 1rem 0.5rem;background:#0f0f13;position:sticky;top:0;z-index:10}
 .header h1{font-size:1.5rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:0.375rem}
 .header h1 span{font-size:1rem;color:#999}
 .header .date{font-size:0.75rem;color:#888;margin-top:0.125rem}
@@ -70,13 +70,12 @@ body{background:#1a1a22;color:#e8e8ed}
 .agent-avatar{width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;flex-shrink:0}
 .agent-name{font-size:0.9rem;font-weight:600;color:#e8e8ed}
 .agent-count{font-size:0.65rem;color:#666;margin-left:auto}
-.sproj-card{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.75rem;margin-bottom:0.375rem;cursor:pointer;transition:all 0.12s;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem}
+.sproj-card{padding:0.65rem 0.75rem;margin-bottom:0.375rem;cursor:pointer;transition:all 0.12s;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem;border-left:3px solid transparent}
 .sproj-card:active{background:rgba(91,154,255,0.06)}
-.sproj-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sproj-dot.planning{background:#a078ff}
-.sproj-dot.in_progress{background:#5b9aff}
-.sproj-dot.completed{background:#2ed573}
-.sproj-dot.archived{background:#555}
+.sproj-card.planning{border-left-color:#a078ff}
+.sproj-card.in_progress{border-left-color:#5b9aff}
+.sproj-card.completed{border-left-color:#2ed573;opacity:0.8}
+.sproj-card.archived{border-left-color:#555;opacity:0.5}
 .sproj-body{flex:1;min-width:0}
 .sproj-name{font-size:0.85rem;font-weight:600;color:#fff}
 .sproj-meta{font-size:0.65rem;color:#888;margin-top:0.2rem}
@@ -125,7 +124,7 @@ body{background:#1a1a22;color:#e8e8ed}
 .fab:active{transform:scale(0.92)}
 
 /* Tab bar */
-.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(26,26,34,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);display:flex;padding:0.375rem 0;z-index:100;padding-bottom:calc(0.375rem + env(safe-area-inset-bottom,0px))}
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(15,15,19,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);display:flex;padding:0.375rem 0;z-index:100;padding-bottom:calc(0.375rem + env(safe-area-inset-bottom,0px))}
 .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.125rem;padding:0.35rem 0.25rem;background:none;border:none;color:#aaa;font-size:0.75rem;cursor:pointer;transition:color 0.15s}
 .tab-btn.active{color:#5b9aff}
 .tab-btn .icon{font-size:1.25rem;line-height:1}
@@ -179,7 +178,7 @@ body{background:#1a1a22;color:#e8e8ed}
 .detail-html .detail-tl::before{content:'';position:absolute;left:0.375rem;top:0.5rem;bottom:0.5rem;width:2px;background:rgba(255,255,255,0.06)}
 .detail-html .detail-tl-item{position:relative;padding-bottom:0.75rem}
 .detail-html .detail-tl-item:last-child{padding-bottom:0}
-.detail-html .detail-tl-dot{position:absolute;left:-1.05rem;top:0.2rem;width:0.625rem;height:0.625rem;border-radius:50%;border:2px solid #1a1a22}
+.detail-html .detail-tl-dot{position:absolute;left:-1.05rem;top:0.2rem;width:0.625rem;height:0.625rem;border-radius:50%;border:2px solid #0f0f13}
 .detail-html .detail-tl-dot.train{background:#5b9aff}
 .detail-html .detail-tl-dot.location{background:#a078ff}
 .detail-html .detail-tl-dot.home{background:#2ed573}
@@ -228,7 +227,7 @@ body{background:#1a1a22;color:#e8e8ed}
 <style>
 @media(min-width:768px){
 html{font-size:clamp(16px,1.2vw,24px)}
-body{background:#1a1a22;color:#e8e8ed}
+body{background:#0f0f13;color:#e8e8ed}
 .app{display:flex;min-height:100vh}
 #desktopView{display:flex;min-height:100vh}
 
@@ -398,11 +397,6 @@ body{background:#1a1a22;color:#e8e8ed}
 .sproj-card{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 0.75rem;margin-bottom:0.375rem;cursor:pointer;transition:all 0.12s;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:0.75rem}
 .sproj-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.1)}
 .sproj-card:active{background:rgba(91,154,255,0.06)}
-.sproj-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.sproj-dot.planning{background:#a078ff}
-.sproj-dot.in_progress{background:#5b9aff}
-.sproj-dot.completed{background:#2ed573}
-.sproj-dot.archived{background:#555}
 .sproj-body{flex:1;min-width:0}
 .sproj-name{font-size:0.85rem;font-weight:600;color:#fff}
 .sproj-meta{font-size:0.65rem;color:#888;margin-top:0.2rem}
@@ -418,7 +412,7 @@ body{background:#1a1a22;color:#e8e8ed}
 .done-list.hidden{display:none}
 .done-list .sproj-card{opacity:0.6}
 
-/* Project detail popup */
+/* Project detail popup (shared mobile + desktop) */
 .proj-detail{padding:0}
 .proj-detail .pd-header{display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:1rem}
 .proj-detail .pd-icon{width:2.5rem;height:2.5rem;border-radius:0.75rem;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
@@ -433,7 +427,6 @@ body{background:#1a1a22;color:#e8e8ed}
 .proj-detail .pd-btn{flex:1;padding:0.5rem;border-radius:0.5rem;font-size:0.78rem;font-weight:500;cursor:pointer;text-align:center;transition:all 0.12s;font-family:inherit}
 .proj-detail .pd-btn.edit{background:#5b9aff;border:none;color:#fff}
 .proj-detail .pd-btn.del{background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.15);color:#ff6b6b}
-
 
 /* Modal overrides */
 .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:200;display:none;align-items:center;justify-content:center}
@@ -478,7 +471,7 @@ body{background:#1a1a22;color:#e8e8ed}
 .detail-html .detail-tl::before{content:'';position:absolute;left:0.375rem;top:0.5rem;bottom:0.5rem;width:2px;background:rgba(255,255,255,0.06)}
 .detail-html .detail-tl-item{position:relative;padding-bottom:0.75rem}
 .detail-html .detail-tl-item:last-child{padding-bottom:0}
-.detail-html .detail-tl-dot{position:absolute;left:-1.05rem;top:0.2rem;width:0.625rem;height:0.625rem;border-radius:50%;border:2px solid #1a1a22}
+.detail-html .detail-tl-dot{position:absolute;left:-1.05rem;top:0.2rem;width:0.625rem;height:0.625rem;border-radius:50%;border:2px solid #0f0f13}
 .detail-html .detail-tl-dot.train{background:#5b9aff}
 .detail-html .detail-tl-dot.location{background:#a078ff}
 .detail-html .detail-tl-dot.home{background:#2ed573}
@@ -925,7 +918,7 @@ function renderProj() {
     html+='<div class="agent-group"><div class="agent-header"><div class="agent-avatar" style="background:'+(ac[a]||'#888')+'">'+avatar+'</div><span class="agent-name">'+a+'</span><span class="agent-count">'+items.length+'个</span></div>';
     items.forEach(function(p){
       var updated=p.updated_at?p.updated_at.slice(0,10):'';
-      html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'planning')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(sm[p.status]||p.status)+'</div></div>'+(updated?'<span class="sproj-updated">'+updated+'</span>':'')+'</div>';
+      html+='<div class="sproj-card '+(p.status||'planning')+'" data-pid="'+p.id+'"><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(sm[p.status]||p.status)+(p.description?' · '+trunc(esc(p.description),80):'')+'</div></div>'+(updated?'<span class="sproj-updated">'+updated+'</span>':'')+'</div>';
     });
     html+='</div>';
   });
@@ -936,7 +929,7 @@ function renderProj() {
     html+='<div class="agent-group"><div class="agent-header"><div class="agent-avatar" style="background:'+(ac[l]||'#888')+'">'+av+'</div><span class="agent-name">'+l+'</span><span class="agent-count">'+groups[l].length+'个</span></div>';
     groups[l].forEach(function(p){
       var updated=p.updated_at?p.updated_at.slice(0,10):'';
-      html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'planning')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(sm[p.status]||p.status)+'</div></div>'+(updated?'<span class="sproj-updated">'+updated+'</span>':'')+'</div>';
+      html+='<div class="sproj-card '+(p.status||'planning')+'" data-pid="'+p.id+'"><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(sm[p.status]||p.status)+(p.description?' · '+trunc(esc(p.description),80):'')+'</div></div>'+(updated?'<span class="sproj-updated">'+updated+'</span>':'')+'</div>';
     });
     html+='</div>';
   });
@@ -944,7 +937,7 @@ function renderProj() {
   if(done.length){
     html+='<div class="done-section"><div class="done-toggle" onclick="this.classList.toggle(\'open\');var n=this.nextElementSibling;if(n)n.classList.toggle(\'hidden\');"><span class="done-arrow">▶</span> 已完成 / 已归档 <span style="margin-left:auto;font-size:0.6rem;color:#555">'+done.length+'个</span></div><div class="done-list hidden">';
     done.forEach(function(p){
-      html+='<div class="sproj-card" data-pid="'+p.id+'"><div class="sproj-dot '+(p.status||'archived')+'"></div><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(p.status==='completed'?'✅ 已完成':'📦 已归档')+(p.lead?' · '+p.lead:'')+'</div></div></div>';
+      html+='<div class="sproj-card '+(p.status||'archived')+'" data-pid="'+p.id+'"><div class="sproj-body"><div class="sproj-name">'+esc(p.name)+'</div><div class="sproj-meta">'+(p.status==='completed'?'✅ 已完成':'📦 已归档')+(p.lead?' · '+p.lead:'')+'</div></div></div>';
     });
     html+='</div></div>';
   }
