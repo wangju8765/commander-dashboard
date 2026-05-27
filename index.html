@@ -362,6 +362,8 @@ body{background:#0f0f13;color:#fff}
 .event-info .title{font-size:0.8rem;color:#fff}
 .event-info .meta{font-size:0.65rem;color:#ccc;margin-top:0.05rem}
 .event-row.done .title{color:#777;text-decoration:line-through}
+.event-row.past .title{color:#777;text-decoration:line-through}
+.event-row.past .meta{color:#bbb}
 
 /* Project mini */
 .project-mini{display:flex;gap:0.75rem;padding:0.5rem 0;align-items:center}
@@ -1187,7 +1189,7 @@ function rDCalendar(){
   var strip = document.getElementById('dCalStrip');
   if(!strip) return;
   var h='';
-  for(var i=0;i<=6;i++){var d=new Date(S.today.getTime()+i*D);var c=isT(d)?'today':'';if(!c&&S.selDate&&fmt(d)===fmt(S.selDate))c='selected';h+='<div class="day-pill '+c+'" data-d="'+fmt(d)+'"><div class="dow">'+dow(d)+'</div><div class="dom">'+d.getDate()+'</div></div>';}
+  for(var i=0;i<=6;i++){var d=new Date(S.today.getTime()+i*D);var c=isT(d)?'today':'';if(!c&&S.selDate&&fmt(d)===fmt(S.selDate))c='selected';var dayEvents=S.events.filter(function(e){return e.event_date===fmt(d)});var bar=calBar(dayEvents);h+='<div class="day-pill '+c+'" data-d="'+fmt(d)+'"><div class="dow">'+dow(d)+'</div><div class="dom">'+d.getDate()+'</div>'+bar+'</div>';}
   strip.innerHTML=h;
   rDCalEvents();
 }
@@ -1200,7 +1202,7 @@ function rDCalEvents(){
   el.innerHTML='<div style="font-size:0.75rem;color:#ccc;margin-bottom:0.75rem;font-weight:500">'+ts+' · '+dow(new Date(ts+'T12:00'))+'</div>'+
     items.map(function(e){
       var c=e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d';
-      return '<div class="event-row" style="cursor:pointer" onclick="openEventDetail(\''+e.id+'\')"><div class="event-dot" style="background:'+c+'"></div><div class="event-info"><div class="title'+(isPast(e)?' style=\"opacity:0.4\"':'')+'">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div>';
+      return '<div class="event-row'+(isPast(e)?' past':'')+'" style="cursor:pointer" onclick="openEventDetail(\''+e.id+'\')"><div class="event-dot" style="background:'+c+'"></div><div class="event-info"><div class="title">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div>';
     }).join('');
   // Bind cal day clicks
   strip.querySelectorAll('.day-pill').forEach(function(p){p.onclick=function(){S.selDate=new Date(p.dataset.d+'T12:00:00');strip.querySelectorAll('.day-pill.selected').forEach(function(x){x.classList.remove('selected');});if(!isT(S.selDate))p.classList.add('selected');rDCalEvents();};});
