@@ -27,6 +27,10 @@ body{background:#0f0f13;color:#fff}
 .header h1{font-size:1.5rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:0.375rem}
 .header h1 span{font-size:1rem;color:#ddd}
 .header .date{font-size:0.75rem;color:#ccc;margin-top:0.125rem}
+/* Page nav bar (fixed return button) */
+.page-nav-bar{display:none;align-items:center;padding:0.25rem 1rem;background:#0f0f13;border-bottom:1px solid #2a2a38;flex-shrink:0;z-index:10}
+.page-nav-bar .back-btn{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;color:#5b9aff;cursor:pointer;background:none;border:none;padding:0.3rem 0;font-family:inherit}
+.page-nav-bar .back-btn:active{opacity:0.7}
 .main{flex:1;padding:0.5rem 1rem 6rem;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
 
 /* Section titles */
@@ -177,7 +181,7 @@ body{background:#0f0f13;color:#fff}
 .md-h1{font-size:0.9rem;font-weight:700;color:#fff;margin:0.75rem 0 0.25rem}
 .md-h2{font-size:0.85rem;font-weight:600;color:#fff;margin:0.625rem 0 0.2rem}
 .md-h3{font-size:0.8rem;font-weight:600;color:#ddd;margin:0.5rem 0 0.15rem}
-.md-p{font-size:0.8rem;color:#fff;line-height:1.6;margin:0.25rem 0}
+.md-p{font-size:0.8rem;color:#fff;line-height:1.7;margin:0.35rem 0}
 .md-ul{margin:0.25rem 0;padding-left:0}
 .md-li{font-size:0.8rem;color:#fff;line-height:1.5}
 .md-cb{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.5rem;margin:0.125rem 0;border-radius:0.5rem;cursor:pointer;font-size:0.8rem;color:#fff;transition:background 0.12s}
@@ -186,6 +190,14 @@ body{background:#0f0f13;color:#fff}
 .md-cb input[type=checkbox]:checked{border-color:#2ed573;background:#2ed573}
 .md-cb input[type=checkbox]:checked::after{content:'✓';position:absolute;top:-0.1rem;left:0.1rem;font-size:0.7rem;color:#fff;font-weight:700}
 .md-cb.checked span{color:#ccc;text-decoration:line-through}
+.md-h4{font-size:0.78rem;font-weight:600;color:#fff;margin:0.4rem 0 0.15rem}
+.md-blockquote{padding:0.35rem 0.5rem 0.35rem 0.75rem;margin:0.35rem 0;border-left:3px solid rgba(255,255,255,0.15);color:#bbb;font-size:0.8rem;line-height:1.6}
+.md-table{width:100%;border-collapse:collapse;margin:0.35rem 0;font-size:0.75rem}
+.md-table td{border:1px solid #2a2a38;padding:0.4rem 0.5rem;color:#ddd}
+.md-table tr:nth-child(even) td{background:rgba(255,255,255,0.03)}
+.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.35rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
+.md-code code{color:#ddd;font-family:inherit}
+.md-hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0.5rem 0}
 
 /* Empty, loading, error */
 .empty-state{text-align:center;padding:1.5rem 1rem;color:#ccc;font-size:0.82rem}
@@ -208,7 +220,7 @@ body{background:#0f0f13;color:#fff}
 .course-btn:active{background:rgba(255,107,157,0.12);border-color:#ff6b9d}
 
 /* Project detail page & doc reader page */
-#projDetailPage,#docReaderPage{padding-top:0.5rem}
+#projDetailPage,#docReaderPage{}
 .back-btn{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;color:#5b9aff;cursor:pointer;background:none;border:none;padding:0.3rem 0;margin-bottom:0.5rem;font-family:inherit}
 .back-btn:active{opacity:0.7}
 .pd-page-title{font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:0.25rem}
@@ -509,7 +521,7 @@ body{background:#0f0f13;color:#fff}
 .md-h1{font-size:0.9rem;font-weight:700;color:#fff;margin:0.75rem 0 0.25rem}
 .md-h2{font-size:0.85rem;font-weight:600;color:#fff;margin:0.625rem 0 0.2rem}
 .md-h3{font-size:0.8rem;font-weight:600;color:#ddd;margin:0.5rem 0 0.15rem}
-.md-p{font-size:0.8rem;color:#fff;line-height:1.6;margin:0.25rem 0}
+.md-p{font-size:0.8rem;color:#fff;line-height:1.7;margin:0.35rem 0}
 .md-ul{margin:0.25rem 0;padding-left:0}
 .md-li{font-size:0.8rem;color:#fff;line-height:1.5}
 .md-cb{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.5rem;margin:0.125rem 0;border-radius:0.5rem;cursor:pointer;font-size:0.8rem;color:#fff;transition:background 0.12s}
@@ -518,6 +530,14 @@ body{background:#0f0f13;color:#fff}
 .md-cb input[type=checkbox]:checked{border-color:#2ed573;background:#2ed573}
 .md-cb input[type=checkbox]:checked::after{content:'✓';position:absolute;top:-0.1rem;left:0.1rem;font-size:0.7rem;color:#fff;font-weight:700}
 .md-cb.checked span{color:#ccc;text-decoration:line-through}
+.md-h4{font-size:0.78rem;font-weight:600;color:#fff;margin:0.4rem 0 0.15rem}
+.md-blockquote{padding:0.35rem 0.5rem 0.35rem 0.75rem;margin:0.35rem 0;border-left:3px solid rgba(255,255,255,0.15);color:#bbb;font-size:0.8rem;line-height:1.6}
+.md-table{width:100%;border-collapse:collapse;margin:0.35rem 0;font-size:0.75rem}
+.md-table td{border:1px solid #2a2a38;padding:0.4rem 0.5rem;color:#ddd}
+.md-table tr:nth-child(even) td{background:rgba(255,255,255,0.03)}
+.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.35rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
+.md-code code{color:#ddd;font-family:inherit}
+.md-hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0.5rem 0}
 </style>
 </head>
 <body>
@@ -531,6 +551,10 @@ body{background:#0f0f13;color:#fff}
     <h1>🦞 主宰 <span>面板</span></h1>
     <div class="date" id="mDate"></div>
   </header>
+
+  <div id="pageNavBar" class="page-nav-bar" style="display:none">
+    <button class="back-btn">← 返回</button>
+  </div>
 
   <div class="main">
     <!-- Today -->
@@ -562,12 +586,10 @@ body{background:#0f0f13;color:#fff}
     </div>
     <!-- Project Detail Page -->
     <div class="tab-content" id="projDetailPage">
-      <button class="back-btn" onclick="showProjList()">← 返回项目列表</button>
       <div id="projDetailContent"></div>
     </div>
     <!-- Doc Reader Page -->
     <div class="tab-content" id="docReaderPage">
-      <button class="back-btn" onclick="backToProjDetail()">← 返回项目详情</button>
       <div id="docReaderTitle" class="doc-reader-title"></div>
       <div id="docReaderContent" class="doc-reader-content"></div>
     </div>
@@ -792,17 +814,84 @@ function calBar(events) {
 function mdToHtml(md, eid){
   if(!md)return'';
   var h=esc(md);
+
+  // 0. Code blocks — must be first (protect content from other regex)
+  var codeBlocks=[];
+  h=h.replace(/```([\s\S]*?)```/g,function(match,code){
+    var idx=codeBlocks.length;
+    codeBlocks.push('<pre class="md-code"><code>'+code.trim()+'</code></pre>');
+    return '%%%CODEBLOCK'+idx+'%%%';
+  });
+
+  // 1. Blockquotes (&gt; because esc() was called first)
+  h=h.replace(/^&gt; (.+)$/gm,'<div class="md-blockquote">$1</div>');
+  // Merge consecutive blockquotes
+  h=h.replace(/(<div class="md-blockquote">[^<]*<\/div>\n?)+/g,function(match){
+    var content=match.replace(/<\/div>\n?/g,'').replace(/<div class="md-blockquote">/g,'').trim();
+    return '<div class="md-blockquote">'+content+'</div>';
+  });
+
+  // 2. Headings (h4 first, then h3, h2, h1)
+  h=h.replace(/^#### (.+)$/gm,'<div class="md-h4">$1</div>');
   h=h.replace(/^### (.+)$/gm,'<div class="md-h3">$1</div>');
   h=h.replace(/^## (.+)$/gm,'<div class="md-h2">$1</div>');
   h=h.replace(/^# (.+)$/gm,'<div class="md-h1">$1</div>');
-  h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+
+  // 3. Tables
+  h=h.replace(/(^\|.+\|\n?)+/gm,function(tableMatch){
+    var rows=tableMatch.trim().split('\n');
+    var result='<table class="md-table">';
+    for(var i=0;i<rows.length;i++){
+      // Skip separator rows (|---|---|)
+      if(/^\|[\s\-:]+\|$/.test(rows[i].trim())) continue;
+      var cells=rows[i].split('|').filter(function(c){return c.trim()!=='';});
+      if(cells.length>0){
+        result+='<tr>';
+        for(var j=0;j<cells.length;j++){
+          result+='<td>'+cells[j].trim()+'</td>';
+        }
+        result+='</tr>';
+      }
+    }
+    result+='</table>';
+    return result;
+  });
+
+  // 4. Horizontal rules
+  h=h.replace(/^---$/gm,'<hr class="md-hr">');
+
+  // 5. Checkboxes (existing)
   h=h.replace(/^- \[x\] (.+)$/gim,'<label class="md-cb checked"><input type="checkbox" checked data-eid="'+eid+'"><span>$1</span></label>');
   h=h.replace(/^- \[ \] (.+)$/gim,'<label class="md-cb"><input type="checkbox" data-eid="'+eid+'"><span>$1</span></label>');
+
+  // 6. Unordered lists (existing)
   h=h.replace(/^- (.+)$/gm,'<li class="md-li">$1</li>');
   h=h.replace(/((?:<(?:label|li)[^>]*>.*?<\/(?:label|li)>\n?)+)/g,'<div class="md-ul">$1</div>');
-  h=h.replace(/\n\n/g,'</div><div class="md-p">');
-  h='<div class="md-p">'+h+'</div>';
-  h=h.replace(/<div class="md-p"><\/div>/g,'');
+
+  // 7. Bold (existing)
+  h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+
+  // 8. Paragraphs — split by \n\n, wrap non-block content
+  h=h.replace(/\n\n/g,'###PARABREAK###');
+  var parts=h.split('###PARABREAK###');
+  var result=[];
+  for(var i=0;i<parts.length;i++){
+    var part=parts[i].trim();
+    if(!part) continue;
+    // Don't wrap if it starts with a block-level element
+    if(/^<(?:div|table|pre|hr|label)/.test(part)){
+      result.push(part);
+    } else {
+      result.push('<div class="md-p">'+part+'</div>');
+    }
+  }
+  h=result.join('\n');
+
+  // 9. Restore code blocks
+  h=h.replace(/%%%CODEBLOCK(\d+)%%%/g,function(match,idx){
+    return codeBlocks[parseInt(idx)];
+  });
+
   return h;
 }
 
@@ -930,30 +1019,37 @@ function renderProj() {
   var done=S.projects.filter(function(p){return p.status==='completed'||p.status==='archived';});
   var groups={};
   active.forEach(function(p){var l=p.lead||'默认';if(!groups[l])groups[l]=[];groups[l].push(p);});
+  var doneGroups={};
+  done.forEach(function(p){var l=p.lead||'默认';if(!doneGroups[l])doneGroups[l]=[];doneGroups[l].push(p);});
   var html='';
-  ao.forEach(function(a){
-    var items=groups[a];if(!items||!items.length)return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+items.length+'个</span></div>';
-    items.forEach(function(p){
+  function appendAgentGroup(html, a, activeItems, doneItems){
+    if(!activeItems||!activeItems.length){if(!doneItems||!doneItems.length)return html;}
+    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+(activeItems?activeItems.length:0)+'个</span></div>';
+    if(activeItems)activeItems.forEach(function(p){
       html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
     });
+    if(doneItems&&doneItems.length){
+      html+='<div style="margin-top:0.25rem;padding-top:0.375rem;border-top:1px dashed rgba(255,255,255,0.08)"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.7rem;color:#888;cursor:pointer;padding:0.25rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.d-arrow\').classList.toggle(\'open\')"><span class="d-arrow" style="font-size:0.55rem;transition:transform 0.12s">▶</span> 📦 已完成 '+doneItems.length+'个</div><div style="display:none">';
+      doneItems.forEach(function(p){
+        html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
+      });
+      html+='</div></div>';
+    }
     html+='</div>';
+    return html;
+  }
+  ao.forEach(function(a){
+    html=appendAgentGroup(html, a, groups[a], doneGroups[a]);
   });
   Object.keys(groups).forEach(function(l){
     if(ao.indexOf(l)>=0||l==='默认')return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[l]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+l+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+groups[l].length+'个</span></div>';
-    groups[l].forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
-    });
-    html+='</div>';
+    html=appendAgentGroup(html, l, groups[l], doneGroups[l]);
   });
-  if(done.length){
-    html+='<div style="margin-top:1rem;padding-top:0.5rem;border-top:1px solid #2a2a38"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:#bbb;cursor:pointer;padding:0.375rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.arrow\').classList.toggle(\'open\')"><span class="arrow" style="font-size:0.6rem;transition:transform 0.12s">▶</span> 📦 已完成 / 已归档 <span style="margin-left:auto;font-size:0.6rem;color:#444">'+done.length+'个</span></div><div style="display:none">';
-    done.forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
-    });
-    html+='</div></div>';
-  }
+  // Remaining agents with only done items
+  Object.keys(doneGroups).forEach(function(l){
+    if(ao.indexOf(l)>=0||groups[l])return;
+    html=appendAgentGroup(html, l, null, doneGroups[l]);
+  });
   el.innerHTML=html;
 }
 
@@ -1036,6 +1132,8 @@ document.addEventListener('click',function(e){
       S.page='projects';S.projDetail=null;S.docReader={};
       document.getElementById('fab').style.display='';
     }
+    var nav=document.getElementById('pageNavBar');
+    if(nav)nav.style.display='none';
     document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
     document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
     var tc=document.getElementById('tab-'+t);if(tc)tc.classList.add('active');
@@ -1115,30 +1213,37 @@ function rDProjects(){
   var done=S.projects.filter(function(p){return p.status==='completed'||p.status==='archived';});
   var groups={};
   active.forEach(function(p){var l=p.lead||'默认';if(!groups[l])groups[l]=[];groups[l].push(p);});
+  var doneGroups={};
+  done.forEach(function(p){var l=p.lead||'默认';if(!doneGroups[l])doneGroups[l]=[];doneGroups[l].push(p);});
   var html='';
-  ao.forEach(function(a){
-    var items=groups[a];if(!items||!items.length)return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+items.length+'个</span></div>';
-    items.forEach(function(p){
+  function appendAgentGroup(html, a, activeItems, doneItems){
+    if(!activeItems||!activeItems.length){if(!doneItems||!doneItems.length)return html;}
+    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+(activeItems?activeItems.length:0)+'个</span></div>';
+    if(activeItems)activeItems.forEach(function(p){
       html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
     });
+    if(doneItems&&doneItems.length){
+      html+='<div style="margin-top:0.25rem;padding-top:0.375rem;border-top:1px dashed rgba(255,255,255,0.08)"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.7rem;color:#888;cursor:pointer;padding:0.25rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.d-arrow\').classList.toggle(\'open\')"><span class="d-arrow" style="font-size:0.55rem;transition:transform 0.12s">▶</span> 📦 已完成 '+doneItems.length+'个</div><div style="display:none">';
+      doneItems.forEach(function(p){
+        html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
+      });
+      html+='</div></div>';
+    }
     html+='</div>';
+    return html;
+  }
+  ao.forEach(function(a){
+    html=appendAgentGroup(html, a, groups[a], doneGroups[a]);
   });
   Object.keys(groups).forEach(function(l){
     if(ao.indexOf(l)>=0||l==='默认')return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[l]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+l+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+groups[l].length+'个</span></div>';
-    groups[l].forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
-    });
-    html+='</div>';
+    html=appendAgentGroup(html, l, groups[l], doneGroups[l]);
   });
-  if(done.length){
-    html+='<div style="margin-top:1rem;padding-top:0.5rem;border-top:1px solid #2a2a38"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:#bbb;cursor:pointer;padding:0.375rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.arrow\').classList.toggle(\'open\')"><span class="arrow" style="font-size:0.6rem;transition:transform 0.12s">▶</span> 📦 已完成 / 已归档 <span style="margin-left:auto;font-size:0.6rem;color:#444">'+done.length+'个</span></div><div style="display:none">';
-    done.forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
-    });
-    html+='</div></div>';
-  }
+  // Remaining agents with only done items
+  Object.keys(doneGroups).forEach(function(l){
+    if(ao.indexOf(l)>=0||groups[l])return;
+    html=appendAgentGroup(html, l, null, doneGroups[l]);
+  });
   el.innerHTML=html;
 }
 function rDGoals(){
@@ -1200,6 +1305,8 @@ function showProjList(){
   document.getElementById('docReaderPage').classList.remove('active');
   document.getElementById('tab-projects').classList.add('active');
   document.getElementById('fab').style.display='';
+  var nav=document.getElementById('pageNavBar');
+  if(nav)nav.style.display='none';
 }
 function showProjDetail(id){
   var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}
@@ -1211,6 +1318,12 @@ function showProjDetail(id){
   document.getElementById('docReaderPage').classList.remove('active');
   document.getElementById('fab').style.display='none';
   renderProjDetail(p);
+  var nav=document.getElementById('pageNavBar');
+  if(nav){
+    nav.style.display='flex';
+    var btn=nav.querySelector('.back-btn');
+    if(btn){btn.textContent='← 返回项目列表';btn.onclick=showProjList;}
+  }
 }
 function renderProjDetail(p){
   var el=document.getElementById('projDetailContent');
@@ -1221,10 +1334,8 @@ function renderProjDetail(p){
   var html='<div class="pd-page-title">'+esc(p.name)+'</div>';
   html+='<div class="pd-page-status"><span style="width:7px;height:7px;border-radius:50%;background:'+sc+';display:inline-block;margin-right:0.3rem"></span>'+(sm[p.status]||p.status)+'</div>';
   if(p.description)html+='<div class="pd-detail-desc">'+esc(p.description)+'</div>';
-  html+='<div class="pd-info-card"><div class="pd-info-row"><span class="pd-info-label">负责人</span><span class="pd-info-value">'+av+' '+(p.lead||'—')+'</span></div>';
-  html+='<div class="pd-info-row"><span class="pd-info-label">创建时间</span><span class="pd-info-value">'+(p.created_at?p.created_at.slice(0,10):'—')+'</span></div>';
-  html+='<div class="pd-info-row"><span class="pd-info-label">上次更新</span><span class="pd-info-value">'+(p.updated_at?p.updated_at.slice(0,10):'—')+'</span></div></div>';
-  html+='<div class="pd-actions"><button class="pd-edit-btn" onclick="editProjOnPage(\''+p.id+'\')">✏️ 编辑</button><button class="pd-del-btn" onclick="deleteProjOnPage(\''+p.id+'\')">🗑️ 删除</button></div>';
+
+
   var docs=p.docs||[];
   if(docs.length>0){
     html+='<div class="section-title" style="margin-top:0.5rem">📄 文档</div><div class="pd-doc-list">';
@@ -1245,6 +1356,12 @@ function showDocReader(docIdx){
   document.getElementById('fab').style.display='none';
   document.getElementById('docReaderTitle').textContent=esc(doc.title);
   document.getElementById('docReaderContent').innerHTML=mdToHtml(doc.content||'');
+  var nav=document.getElementById('pageNavBar');
+  if(nav){
+    nav.style.display='flex';
+    var btn=nav.querySelector('.back-btn');
+    if(btn){btn.textContent='← 返回项目详情';btn.onclick=backToProjDetail;}
+  }
 }
 function backToProjDetail(){if(S.projDetail){showProjDetail(S.projDetail.id);}else{showProjList();}}
 function editProjOnPage(id){var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}if(p)editProject(p);}
