@@ -224,18 +224,33 @@ body{background:#0f0f13;color:#fff}
 #projDetailPage,#docReaderPage{}
 .back-btn{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;color:#5b9aff;cursor:pointer;background:none;border:none;padding:0.3rem 0;margin-bottom:0.5rem;font-family:inherit}
 .back-btn:active{opacity:0.7}
+.pd-new-name{font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:0.1rem}
+.pd-new-status{display:inline-flex;align-items:center;gap:0.3rem;font-size:0.72rem;padding:0.15rem 0.5rem;border-radius:0.5rem;background:rgba(91,154,255,0.1);color:var(--sc,#5b9aff);font-weight:500;margin-bottom:0.625rem}
+.pd-new-status .dot{width:6px;height:6px;border-radius:50%;background:var(--sc,#5b9aff);display:inline-block}
+.pd-new-intro{background:#1e1e28;border:1px solid #2a2a38;border-radius:0.75rem;padding:0.85rem;margin-bottom:0.75rem}
+.pd-new-intro-title{font-size:0.75rem;font-weight:600;color:#ddd;margin-bottom:0.5rem}
+.pd-new-intro-body{font-size:0.78rem;color:#ccc;line-height:1.7}
+.pd-new-intro-body p{margin-bottom:0.4rem}
+.pd-new-intro-body strong{color:#fff}
+.pd-new-section-title{font-size:0.75rem;font-weight:600;color:#ddd;display:flex;align-items:center;gap:0.375rem;margin-bottom:0.5rem;padding-bottom:0.375rem;border-bottom:1px solid #2a2a38}
+.pd-new-count{font-size:0.6rem;color:#666;font-weight:400}
+.pd-new-del{display:flex;align-items:center;gap:0.75rem;background:#1e1e28;border:1px solid #2a2a38;border-radius:0.75rem;padding:0.7rem 0.85rem;cursor:pointer;transition:all 0.12s;margin-bottom:0.5rem}
+.pd-new-del:active{background:rgba(255,255,255,0.03)}
+.pd-del-icon{width:2.2rem;height:2.2rem;border-radius:0.5rem;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.pd-del-icon.doc{background:rgba(91,154,255,0.12);color:#5b9aff}
+.pd-del-icon.link{background:rgba(46,213,115,0.12);color:#2ed573}
+.pd-del-body{flex:1;min-width:0}
+.pd-del-title{font-size:0.82rem;font-weight:600;color:#fff}
+.pd-del-meta{font-size:0.65rem;color:#888;margin-top:0.05rem}
+.pd-del-action{width:1.5rem;height:1.5rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:#ccc;flex-shrink:0;background:rgba(255,255,255,0.06)}
+.pd-del-action.ext{color:#2ed573;background:rgba(46,213,115,0.1)}
+.pd-new-empty{text-align:center;padding:1.5rem 1rem;color:#555;font-size:0.78rem}
+.doc-reader-title{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.5rem;padding-bottom:0.5rem;border-bottom:1px solid #2a2a38}
+.doc-reader-content{font-size:0.82rem;color:#fff;line-height:1.6}
+/* Old pd-* classes kept for desktop modal compatibility */
 .pd-page-title{font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:0.25rem}
 .pd-page-status{font-size:0.75rem;color:#ccc;margin-bottom:0.75rem}
 .pd-detail-desc{font-size:0.82rem;color:#bbb;line-height:1.6;margin-bottom:0.75rem;padding:0.75rem;background:rgba(255,255,255,0.02);border:1px solid #2a2a38;border-radius:0.5rem}
-.pd-info-card{background:#1e1e28;border:1px solid #2a2a38;border-radius:0.75rem;padding:0.75rem;margin-bottom:0.75rem}
-.pd-info-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;font-size:0.8rem}
-.pd-info-row+.pd-info-row{border-top:1px solid #2a2a38}
-.pd-info-label{color:#bbb;font-size:0.72rem;width:4rem;flex-shrink:0}
-.pd-info-value{color:#fff;flex:1}
-.pd-actions{display:flex;gap:0.5rem;margin:0.75rem 0}
-.pd-actions button{flex:1;padding:0.5rem;border-radius:0.5rem;font-size:0.78rem;font-weight:500;cursor:pointer;text-align:center;border:none;font-family:inherit}
-.pd-edit-btn{background:#5b9aff;color:#fff}
-.pd-del-btn{background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.15)!important;color:#ff6b6b}
 .pd-doc-list{margin-top:0.5rem}
 .pd-doc-item{background:rgba(255,255,255,0.02);border:1px solid #2a2a38;border-radius:0.5rem;margin-bottom:0.375rem;overflow:hidden}
 .pd-doc-link{display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0.75rem;cursor:pointer;text-decoration:none;color:inherit;user-select:none}
@@ -243,8 +258,6 @@ body{background:#0f0f13;color:#fff}
 .pd-doc-icon{font-size:0.85rem;flex-shrink:0}
 .pd-doc-title-text{font-size:0.82rem;font-weight:500;color:#fff;flex:1;min-width:0}
 .pd-doc-tag{font-size:0.65rem;padding:0.1rem 0.375rem;border-radius:0.25rem;background:rgba(91,154,255,0.1);color:#5b9aff;font-weight:500;flex-shrink:0}
-.doc-reader-title{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.5rem;padding-bottom:0.5rem;border-bottom:1px solid #2a2a38}
-.doc-reader-content{font-size:0.82rem;color:#fff;line-height:1.6}
 }
 </style>
 <!-- ===== DESKTOP CSS ===== -->
@@ -1341,24 +1354,36 @@ function showProjDetail(id){
 function renderProjDetail(p){
   var el=document.getElementById('projDetailContent');
   var sm={planning:'🎯 规划中',in_progress:'🚧 进行中',completed:'✅ 已完成',archived:'📦 已归档'};
-  var ae={'主宰':'👑','史蒂夫老师':'🧠','笔杆子':'✍️','参谋':'🔍','运营官':'⚙️','Erickson':'🛠️'};
-  var av=ae[p.lead]||'📦';
   var sc=p.status==='in_progress'?'#5b9aff':p.status==='planning'?'#a078ff':p.status==='completed'?'#2ed573':'#555';
-  var html='<div class="pd-page-title">'+esc(p.name)+'</div>';
-  html+='<div class="pd-page-status"><span style="width:7px;height:7px;border-radius:50%;background:'+sc+';display:inline-block;margin-right:0.3rem"></span>'+(sm[p.status]||p.status)+'</div>';
-  if(p.description)html+='<div class="pd-detail-desc">'+esc(p.description)+'</div>';
-
-
+  var html='<div class="pd-new-name">'+esc(p.name)+'</div>';
+  html+='<div class="pd-new-status" style="--sc:'+sc+'"><span class="dot"></span>'+(sm[p.status]||'未知')+'</div>';
+  
+  if(p.description){
+    html+='<div class="pd-new-intro"><div class="pd-new-intro-title">📋 项目简介</div><div class="pd-new-intro-body">'+mdToHtml(p.description)+'</div></div>';
+  }
+  
   var docs=p.docs||[];
   if(docs.length>0){
-    html+='<div class="section-title" style="margin-top:0.5rem">📄 文档</div><div class="pd-doc-list">';
+    html+='<div class="pd-new-section-title">📦 项目产出 <span class="pd-new-count">'+docs.length+' 项</span></div>';
     for(var di=0;di<docs.length;di++){
       var doc=docs[di];
-      html+='<div class="pd-doc-item"><a class="pd-doc-link" href="javascript:void(0)" onclick="showDocReader('+di+')"><span class="pd-doc-icon">📄</span><span class="pd-doc-title-text">'+esc(doc.title)+'</span><span class="pd-doc-tag">'+(doc.type||'文档')+'</span></a></div>';
+      if(doc.url){
+        html+='<div class="pd-new-del" data-didx="'+di+'" onclick="openDeliverable(this)"><div class="pd-del-icon link">🔗</div><div class="pd-del-body"><div class="pd-del-title">'+esc(doc.title)+'</div><div class="pd-del-meta">link</div></div><div class="pd-del-action ext">↗</div></div>';
+      } else {
+        html+='<div class="pd-new-del" data-didx="'+di+'" onclick="openDeliverable(this)"><div class="pd-del-icon doc">📄</div><div class="pd-del-body"><div class="pd-del-title">'+esc(doc.title)+'</div><div class="pd-del-meta">'+(doc.type||'文档')+'</div></div><div class="pd-del-action">→</div></div>';
+      }
     }
-    html+='</div>';
+  } else {
+    html+='<div class="pd-new-section-title">📦 项目产出</div><div class="pd-new-empty">暂无项目产出</div>';
   }
   el.innerHTML=html;
+}
+function openDeliverable(el){
+  var didx=parseInt(el.dataset.didx);
+  var p=S.projDetail;if(!p||!p.docs||!p.docs[didx])return;
+  var doc=p.docs[didx];
+  if(doc.url){window.open(doc.url,'_blank');}
+  else{showDocReader(didx);}
 }
 function showDocReader(docIdx){
   var p=S.projDetail;if(!p||!p.docs||!p.docs[docIdx])return;
