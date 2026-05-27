@@ -1303,8 +1303,13 @@ document.addEventListener('click',function(e){
 });
 
 // ==================== PROJECT DETAIL (NEW PAGE SYSTEM) ====================
+function resetMainScroll(){
+  var el=document.querySelector('.main');if(!el)return;
+  el.scrollTop=0;el.scrollTo(0,0);
+  setTimeout(function(){el.scrollTop=0;},16);
+}
 function showProjList(){
-  document.querySelector('.main').scrollTop=0;
+  resetMainScroll();
   S.page='projects';S.projDetail=null;S.docReader={};
   document.getElementById('projDetailPage').classList.remove('active');
   document.getElementById('docReaderPage').classList.remove('active');
@@ -1314,7 +1319,6 @@ function showProjList(){
   if(nav)nav.style.display='none';
 }
 function showProjDetail(id){
-  document.querySelector('.main').scrollTop=0;
   var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}
   if(!p)return;
   S.projDetail=p;S.page='project-detail';
@@ -1324,6 +1328,7 @@ function showProjDetail(id){
   document.getElementById('docReaderPage').classList.remove('active');
   document.getElementById('fab').style.display='none';
   renderProjDetail(p);
+  resetMainScroll();
   var nav=document.getElementById('pageNavBar');
   if(nav){
     nav.style.display='flex';
@@ -1354,7 +1359,6 @@ function renderProjDetail(p){
   el.innerHTML=html;
 }
 function showDocReader(docIdx){
-  document.querySelector('.main').scrollTop=0;
   var p=S.projDetail;if(!p||!p.docs||!p.docs[docIdx])return;
   var doc=p.docs[docIdx];S.docReader={projectId:p.id,docIdx:docIdx};S.page='doc-reader';
   document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
@@ -1363,6 +1367,7 @@ function showDocReader(docIdx){
   document.getElementById('fab').style.display='none';
   document.getElementById('docReaderTitle').textContent=esc(doc.title);
   document.getElementById('docReaderContent').innerHTML=mdToHtml(doc.content||'');
+  resetMainScroll();
   var nav=document.getElementById('pageNavBar');
   if(nav){
     nav.style.display='flex';
@@ -1370,7 +1375,7 @@ function showDocReader(docIdx){
     if(btn){btn.textContent='← 返回项目详情';btn.onclick=backToProjDetail;}
   }
 }
-function backToProjDetail(){document.querySelector('.main').scrollTop=0;if(S.projDetail){showProjDetail(S.projDetail.id);}else{showProjList();}}
+function backToProjDetail(){if(S.projDetail){showProjDetail(S.projDetail.id);}else{showProjList();}}
 function editProjOnPage(id){var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}if(p)editProject(p);}
 function deleteProjOnPage(id){
   if(!confirm('确定删除此项目？'))return;
