@@ -27,6 +27,10 @@ body{background:#0f0f13;color:#fff}
 .header h1{font-size:1.5rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:0.375rem}
 .header h1 span{font-size:1rem;color:#ddd}
 .header .date{font-size:0.75rem;color:#ccc;margin-top:0.125rem}
+/* Page nav bar (fixed return button) */
+.page-nav-bar{display:none;align-items:center;padding:0.25rem 1rem;background:#0f0f13;border-bottom:1px solid #2a2a38;flex-shrink:0;z-index:10}
+.page-nav-bar .back-btn{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;color:#5b9aff;cursor:pointer;background:none;border:none;padding:0.3rem 0;font-family:inherit}
+.page-nav-bar .back-btn:active{opacity:0.7}
 .main{flex:1;padding:0.5rem 1rem 6rem;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain}
 
 /* Section titles */
@@ -177,7 +181,7 @@ body{background:#0f0f13;color:#fff}
 .md-h1{font-size:0.9rem;font-weight:700;color:#fff;margin:0.75rem 0 0.25rem}
 .md-h2{font-size:0.85rem;font-weight:600;color:#fff;margin:0.625rem 0 0.2rem}
 .md-h3{font-size:0.8rem;font-weight:600;color:#ddd;margin:0.5rem 0 0.15rem}
-.md-p{font-size:0.8rem;color:#fff;line-height:1.6;margin:0.25rem 0}
+.md-p{font-size:0.8rem;color:#fff;line-height:1.7;margin:0.35rem 0}
 .md-ul{margin:0.25rem 0;padding-left:0}
 .md-li{font-size:0.8rem;color:#fff;line-height:1.5}
 .md-cb{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.5rem;margin:0.125rem 0;border-radius:0.5rem;cursor:pointer;font-size:0.8rem;color:#fff;transition:background 0.12s}
@@ -186,6 +190,14 @@ body{background:#0f0f13;color:#fff}
 .md-cb input[type=checkbox]:checked{border-color:#2ed573;background:#2ed573}
 .md-cb input[type=checkbox]:checked::after{content:'✓';position:absolute;top:-0.1rem;left:0.1rem;font-size:0.7rem;color:#fff;font-weight:700}
 .md-cb.checked span{color:#ccc;text-decoration:line-through}
+.md-h4{font-size:0.78rem;font-weight:600;color:#fff;margin:0.4rem 0 0.15rem}
+.md-blockquote{padding:0.35rem 0.5rem 0.35rem 0.75rem;margin:0.35rem 0;border-left:3px solid rgba(255,255,255,0.15);color:#bbb;font-size:0.8rem;line-height:1.6}
+.md-table{width:100%;border-collapse:collapse;margin:0.35rem 0;font-size:0.75rem}
+.md-table td{border:1px solid #2a2a38;padding:0.4rem 0.5rem;color:#ddd}
+.md-table tr:nth-child(even) td{background:rgba(255,255,255,0.03)}
+.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.5rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
+.md-code code{color:#ddd;font-family:inherit}
+.md-hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0.5rem 0}
 
 /* Empty, loading, error */
 .empty-state{text-align:center;padding:1.5rem 1rem;color:#ccc;font-size:0.82rem}
@@ -206,6 +218,32 @@ body{background:#0f0f13;color:#fff}
 .type-btn{gap:0.375rem}
 .course-btn{background:rgba(255,255,255,0.12);border:1px solid #1e1e28;color:#fff;padding:0.4rem 0.75rem;border-radius:0.5rem;font-size:0.8rem;cursor:pointer}
 .course-btn:active{background:rgba(255,107,157,0.12);border-color:#ff6b9d}
+
+/* Project detail page & doc reader page */
+#projDetailPage,#docReaderPage{}
+.back-btn{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;color:#5b9aff;cursor:pointer;background:none;border:none;padding:0.3rem 0;margin-bottom:0.5rem;font-family:inherit}
+.back-btn:active{opacity:0.7}
+.pd-page-title{font-size:1.1rem;font-weight:600;color:#fff;margin-bottom:0.25rem}
+.pd-page-status{font-size:0.75rem;color:#ccc;margin-bottom:0.75rem}
+.pd-detail-desc{font-size:0.82rem;color:#bbb;line-height:1.6;margin-bottom:0.75rem;padding:0.75rem;background:rgba(255,255,255,0.02);border:1px solid #2a2a38;border-radius:0.5rem}
+.pd-info-card{background:#1e1e28;border:1px solid #2a2a38;border-radius:0.75rem;padding:0.75rem;margin-bottom:0.75rem}
+.pd-info-row{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0;font-size:0.8rem}
+.pd-info-row+.pd-info-row{border-top:1px solid #2a2a38}
+.pd-info-label{color:#bbb;font-size:0.72rem;width:4rem;flex-shrink:0}
+.pd-info-value{color:#fff;flex:1}
+.pd-actions{display:flex;gap:0.5rem;margin:0.75rem 0}
+.pd-actions button{flex:1;padding:0.5rem;border-radius:0.5rem;font-size:0.78rem;font-weight:500;cursor:pointer;text-align:center;border:none;font-family:inherit}
+.pd-edit-btn{background:#5b9aff;color:#fff}
+.pd-del-btn{background:rgba(255,107,107,0.08);border:1px solid rgba(255,107,107,0.15)!important;color:#ff6b6b}
+.pd-doc-list{margin-top:0.5rem}
+.pd-doc-item{background:rgba(255,255,255,0.02);border:1px solid #2a2a38;border-radius:0.5rem;margin-bottom:0.375rem;overflow:hidden}
+.pd-doc-link{display:flex;align-items:center;gap:0.5rem;padding:0.6rem 0.75rem;cursor:pointer;text-decoration:none;color:inherit;user-select:none}
+.pd-doc-link:active{background:rgba(255,255,255,0.04)}
+.pd-doc-icon{font-size:0.85rem;flex-shrink:0}
+.pd-doc-title-text{font-size:0.82rem;font-weight:500;color:#fff;flex:1;min-width:0}
+.pd-doc-tag{font-size:0.65rem;padding:0.1rem 0.375rem;border-radius:0.25rem;background:rgba(91,154,255,0.1);color:#5b9aff;font-weight:500;flex-shrink:0}
+.doc-reader-title{font-size:1rem;font-weight:600;color:#fff;margin-bottom:0.5rem;padding-bottom:0.5rem;border-bottom:1px solid #2a2a38}
+.doc-reader-content{font-size:0.82rem;color:#fff;line-height:1.6}
 }
 </style>
 <!-- ===== DESKTOP CSS ===== -->
@@ -324,6 +362,8 @@ body{background:#0f0f13;color:#fff}
 .event-info .title{font-size:0.8rem;color:#fff}
 .event-info .meta{font-size:0.65rem;color:#ccc;margin-top:0.05rem}
 .event-row.done .title{color:#777;text-decoration:line-through}
+.event-row.past .title{color:#777;text-decoration:line-through}
+.event-row.past .meta{color:#bbb}
 
 /* Project mini */
 .project-mini{display:flex;gap:0.75rem;padding:0.5rem 0;align-items:center}
@@ -483,7 +523,7 @@ body{background:#0f0f13;color:#fff}
 .md-h1{font-size:0.9rem;font-weight:700;color:#fff;margin:0.75rem 0 0.25rem}
 .md-h2{font-size:0.85rem;font-weight:600;color:#fff;margin:0.625rem 0 0.2rem}
 .md-h3{font-size:0.8rem;font-weight:600;color:#ddd;margin:0.5rem 0 0.15rem}
-.md-p{font-size:0.8rem;color:#fff;line-height:1.6;margin:0.25rem 0}
+.md-p{font-size:0.8rem;color:#fff;line-height:1.7;margin:0.35rem 0}
 .md-ul{margin:0.25rem 0;padding-left:0}
 .md-li{font-size:0.8rem;color:#fff;line-height:1.5}
 .md-cb{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.5rem;margin:0.125rem 0;border-radius:0.5rem;cursor:pointer;font-size:0.8rem;color:#fff;transition:background 0.12s}
@@ -492,6 +532,14 @@ body{background:#0f0f13;color:#fff}
 .md-cb input[type=checkbox]:checked{border-color:#2ed573;background:#2ed573}
 .md-cb input[type=checkbox]:checked::after{content:'✓';position:absolute;top:-0.1rem;left:0.1rem;font-size:0.7rem;color:#fff;font-weight:700}
 .md-cb.checked span{color:#ccc;text-decoration:line-through}
+.md-h4{font-size:0.78rem;font-weight:600;color:#fff;margin:0.4rem 0 0.15rem}
+.md-blockquote{padding:0.35rem 0.5rem 0.35rem 0.75rem;margin:0.35rem 0;border-left:3px solid rgba(255,255,255,0.15);color:#bbb;font-size:0.8rem;line-height:1.6}
+.md-table{width:100%;border-collapse:collapse;margin:0.35rem 0;font-size:0.75rem}
+.md-table td{border:1px solid #2a2a38;padding:0.4rem 0.5rem;color:#ddd}
+.md-table tr:nth-child(even) td{background:rgba(255,255,255,0.03)}
+.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.5rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
+.md-code code{color:#ddd;font-family:inherit}
+.md-hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0.5rem 0}
 </style>
 </head>
 <body>
@@ -505,6 +553,10 @@ body{background:#0f0f13;color:#fff}
     <h1>🦞 主宰 <span>面板</span></h1>
     <div class="date" id="mDate"></div>
   </header>
+
+  <div id="pageNavBar" class="page-nav-bar" style="display:none">
+    <button class="back-btn">← 返回</button>
+  </div>
 
   <div class="main">
     <!-- Today -->
@@ -533,6 +585,15 @@ body{background:#0f0f13;color:#fff}
         <span data-f="plan">🗓️ 规划</span>
       </div>
       <div id="entryList"><div class="loading"><div class="spinner"></div>加载中...</div></div>
+    </div>
+    <!-- Project Detail Page -->
+    <div class="tab-content" id="projDetailPage">
+      <div id="projDetailContent"></div>
+    </div>
+    <!-- Doc Reader Page -->
+    <div class="tab-content" id="docReaderPage">
+      <div id="docReaderTitle" class="doc-reader-title"></div>
+      <div id="docReaderContent" class="doc-reader-content"></div>
     </div>
   </div>
 
@@ -711,7 +772,8 @@ function api(method, table, params, body) {
 var S = {
   events: [], projects: [], goals: [], entries: [],
   today: new Date(), selDate: new Date(),
-  eFilter: 'all', loaded: false, err: null
+  eFilter: 'all', loaded: false, err: null,
+  page: 'projects', projDetail: null, docReader: {}
 };
 var D = 86400000;
 
@@ -754,17 +816,86 @@ function calBar(events) {
 function mdToHtml(md, eid){
   if(!md)return'';
   var h=esc(md);
+
+  // 0. Code blocks — must be first (protect content from other regex)
+  var codeBlocks=[];
+  h=h.replace(/```([\s\S]*?)```/g,function(match,code){
+    var idx=codeBlocks.length;
+    codeBlocks.push('<pre class="md-code"><code>'+code.trim()+'</code></pre>');
+    return '%%%CODEBLOCK'+idx+'%%%';
+  });
+
+  // 1. Blockquotes (&gt; because esc() was called first)
+  h=h.replace(/^&gt; (.+)$/gm,'<div class="md-blockquote">$1</div>');
+  // Merge consecutive blockquotes
+  h=h.replace(/(<div class="md-blockquote">[^<]*<\/div>\n?)+/g,function(match){
+    var content=match.replace(/<\/div>\n?/g,'').replace(/<div class="md-blockquote">/g,'').trim();
+    return '<div class="md-blockquote">'+content+'</div>';
+  });
+
+  // 2. Headings (h4 first, then h3, h2, h1)
+  h=h.replace(/^#### (.+)$/gm,'<div class="md-h4">$1</div>');
   h=h.replace(/^### (.+)$/gm,'<div class="md-h3">$1</div>');
   h=h.replace(/^## (.+)$/gm,'<div class="md-h2">$1</div>');
   h=h.replace(/^# (.+)$/gm,'<div class="md-h1">$1</div>');
-  h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+
+  // 3. Tables
+  h=h.replace(/(^\|.+\|\n?)+/gm,function(tableMatch){
+    var rows=tableMatch.trim().split('\n');
+    var result='<table class="md-table">';
+    for(var i=0;i<rows.length;i++){
+      // Skip separator rows (|---|---|)
+      if(/^\|[\s\-:]+\|$/.test(rows[i].trim())) continue;
+      if(!rows[i].trim()) continue;
+      var cells=rows[i].split('|').filter(function(c){return c.trim()!=='';});
+      if(cells.length>0){
+        result+='<tr>';
+        for(var j=0;j<cells.length;j++){
+          result+='<td>'+cells[j].trim()+'</td>';
+        }
+        result+='</tr>';
+      }
+    }
+    result+='</table>';
+    return result;
+  });
+
+  // 4. Horizontal rules
+  h=h.replace(/^---$/gm,'<hr class="md-hr">');
+
+  // 5. Checkboxes (existing)
   h=h.replace(/^- \[x\] (.+)$/gim,'<label class="md-cb checked"><input type="checkbox" checked data-eid="'+eid+'"><span>$1</span></label>');
   h=h.replace(/^- \[ \] (.+)$/gim,'<label class="md-cb"><input type="checkbox" data-eid="'+eid+'"><span>$1</span></label>');
+
+  // 6. Unordered lists (existing)
   h=h.replace(/^- (.+)$/gm,'<li class="md-li">$1</li>');
   h=h.replace(/((?:<(?:label|li)[^>]*>.*?<\/(?:label|li)>\n?)+)/g,'<div class="md-ul">$1</div>');
-  h=h.replace(/\n\n/g,'</div><div class="md-p">');
-  h='<div class="md-p">'+h+'</div>';
-  h=h.replace(/<div class="md-p"><\/div>/g,'');
+
+  // 7. Bold (existing)
+  h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+
+  // 8. Paragraphs — squeeze multiple newlines, split by \n\n, wrap non-block content
+  h=h.replace(/\n{3,}/g,'\n\n');
+  h=h.replace(/\n\n/g,'###PARABREAK###');
+  var parts=h.split('###PARABREAK###');
+  var result=[];
+  for(var i=0;i<parts.length;i++){
+    var part=parts[i].trim();
+    if(!part) continue;
+    // Don't wrap if it starts with a block-level element
+    if(/^<(?:div|table|pre|hr|label)/.test(part)){
+      result.push(part);
+    } else {
+      result.push('<div class="md-p">'+part+'</div>');
+    }
+  }
+  h=result.join('\n');
+
+  // 9. Restore code blocks
+  h=h.replace(/%%%CODEBLOCK(\d+)%%%/g,function(match,idx){
+    return codeBlocks[parseInt(idx)];
+  });
+
   return h;
 }
 
@@ -892,30 +1023,37 @@ function renderProj() {
   var done=S.projects.filter(function(p){return p.status==='completed'||p.status==='archived';});
   var groups={};
   active.forEach(function(p){var l=p.lead||'默认';if(!groups[l])groups[l]=[];groups[l].push(p);});
+  var doneGroups={};
+  done.forEach(function(p){var l=p.lead||'默认';if(!doneGroups[l])doneGroups[l]=[];doneGroups[l].push(p);});
   var html='';
-  ao.forEach(function(a){
-    var items=groups[a];if(!items||!items.length)return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+items.length+'个</span></div>';
-    items.forEach(function(p){
+  function appendAgentGroup(html, a, activeItems, doneItems){
+    if(!activeItems||!activeItems.length){if(!doneItems||!doneItems.length)return html;}
+    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+(activeItems?activeItems.length:0)+'个</span></div>';
+    if(activeItems)activeItems.forEach(function(p){
       html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
     });
+    if(doneItems&&doneItems.length){
+      html+='<div style="margin-top:0.25rem;padding-top:0.375rem;border-top:1px dashed rgba(255,255,255,0.08)"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.7rem;color:#888;cursor:pointer;padding:0.25rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.d-arrow\').classList.toggle(\'open\')"><span class="d-arrow" style="font-size:0.55rem;transition:transform 0.12s">▶</span> 📦 已完成 '+doneItems.length+'个</div><div style="display:none">';
+      doneItems.forEach(function(p){
+        html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
+      });
+      html+='</div></div>';
+    }
     html+='</div>';
+    return html;
+  }
+  ao.forEach(function(a){
+    html=appendAgentGroup(html, a, groups[a], doneGroups[a]);
   });
   Object.keys(groups).forEach(function(l){
     if(ao.indexOf(l)>=0||l==='默认')return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[l]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+l+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+groups[l].length+'个</span></div>';
-    groups[l].forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
-    });
-    html+='</div>';
+    html=appendAgentGroup(html, l, groups[l], doneGroups[l]);
   });
-  if(done.length){
-    html+='<div style="margin-top:1rem;padding-top:0.5rem;border-top:1px solid #2a2a38"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:#bbb;cursor:pointer;padding:0.375rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.arrow\').classList.toggle(\'open\')"><span class="arrow" style="font-size:0.6rem;transition:transform 0.12s">▶</span> 📦 已完成 / 已归档 <span style="margin-left:auto;font-size:0.6rem;color:#444">'+done.length+'个</span></div><div style="display:none">';
-    done.forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
-    });
-    html+='</div></div>';
-  }
+  // Remaining agents with only done items
+  Object.keys(doneGroups).forEach(function(l){
+    if(ao.indexOf(l)>=0||groups[l])return;
+    html=appendAgentGroup(html, l, null, doneGroups[l]);
+  });
   el.innerHTML=html;
 }
 
@@ -993,6 +1131,13 @@ document.addEventListener('click',function(e){
   var b=e.target.closest('.tab-btn');
   if(b&&b.dataset.tab){
     var t=b.dataset.tab;
+    // Reset sub-page state if on detail/doc page
+    if(S.page!=='projects'){
+      S.page='projects';S.projDetail=null;S.docReader={};
+      document.getElementById('fab').style.display='';
+    }
+    var nav=document.getElementById('pageNavBar');
+    if(nav)nav.style.display='none';
     document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
     document.querySelectorAll('.tab-btn').forEach(function(el){el.classList.remove('active');});
     var tc=document.getElementById('tab-'+t);if(tc)tc.classList.add('active');
@@ -1044,7 +1189,7 @@ function rDCalendar(){
   var strip = document.getElementById('dCalStrip');
   if(!strip) return;
   var h='';
-  for(var i=0;i<=6;i++){var d=new Date(S.today.getTime()+i*D);var c=isT(d)?'today':'';if(!c&&S.selDate&&fmt(d)===fmt(S.selDate))c='selected';h+='<div class="day-pill '+c+'" data-d="'+fmt(d)+'"><div class="dow">'+dow(d)+'</div><div class="dom">'+d.getDate()+'</div></div>';}
+  for(var i=0;i<=6;i++){var d=new Date(S.today.getTime()+i*D);var c=isT(d)?'today':'';if(!c&&S.selDate&&fmt(d)===fmt(S.selDate))c='selected';var dayEvents=S.events.filter(function(e){return e.event_date===fmt(d)});var bar=calBar(dayEvents);h+='<div class="day-pill '+c+'" data-d="'+fmt(d)+'"><div class="dow">'+dow(d)+'</div><div class="dom">'+d.getDate()+'</div>'+bar+'</div>';}
   strip.innerHTML=h;
   rDCalEvents();
 }
@@ -1057,7 +1202,7 @@ function rDCalEvents(){
   el.innerHTML='<div style="font-size:0.75rem;color:#ccc;margin-bottom:0.75rem;font-weight:500">'+ts+' · '+dow(new Date(ts+'T12:00'))+'</div>'+
     items.map(function(e){
       var c=e.event_type==='work'?'#ff9f43':e.event_type==='life'?'#a078ff':'#ff6b9d';
-      return '<div class="event-row" style="cursor:pointer" onclick="openEventDetail(\''+e.id+'\')"><div class="event-dot" style="background:'+c+'"></div><div class="event-info"><div class="title'+(isPast(e)?' style=\"opacity:0.4\"':'')+'">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div>';
+      return '<div class="event-row'+(isPast(e)?' past':'')+'" style="cursor:pointer" onclick="openEventDetail(\''+e.id+'\')"><div class="event-dot" style="background:'+c+'"></div><div class="event-info"><div class="title">'+esc(e.title)+'</div><div class="meta">'+((e.start_time||'').slice(0,5))+(e.start_time&&e.description?' · ':'')+trunc(esc(e.description||''),60)+'</div></div></div>';
     }).join('');
   // Bind cal day clicks
   strip.querySelectorAll('.day-pill').forEach(function(p){p.onclick=function(){S.selDate=new Date(p.dataset.d+'T12:00:00');strip.querySelectorAll('.day-pill.selected').forEach(function(x){x.classList.remove('selected');});if(!isT(S.selDate))p.classList.add('selected');rDCalEvents();};});
@@ -1072,30 +1217,37 @@ function rDProjects(){
   var done=S.projects.filter(function(p){return p.status==='completed'||p.status==='archived';});
   var groups={};
   active.forEach(function(p){var l=p.lead||'默认';if(!groups[l])groups[l]=[];groups[l].push(p);});
+  var doneGroups={};
+  done.forEach(function(p){var l=p.lead||'默认';if(!doneGroups[l])doneGroups[l]=[];doneGroups[l].push(p);});
   var html='';
-  ao.forEach(function(a){
-    var items=groups[a];if(!items||!items.length)return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+items.length+'个</span></div>';
-    items.forEach(function(p){
+  function appendAgentGroup(html, a, activeItems, doneItems){
+    if(!activeItems||!activeItems.length){if(!doneItems||!doneItems.length)return html;}
+    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[a]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+a+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+(activeItems?activeItems.length:0)+'个</span></div>';
+    if(activeItems)activeItems.forEach(function(p){
       html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
     });
+    if(doneItems&&doneItems.length){
+      html+='<div style="margin-top:0.25rem;padding-top:0.375rem;border-top:1px dashed rgba(255,255,255,0.08)"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.7rem;color:#888;cursor:pointer;padding:0.25rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.d-arrow\').classList.toggle(\'open\')"><span class="d-arrow" style="font-size:0.55rem;transition:transform 0.12s">▶</span> 📦 已完成 '+doneItems.length+'个</div><div style="display:none">';
+      doneItems.forEach(function(p){
+        html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
+      });
+      html+='</div></div>';
+    }
     html+='</div>';
+    return html;
+  }
+  ao.forEach(function(a){
+    html=appendAgentGroup(html, a, groups[a], doneGroups[a]);
   });
   Object.keys(groups).forEach(function(l){
     if(ao.indexOf(l)>=0||l==='默认')return;
-    html+='<div style="margin-bottom:0.75rem"><div style="display:flex;align-items:center;gap:0.375rem;margin-bottom:0.375rem;padding-bottom:0.25rem;border-bottom:1px solid #2a2a38"><span style="font-size:0.8rem">'+(ae[l]||'👤')+'</span><span style="font-size:0.85rem;font-weight:600;color:#ddd">'+l+'</span><span style="font-size:0.6rem;color:#444;margin-left:auto">'+groups[l].length+'个</span></div>';
-    groups[l].forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'planning')+'" style="cursor:pointer;margin-bottom:0.375rem;padding:0.625rem 0.75rem" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.85rem">'+esc(p.name)+'</div><div class="p-desc" style="font-size:0.65rem;color:#ccc;margin-top:0.2rem">'+(p.description?esc(p.description):'')+'</div></div>';
-    });
-    html+='</div>';
+    html=appendAgentGroup(html, l, groups[l], doneGroups[l]);
   });
-  if(done.length){
-    html+='<div style="margin-top:1rem;padding-top:0.5rem;border-top:1px solid #2a2a38"><div style="display:flex;align-items:center;gap:0.375rem;font-size:0.75rem;color:#bbb;cursor:pointer;padding:0.375rem 0" onclick="var n=this.nextElementSibling;if(n)n.style.display=n.style.display===\'none\'?\'\':\'none\';this.querySelector(\'.arrow\').classList.toggle(\'open\')"><span class="arrow" style="font-size:0.6rem;transition:transform 0.12s">▶</span> 📦 已完成 / 已归档 <span style="margin-left:auto;font-size:0.6rem;color:#444">'+done.length+'个</span></div><div style="display:none">';
-    done.forEach(function(p){
-      html+='<div class="d-proj-card status-'+(p.status||'archived')+'" style="cursor:pointer;margin-bottom:0.25rem;padding:0.5rem 0.75rem;opacity:0.6" data-pid="'+p.id+'"><div class="p-name" style="font-size:0.82rem">'+esc(p.name)+'</div></div>';
-    });
-    html+='</div></div>';
-  }
+  // Remaining agents with only done items
+  Object.keys(doneGroups).forEach(function(l){
+    if(ao.indexOf(l)>=0||groups[l])return;
+    html=appendAgentGroup(html, l, null, doneGroups[l]);
+  });
   el.innerHTML=html;
 }
 function rDGoals(){
@@ -1150,8 +1302,85 @@ document.addEventListener('click',function(e){
   if(pc&&pc.dataset.pid)openProjectDetail(pc.dataset.pid);
 });
 
-// ==================== PROJECT DETAIL ====================
+// ==================== PROJECT DETAIL (NEW PAGE SYSTEM) ====================
+function showProjList(){
+  document.querySelector('.main').scrollTop=0;
+  S.page='projects';S.projDetail=null;S.docReader={};
+  document.getElementById('projDetailPage').classList.remove('active');
+  document.getElementById('docReaderPage').classList.remove('active');
+  document.getElementById('tab-projects').classList.add('active');
+  document.getElementById('fab').style.display='';
+  var nav=document.getElementById('pageNavBar');
+  if(nav)nav.style.display='none';
+}
+function showProjDetail(id){
+  document.querySelector('.main').scrollTop=0;
+  var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}
+  if(!p)return;
+  S.projDetail=p;S.page='project-detail';
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('tab-projects').classList.remove('active');
+  document.getElementById('projDetailPage').classList.add('active');
+  document.getElementById('docReaderPage').classList.remove('active');
+  document.getElementById('fab').style.display='none';
+  renderProjDetail(p);
+  var nav=document.getElementById('pageNavBar');
+  if(nav){
+    nav.style.display='flex';
+    var btn=nav.querySelector('.back-btn');
+    if(btn){btn.textContent='← 返回项目列表';btn.onclick=showProjList;}
+  }
+}
+function renderProjDetail(p){
+  var el=document.getElementById('projDetailContent');
+  var sm={planning:'🎯 规划中',in_progress:'🚧 进行中',completed:'✅ 已完成',archived:'📦 已归档'};
+  var ae={'主宰':'👑','史蒂夫老师':'🧠','笔杆子':'✍️','参谋':'🔍','运营官':'⚙️','Erickson':'🛠️'};
+  var av=ae[p.lead]||'📦';
+  var sc=p.status==='in_progress'?'#5b9aff':p.status==='planning'?'#a078ff':p.status==='completed'?'#2ed573':'#555';
+  var html='<div class="pd-page-title">'+esc(p.name)+'</div>';
+  html+='<div class="pd-page-status"><span style="width:7px;height:7px;border-radius:50%;background:'+sc+';display:inline-block;margin-right:0.3rem"></span>'+(sm[p.status]||p.status)+'</div>';
+  if(p.description)html+='<div class="pd-detail-desc">'+esc(p.description)+'</div>';
+
+
+  var docs=p.docs||[];
+  if(docs.length>0){
+    html+='<div class="section-title" style="margin-top:0.5rem">📄 文档</div><div class="pd-doc-list">';
+    for(var di=0;di<docs.length;di++){
+      var doc=docs[di];
+      html+='<div class="pd-doc-item"><a class="pd-doc-link" href="javascript:void(0)" onclick="showDocReader('+di+')"><span class="pd-doc-icon">📄</span><span class="pd-doc-title-text">'+esc(doc.title)+'</span><span class="pd-doc-tag">'+(doc.type||'文档')+'</span></a></div>';
+    }
+    html+='</div>';
+  }
+  el.innerHTML=html;
+}
+function showDocReader(docIdx){
+  document.querySelector('.main').scrollTop=0;
+  var p=S.projDetail;if(!p||!p.docs||!p.docs[docIdx])return;
+  var doc=p.docs[docIdx];S.docReader={projectId:p.id,docIdx:docIdx};S.page='doc-reader';
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('projDetailPage').classList.remove('active');
+  document.getElementById('docReaderPage').classList.add('active');
+  document.getElementById('fab').style.display='none';
+  document.getElementById('docReaderTitle').textContent=esc(doc.title);
+  document.getElementById('docReaderContent').innerHTML=mdToHtml(doc.content||'');
+  var nav=document.getElementById('pageNavBar');
+  if(nav){
+    nav.style.display='flex';
+    var btn=nav.querySelector('.back-btn');
+    if(btn){btn.textContent='← 返回项目详情';btn.onclick=backToProjDetail;}
+  }
+}
+function backToProjDetail(){document.querySelector('.main').scrollTop=0;if(S.projDetail){showProjDetail(S.projDetail.id);}else{showProjList();}}
+function editProjOnPage(id){var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}if(p)editProject(p);}
+function deleteProjOnPage(id){
+  if(!confirm('确定删除此项目？'))return;
+  api('DELETE','projects','id=eq.'+id).then(function(r){if(r.ok){S.projDetail=null;showProjList();loadAll();}else alert('删除失败');});
+}
+
+// ==================== PROJECT DETAIL (MODAL - DESKTOP ONLY) ====================
 function openProjectDetail(id){
+  // Mobile: redirect to independent page
+  if(window.innerWidth<768){showProjDetail(id);return;}
   var p = null;
   for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}
   if(!p) return;
@@ -1209,7 +1438,7 @@ function editProject(p){
     var data={name:document.getElementById('epName').value.trim(),lead:document.getElementById('epLead').value||null,status:document.getElementById('epStatus').value,description:document.getElementById('epDesc').value.trim()||null};
     if(!data.name)return;
     api('PATCH','projects','id=eq.'+p.id,data).then(function(r){
-      if(r.ok){Object.assign(p,data);closeModal();renderAll();}else alert('保存失败');
+      if(r.ok){Object.assign(p,data);closeModal();renderAll();if(S.page==='project-detail'&&S.projDetail)renderProjDetail(S.projDetail);}else alert('保存失败');
     });
   };
   document.getElementById('epCancel').onclick=function(){openProjectDetail(p.id);};
