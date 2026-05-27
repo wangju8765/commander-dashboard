@@ -195,7 +195,7 @@ body{background:#0f0f13;color:#fff}
 .md-table{width:100%;border-collapse:collapse;margin:0.35rem 0;font-size:0.75rem}
 .md-table td{border:1px solid #2a2a38;padding:0.4rem 0.5rem;color:#ddd}
 .md-table tr:nth-child(even) td{background:rgba(255,255,255,0.03)}
-.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.35rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
+.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.5rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
 .md-code code{color:#ddd;font-family:inherit}
 .md-hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0.5rem 0}
 
@@ -535,7 +535,7 @@ body{background:#0f0f13;color:#fff}
 .md-table{width:100%;border-collapse:collapse;margin:0.35rem 0;font-size:0.75rem}
 .md-table td{border:1px solid #2a2a38;padding:0.4rem 0.5rem;color:#ddd}
 .md-table tr:nth-child(even) td{background:rgba(255,255,255,0.03)}
-.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.35rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
+.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.5rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
 .md-code code{color:#ddd;font-family:inherit}
 .md-hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0.5rem 0}
 </style>
@@ -844,6 +844,7 @@ function mdToHtml(md, eid){
     for(var i=0;i<rows.length;i++){
       // Skip separator rows (|---|---|)
       if(/^\|[\s\-:]+\|$/.test(rows[i].trim())) continue;
+      if(!rows[i].trim()) continue;
       var cells=rows[i].split('|').filter(function(c){return c.trim()!=='';});
       if(cells.length>0){
         result+='<tr>';
@@ -871,7 +872,8 @@ function mdToHtml(md, eid){
   // 7. Bold (existing)
   h=h.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
 
-  // 8. Paragraphs — split by \n\n, wrap non-block content
+  // 8. Paragraphs — squeeze multiple newlines, split by \n\n, wrap non-block content
+  h=h.replace(/\n{3,}/g,'\n\n');
   h=h.replace(/\n\n/g,'###PARABREAK###');
   var parts=h.split('###PARABREAK###');
   var result=[];
@@ -1300,6 +1302,7 @@ document.addEventListener('click',function(e){
 
 // ==================== PROJECT DETAIL (NEW PAGE SYSTEM) ====================
 function showProjList(){
+  document.querySelector('.main').scrollTop=0;
   S.page='projects';S.projDetail=null;S.docReader={};
   document.getElementById('projDetailPage').classList.remove('active');
   document.getElementById('docReaderPage').classList.remove('active');
@@ -1309,6 +1312,7 @@ function showProjList(){
   if(nav)nav.style.display='none';
 }
 function showProjDetail(id){
+  document.querySelector('.main').scrollTop=0;
   var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}
   if(!p)return;
   S.projDetail=p;S.page='project-detail';
@@ -1348,6 +1352,7 @@ function renderProjDetail(p){
   el.innerHTML=html;
 }
 function showDocReader(docIdx){
+  document.querySelector('.main').scrollTop=0;
   var p=S.projDetail;if(!p||!p.docs||!p.docs[docIdx])return;
   var doc=p.docs[docIdx];S.docReader={projectId:p.id,docIdx:docIdx};S.page='doc-reader';
   document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
@@ -1363,7 +1368,7 @@ function showDocReader(docIdx){
     if(btn){btn.textContent='← 返回项目详情';btn.onclick=backToProjDetail;}
   }
 }
-function backToProjDetail(){if(S.projDetail){showProjDetail(S.projDetail.id);}else{showProjList();}}
+function backToProjDetail(){document.querySelector('.main').scrollTop=0;if(S.projDetail){showProjDetail(S.projDetail.id);}else{showProjList();}}
 function editProjOnPage(id){var p=null;for(var i=0;i<S.projects.length;i++){if(S.projects[i].id===id){p=S.projects[i];break;}}if(p)editProject(p);}
 function deleteProjOnPage(id){
   if(!confirm('确定删除此项目？'))return;
