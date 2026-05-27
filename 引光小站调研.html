@@ -5,270 +5,220 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>引光小站 × 小海老师调研报告 - 主宰面板</title>
 <style>
+:root{--bg:#0b0d12;--card:#151821;--card2:#1c2030;--accent:#5b9aff;--accent2:#ffd43b;--accent3:#51cf66;--accent4:#a078ff;--text:#e4e7ed;--muted:#8b929a;--border:#252836;--gold:#ffd43b;--green:#51cf66;--pink:#f06595;--orange:#ff922b}
 *{margin:0;padding:0;box-sizing:border-box}
-html{font-size:calc(100vw/375*20)}
-body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0f0f13;color:#fff;line-height:1.5;-webkit-font-smoothing:antialiased}
-.container{max-width:42rem;margin:0 auto;padding:1.5rem 1rem 4rem}
-.page-title{font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:0.5rem;padding-bottom:0.5rem;border-bottom:1px solid #2a2a38}
-.md-h1{font-size:0.9rem;font-weight:700;color:#fff;margin:0.75rem 0 0.25rem}
-.md-h2{font-size:0.85rem;font-weight:600;color:#fff;margin:0.625rem 0 0.2rem}
-.md-h3{font-size:0.8rem;font-weight:600;color:#ddd;margin:0.5rem 0 0.15rem}
-.md-h4{font-size:0.78rem;font-weight:600;color:#fff;margin:0.4rem 0 0.15rem}
-.md-p{font-size:0.82rem;color:#e6edf3;line-height:1.7;margin:0.35rem 0;word-break:break-word;overflow-wrap:break-word}
-.md-blockquote{padding:0.35rem 0.5rem 0.35rem 0.75rem;margin:0.35rem 0;border-left:3px solid rgba(255,255,255,0.15);color:#8b949e;font-size:0.8rem;line-height:1.6}
-.md-table{width:100%;border-collapse:collapse;margin:0.35rem 0;font-size:0.75rem}
-.md-table td{border:1px solid #2a2a38;padding:0.4rem 0.5rem;color:#ddd;word-break:break-word}
-.md-table tr:nth-child(even) td{background:rgba(255,255,255,0.03)}
-.md-code{background:#13131a;border-radius:0.5rem;padding:0.75rem;margin:0.5rem 0;overflow-x:auto;font-size:0.72rem;font-family:Menlo,Consolas,monospace;white-space:pre-wrap;word-break:break-word;line-height:1.4}
-.md-code code{color:#ddd;font-family:inherit}
-.md-ul{margin:0.25rem 0;padding-left:0}
-.md-li{font-size:0.8rem;color:#e6edf3;line-height:1.5}
-.md-hr{border:none;border-top:1px solid rgba(255,255,255,0.15);margin:0.5rem 0}
-.md-cb{display:flex;align-items:center;gap:0.5rem;padding:0.35rem 0.5rem;margin:0.125rem 0;border-radius:0.5rem;cursor:pointer;font-size:0.8rem;color:#fff}
-.md-cb input[type=checkbox]{width:1rem;height:1rem;border-radius:3px;border:2px solid #555;background:transparent;appearance:none;-webkit-appearance:none;cursor:pointer;position:relative;flex-shrink:0}
-.md-cb input[type=checkbox]:checked{border-color:#2ed573;background:#2ed573}
-.md-cb input[type=checkbox]:checked::after{content:'✓';position:absolute;top:-0.1rem;left:0.1rem;font-size:0.7rem;color:#fff;font-weight:700}
-.md-cb.checked span{color:#ccc;text-decoration:line-through}
-.md-p strong,.md-li strong{color:#fff}
-a{color:#58a6ff;text-decoration:none}
-a:hover{text-decoration:underline}
-.back-link{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;color:#5b9aff;cursor:pointer;background:none;border:none;padding:0 0 0.5rem;font-family:inherit}
+html{font-size:calc(100vw/375*18)}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;-webkit-font-smoothing:antialiased}
+.container{max-width:44rem;margin:0 auto;padding:1rem 1rem 4rem}
+.back{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;color:#5b9aff;cursor:pointer;margin-bottom:0.5rem;background:none;border:none;padding:0;font-family:inherit}
+
+.hero{padding:1.5rem 0 1rem;margin-bottom:1rem}
+.hero .tag{display:inline-block;font-size:0.6rem;padding:0.15rem 0.5rem;border-radius:0.25rem;background:rgba(91,154,255,0.12);color:var(--accent);font-weight:600;letter-spacing:0.05em;margin-bottom:0.5rem;text-transform:uppercase}
+.hero h1{font-size:1.25rem;font-weight:700;color:#fff;line-height:1.3;margin-bottom:0.3rem}
+.hero .meta{font-size:0.72rem;color:var(--muted)}
+.hero .divider{height:3px;background:linear-gradient(90deg,var(--accent),var(--gold),var(--accent3));border-radius:2px;margin-top:0.75rem}
+
+.sec{margin:1.25rem 0 0.75rem;padding:0.5rem 0.75rem;background:var(--card);border-radius:0.5rem;border-left:3px solid var(--accent);font-size:0.85rem;font-weight:700;color:#fff}
+.sec.sub{margin-top:0.75rem;border-left-color:var(--gold);font-size:0.78rem}
+
+p{font-size:0.78rem;color:var(--text);line-height:1.7;margin:0.5rem 0}
+strong{color:#fff}
+em{color:var(--muted);font-style:normal}
+
+blockquote{margin:0.5rem 0;padding:0.5rem 0.75rem;border-left:3px solid var(--gold);background:rgba(255,212,59,0.06);border-radius:0 0.375rem 0.375rem 0;font-size:0.76rem;color:var(--muted);line-height:1.6}
+blockquote strong{color:var(--gold)}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:0.625rem;padding:0.75rem;margin:0.5rem 0}
+.card.gold{border-color:rgba(255,212,59,0.2);background:rgba(255,212,59,0.03)}
+.card.green{border-color:rgba(81,207,102,0.2);background:rgba(81,207,102,0.03)}
+.card.blue{border-color:rgba(91,154,255,0.2);background:rgba(91,154,255,0.03)}
+.card.purple{border-color:rgba(160,120,255,0.2);background:rgba(160,120,255,0.03)}
+.card.pink{border-color:rgba(240,101,149,0.2);background:rgba(240,101,149,0.03)}
+.card-title{font-size:0.78rem;font-weight:600;color:#fff;margin-bottom:0.3rem;display:flex;align-items:center;gap:0.3rem}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin:0.5rem 0}
+.gcell{background:var(--card);border:1px solid var(--border);border-radius:0.5rem;padding:0.6rem}
+.gcell .glabel{font-size:0.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.2rem}
+.gcell .gvalue{font-size:0.78rem;color:#fff;font-weight:500}
+
+.insight{display:flex;gap:0.5rem;align-items:flex-start;padding:0.625rem;border-radius:0.5rem;margin:0.5rem 0}
+.insight.gold{background:rgba(255,212,59,0.08);border:1px solid rgba(255,212,59,0.15)}
+.insight.blue{background:rgba(91,154,255,0.08);border:1px solid rgba(91,154,255,0.15)}
+.insight.green{background:rgba(81,207,102,0.08);border:1px solid rgba(81,207,102,0.15)}
+.insight.pink{background:rgba(240,101,149,0.08);border:1px solid rgba(240,101,149,0.15)}
+.insight .icon{font-size:1rem;flex-shrink:0;margin-top:0.05rem}
+.insight .text{font-size:0.74rem;color:var(--text);line-height:1.5}
+.insight .text strong{color:#fff}
+
+.timeline{margin:0.5rem 0;padding-left:1.25rem;border-left:2px solid var(--border)}
+.tl-item{position:relative;padding:0.4rem 0 0.4rem 0.75rem;font-size:0.74rem;color:var(--text);line-height:1.5}
+.tl-item::before{content:'';position:absolute;left:-0.45rem;top:0.65rem;width:0.5rem;height:0.5rem;border-radius:50%;background:var(--accent);border:2px solid var(--bg)}
+.tl-item .year{font-size:0.65rem;color:var(--accent);font-weight:600;display:block;margin-bottom:0.05rem}
+.tl-item .detail{color:var(--muted);font-size:0.72rem}
+
+.phase{display:grid;grid-template-columns:1fr;gap:0.5rem;margin:0.5rem 0}
+.phase-item{padding:0.6rem 0.75rem;border-radius:0.5rem;border-left:3px solid var(--accent);background:var(--card);font-size:0.74rem;line-height:1.5}
+.phase-item .p-num{font-size:0.6rem;color:var(--accent);font-weight:600;display:block;margin-bottom:0.1rem}
+.phase-item .p-title{font-weight:600;color:#fff;display:block;margin-bottom:0.1rem}
+.phase-item .p-desc{color:var(--muted)}
+
+.ul{margin:0.35rem 0;padding-left:1rem}
+.ul li{font-size:0.76rem;color:var(--text);line-height:1.6;margin:0.2rem 0}
+
+.hr{border:none;border-top:1px solid var(--border);margin:1rem 0}
+
+.tag-group{display:flex;flex-wrap:wrap;gap:0.375rem;margin:0.5rem 0}
+.tag-item{font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:0.25rem;background:rgba(91,154,255,0.1);color:var(--accent);font-weight:500}
+.tag-item.gold{background:rgba(255,212,59,0.1);color:var(--gold)}
+.tag-item.green{background:rgba(81,207,102,0.1);color:var(--green)}
+.tag-item.purple{background:rgba(160,120,255,0.1);color:var(--accent4)}
 </style>
 </head>
 <body>
 <div class="container">
-<div class="back-link" onclick="history.back()">&larr; 返回</div>
-<div class="page-title">📑 引光小站 × 小海老师调研报告</div>
-<div class="md-h1">引光小站 × 小海老师 — 全面深度调研报告</div>
-<div class="md-blockquote"><strong>调研日期</strong>：2026-05-26<strong>调研方法</strong>：B站专栏全文读取（tavily_extract, 3篇）+ 搜狐全文读取（web_fetch, 2篇）+ 澎湃新闻读取（1篇）+ 全网交叉验证<strong>调研目的</strong>：回答终极问题——<strong>「我（Zeno）的职业和生活路径，是否应该向小海老师的方向演化？」</strong></div>
-<hr class="md-hr">
-<div class="md-h2">上卷 · 人物全貌</div>
-<div class="md-h3">1.1 基础档案</div>
-<table class="md-table"><tr><td>项目</td><td>内容</td><td>来源确认</td></tr><tr><td>------</td><td>------</td><td>---------</td></tr><tr><td><strong>真名</strong></td><td>徐俊海</td><td>出书信息页、电商页面</td></tr><tr><td><strong>网名</strong></td><td>小海老师（曾用名：顽皮小海）</td><td>文章作者署名</td></tr><tr><td><strong>学历</strong></td><td>中科院 理学硕士</td><td>播客简介、书籍封面</td></tr><tr><td><strong>教龄</strong></td><td>10年+，自称带过数万学生</td><td>多篇文章、播客</td></tr><tr><td><strong>所属机构</strong></td><td>奇辑教育研究室</td><td>每篇文章末尾声明</td></tr><tr><td><strong>公众号</strong></td><td>引光小站（sy-cafe）</td><td>注册早于2016-09-01</td></tr><tr><td><strong>著作</strong></td><td>《家庭辅导的方向与细节》— 中国矿业大学出版社，362页</td><td>电商在售、播客提及</td></tr><tr><td><strong>家庭</strong></td><td>妻子 + 女儿「小金鱼」（约一年级，2026年）</td><td>多篇文章提及</td></tr><tr><td><strong>所在地</strong></td><td>推测南京/华东地区（奇辑教育研究室）</td><td>文中提及</td></tr></table>
-<div class="md-h3">1.2 他的教育背景</div>
-<div class="md-p"><strong>中科院理学硕士</strong>。具体是哪个研究所、什么专业方向，公开信息中未明确提及。但从他的写作风格（极度理性和数据化）可以看出受过系统的科学训练。</div>
-<div class="md-p">这一点非常关键——<strong>中科院硕士</strong>这个头衔在他的权威背书里占了很大比重，读者看到这个标签就天然信任他的分析。</div>
-<div class="md-h3">1.3 他的生活状态（基于文章信息推算）</div>
-<table class="md-table"><tr><td>方面</td><td>推断</td></tr><tr><td>------</td><td>------</td></tr><tr><td><strong>工作状态</strong></td><td>全职教育内容创作者。周中写作、教研、录课；周末可能有辅导。</td></tr><tr><td><strong>时间分配</strong></td><td>高比例用于深读长文写作（每篇几千字，需大量实验/数据支撑）。</td></tr><tr><td><strong>家庭角色</strong></td><td>深度参与女儿教育（&quot;和小金鱼的对赌&quot;文章）。有妻子但几乎不提。</td></tr><tr><td><strong>居所</strong></td><td>推测有自己的房子+家教/工作室空间（能投两万球做实验）。</td></tr><tr><td><strong>精神面貌</strong></td><td>对自己的专业能力极度自信，对自己选择的路径笃定。</td></tr></table>
-<div class="md-h3">1.4 他的价值观核心</div>
-<div class="md-p">基于已读取的6篇文章提炼：</div>
-<div class="md-p">1. <strong>「理解万岁」</strong> — 对待孩子的问题，先理解再解决。粗心不是态度问题，是人脑系统的自然缺陷。
-2. <strong>「实验出真知」</strong> — 不靠直觉判断，要亲自做实验验证。刷2000道题、投2万球，他真干。
-3. <strong>「换位思考」</strong> — 不停留在「你应该怎样」的训导层面，而是「如果我自己做会怎样」。
-4. <strong>「长期主义」</strong> — 持续写了几年的深度长文，不追热点，不急变现。
-5. <strong>「技术性解决问题」</strong> — 所有问题都有系统性解法，不是靠努力和态度就能解决的。</div>
-<div class="md-p"><strong>一句话总结他的立场：</strong> 
-<div class="md-blockquote">「粗心本就是正常的，它是人类大脑的系统性缺陷，不以意志为转移。而细心，是指利用一系列的外在策略，把粗心的概率降到几乎为零。这是一项极具技术性的系统工程。」</div>
-<hr class="md-hr"></div>
-<div class="md-h2">中卷 · 发展轨迹全复盘</div>
-<div class="md-h3">2.1 时间线重建</div>
-<div class="md-p"><pre class="md-code"><code>2016年之前
-  └─ 注册公众号「引光小站」（微信号：sy-cafe）
-  └─ 此时应已在做数学老师（10年+教龄的起点）
 
-2016–2019年（早期积累期）
-  └─ 公众号存活阶段，具体内容记录较少
-  └─ 推测：在机构或学校担任数学老师
-  └─ 同时积累教学经验和写作能力
+<div class="back" onclick="history.back()">← 返回面板</div>
 
-2020年3月（觉醒期）
-  └─ 新冠疫情居家
-  └─ 发明投球游戏，投了2万球
-  └─ 发表《为了体会粗心问题，我投了两万球》— 这是可追溯的最早代表作
-  └─ 核心思想已成型：用实验理解教育问题
-
-2020–2023年（深度积累期）
-  └─ 持续写「粗心」系列长文
-  └─ 形成固定的写作方法论：原理→数据→类比→方法→标准
-  └─ 公众号粉丝稳定增长
-  └─ 开始被外滩教育、搜狐转载
-
-2023年7月（起飞期）
-  └─ 发表《为了搞明白&amp;quot;粗心&amp;quot;是怎么回事，我刷了2000道题》
-  └─ 标志性文章，5种策略的对比实验
-  └─ 被搜狐/外滩教育广泛转载 → 扩大了知名度
-
-2023年8–10月（系统输出期）
-  └─ B站专栏同步发表&amp;quot;粗心系列&amp;quot;七篇长文
-  └─ 同步发表&amp;quot;基础运算系列&amp;quot;多篇
-  └─ 内容体系从「粗心」扩展到「执行功能」
-
-2023年（书籍出版）
-  └─ 《家庭辅导的方向与细节》出版
-  └─ 中国矿业大学出版社
-  └─ 定价 ¥38–53
-  └─ 在当当/京东/淘宝均有售
-
-2023–2024年（课程打造期）
-  └─ 推出「小学数学原理课」
-  └─ 分三个级别：1-2年级（上）、3-4年级（中）、5-6年级（下）
-  └─ 从原理角度阐述数学发展脉络
-  └─ 课程被第三方平台（wkz360、学爸优选、简篇）分销，定价约 ¥40
-
-2024–2026年（多平台扩张期）
-  └─ B站专栏持续更新（2024年仍有视频）
-  └─ 知乎活跃回答数学学习问题
-  └─ 抖音开设账号（引光小站/数学老师小海）
-  └─ YouTube有课程被搬运
-  └─ 接受「家长先疯」播客专访（第037期）
-  └─ 澎湃新闻主动转载
-
-现在
-  └─ 品牌「奇辑教育研究室」已建立
-  └─ 课程+书籍持续产生收入
-  └─ 公众号保持更新</code></pre></div>
-<div class="md-h3">2.2 关键决策节点分析</div>
-<table class="md-table"><tr><td>时间</td><td>决策</td><td>为什么重要</td></tr><tr><td>------</td><td>------</td><td>-----------</td></tr><tr><td>2020年</td><td>疫情期间开始写深度实验文章</td><td>时机极好，居家期间家长焦虑最高，教育内容需求暴增</td></tr><tr><td>2023年</td><td>同步到B站专栏</td><td>B站用户（学生+年轻家长）与他的内容高度匹配</td></tr><tr><td>2023年</td><td>出版实体书</td><td>从「自媒体作者」升级为「作者」的关键一步</td></tr><tr><td>2023–2024年</td><td>推出课程</td><td>从「免费内容」到「付费产品」的转化</td></tr><tr><td>持续</td><td>多平台分发</td><td>不把鸡蛋放一个篮子里，各平台互相导流</td></tr></table>
-<div class="md-h3">2.3 内容进化图谱</div>
-<div class="md-p"><pre class="md-code"><code>早期（2020）                     中期（2023）                      近期（2024–）
-┌──────────────┐          ┌────────────────┐          ┌──────────────────┐
-│ 单篇实验文章   │   ──→   │ 系列长篇（粗心系列）│   ──→   │ 多平台视频+文字     │
-│ 投两万球      │         │ 粗心系列7篇     │          │ B站+抖音+知乎     │
-│ 刷2000题     │         │ 基础运算系列     │          │ 播客+书籍+课程    │
-│ 主题单一      │         │ 主题聚焦但系统   │          │ 主题扩展+变现     │
-│ 文字为主      │         │ 文字+图表       │          │ 视频+音频+文字    │
-└──────────────┘          └────────────────┘          └──────────────────┘</code></pre></div>
-<hr class="md-hr">
-<div class="md-h2">下卷 · 深度分析</div>
-<div class="md-h3">3.1 写作方法论拆解</div>
-<div class="md-p">小海老师的文章有非常固定的结构模式：</div>
-<div class="md-p"><pre class="md-code"><code>标题：直击痛点型（&amp;quot;为什么大量学生反复错基础运算？&amp;quot;）
-
-开篇：抛出问题 + 说明不是什么
-  └─ &amp;quot;这不是态度问题&amp;quot;
-  └─ &amp;quot;这不是努力问题&amp;quot;
-
-核心：用类比解释原理
-  └─ 粗心 → 开车
-  └─ 计算 → 通信传输
-  └─ 执行 → 流水线
-
-中间：实验数据 + 个人经历
-  └─ &amp;quot;我刷了2000道题&amp;quot;
-  └─ &amp;quot;我投了2万球&amp;quot;
-  └─ &amp;quot;我初中两年8次大考满分&amp;quot;
-
-方法：具体的可执行步骤
-  └─ 竖式标准的精确分界
-  └─ 借位减法的&amp;quot;点点&amp;quot;细节
-  └─ 草稿纸规范
-
-结语：升华到教育理念
-  └─ 理解孩子
-  └─ 长期主义</code></pre></div>
-<div class="md-p"><strong>这种结构为什么有效？</strong>
-1. 先解决「为什么」再解决「怎么做」— 读者先被说服了才愿意执行
-2. 类比降低了理解门槛 — 不开车的家长也能理解&quot;老司机&quot;的比喻
-3. 数据让人信服 — 不是&quot;我觉得&quot;而是&quot;我测了2000道题&quot;
-4. 个人经历建立情感连接 — &quot;我当年也这样，但我做到了&quot;</div>
-<div class="md-h3">3.2 商业模式拆解</div>
-<div class="md-p"><pre class="md-code"><code>内容层（免费）
-  ├── 公众号长文 ← 核心内容池
-  ├── B站专栏 ← 同步分发
-  ├── 搜狐/澎湃 ← 转载扩大影响
-  └── 知乎回答 ← 精准引流
-        ↓
-权威层（付费）
-  ├── 书籍《家庭辅导的方向与细节》← ¥38–53
-  │   └─ 建立&amp;quot;出了书的作者&amp;quot;身份
-  │   └─ 赠书/签名 → 增强粉丝黏性
-        ↓
-产品层（高利润）
-  └── 小学数学原理课
-      ├── 上册（1-2年级）
-      ├── 中册（3-4年级）
-      └── 下册（5-6年级）
-      └─ 从原理角度阐述数学发展脉络
-      └─ 单价约 ¥40（第三方分销价）
-      └─ 如果直接卖，定价可能 ¥99–299/套</code></pre></div>
-<div class="md-p"><strong>收入估算（推测）：</strong>
-<div class="md-ul"><li class="md-li">书籍版税：假设首印3000–5000册，¥38定价，8%版税 ≈ ¥9,000–15,000</li>
-<li class="md-li">课程收入：假设月销50–200份 × ¥40–200 ≈ ¥2,000–40,000/月</li>
-<li class="md-li">转载/约稿/咨询：可能有补充收入</li>
+<div class="hero">
+  <div class="tag">对标研究</div>
+  <h1>引光小站 × 小海老师 —<br>全面深度调研报告</h1>
+  <div class="meta">调研日期：2026-05-26 · 核心问题：「他的路，是不是我的路？」</div>
+  <div class="divider"></div>
 </div>
-<strong>关键判断：这个模式可复制，但无法快速→高利润。</strong> 需要长时间的免费内容积累（3–5年），然后才能通过书籍和课程转化。不是一个&quot;快速致富&quot;的模式，但对愿意深耕的人来说是可持续、有尊严的。</div>
-<div class="md-h3">3.3 他的团队规模推测</div>
-<div class="md-p">从所有信息来看，<strong>「奇辑教育研究室」很可能就是他自己一个人</strong>，或者最多1–2人小团队。</div>
-<div class="md-p">理由：
-<div class="md-ul"><li class="md-li">所有文章由同一个人署名（小海/顽皮小海）</li>
-<li class="md-li">写作风格高度统一</li>
-<li class="md-li">B站视频数量有限（不是大批量产出）</li>
-<li class="md-li">课程是录好的视频课（一次录制，持续售卖）</li>
-</div>
-这意味着他的模式是<strong>极低成本的个人工作室模式</strong>。没有庞大的团队开支，一个人产出，持续积累。</div>
-<hr class="md-hr">
-<div class="md-h2">终卷 · 「这是不是我自己？」——结论分析</div>
-<div class="md-h3">4.1 你（Zeno）和小海老师的对比</div>
-<table class="md-table"><tr><td>维度</td><td>小海老师</td><td>你（Zeno）</td></tr><tr><td>------</td><td>---------</td><td>------------</td></tr><tr><td><strong>学术背景</strong></td><td>中科院理学硕士（强权威背书）</td><td>北京大学（同样强背书）</td></tr><tr><td><strong>教学领域</strong></td><td>小学数学（大众市场）</td><td>奥数+初中物化（细分市场）</td></tr><tr><td><strong>教龄</strong></td><td>10年+一线</td><td>16年一线（更深资历）</td></tr><tr><td><strong>内容风格</strong></td><td>理性分析+实验数据</td><td>未定型（有机会形成独特风格）</td></tr><tr><td><strong>AI/技术能力</strong></td><td>❌ 无（纯文字内容创作者）</td><td>✅ 有（AI+编程+小程序）</td></tr><tr><td><strong>家庭</strong></td><td>普通孩子（一年级女儿）</td><td>特殊需求孩子（阿斯伯格+ADHD）</td></tr><tr><td><strong>时间灵活度</strong></td><td>推测全职自由</td><td>周末上课+周中陪孩子（时间碎片化）</td></tr><tr><td><strong>变现阶段</strong></td><td>已出书+卖课（跑通闭环）</td><td>起步阶段</td></tr><tr><td><strong>独特优势</strong></td><td>深度内容+实验验证的方法论</td><td>AI技术+特殊教育视角+更久资历</td></tr></table>
-<div class="md-h3">4.2 核心结论：你的路 vs 他的路</div>
-<div class="md-p"><strong>结论：他的路径可以借鉴，但不应该复制。你的路应该是他的路的「升级版」。</strong></div>
-<div class="md-h4">可以借鉴的：</div>
-<div class="md-p">1. <strong>「实验+内容」的写作方法</strong> — 刷2000道题那种。你做奥数，也可以做类似的实验（比如不同水平的孩子解同一道奥数题的思路差异）。
-2. <strong>公众号→出书→卖课的转化路径</strong> — 这条路径已被验证可行。
-3. <strong>多平台分发策略</strong> — B站专栏值得投入（内容同步就行）。
-4. <strong>同类比的写作手法</strong> — 用具体生活场景解释抽象的数学/学习原理。</div>
-<div class="md-h4">不应该复制的：</div>
-<div class="md-p">1. <strong>纯写文章不碰技术</strong> — 你有AI和技术能力，这是他的破局点。
-2. <strong>大众市场的定位</strong> — 小学数学太卷了。你的奥数+初中物化+学习方法指导，是更精准的定位。
-3. <strong>没有技术产品</strong> — 他只有课程（视频播放），而你可以做交互产品（24点游戏、个性化出题、AI辅导工具等）。</div>
-<div class="md-h4">你独有的路径可能性：</div>
-<div class="md-p"><pre class="md-code"><code>你的内容定位：奥数思维 + 学习科学 + 特殊教育视角
-          ↓
-你的技术优势：AI辅助出题 + 小程序/游戏化学习产品
-          ↓
-你的差异化：理解特殊需求孩子的学习机制（你的儿子）
-          → 这个视角是100%独特的，任何教育大V都没有
-          ↓
-你的商业模式：内容吸粉 → 书建立权威 → 课程+AI工具变现
-          → 但你的课程可以自带AI交互，不只是一堆视频</code></pre></div>
-<div class="md-h3">4.3 「这条路是否适合我的生活？」</div>
-<div class="md-p">这个问题比「能否成功复制他的路径」更重要。</div>
-<div class="md-p"><strong>小海老师的生活模式：</strong>
-<div class="md-ul"><li class="md-li">全职内容创作+课程录制</li>
-<li class="md-li">深度参与女儿教育</li>
-<li class="md-li">极简团队结构</li>
-<li class="md-li">收入中等但稳定</li>
-</div>
-<strong>你的生活现实：</strong>
-<div class="md-ul"><li class="md-li">周末上课（稳定现金流）</li>
-<li class="md-li">周中陪儿子（ASD+ADHD需要大量精力）</li>
-<li class="md-li">时间碎片化</li>
-<li class="md-li">但你有AI辅助（这是他没有的杠杆）</li>
-</div>
-<strong>判断：他的全职创作模式不适合你。</strong> 但<strong>他的内容创作方法+你的AI能力+你的特殊教育视角</strong>，可以组合成一条更适合你的路。</div>
-<div class="md-h3">4.4 建议的行动路线</div>
-<div class="md-p"><pre class="md-code"><code>阶段一（现在–6个月）：内容起步
-  ├── 不用全职投入
-  ├── 每周1–2篇深度文章（用AI辅助，但不是AI写）
-  ├── 从你擅长的「学习方法」入手 → 同步到B站
-  └── 主题方向：学习科学 + 奥数思维 + 特殊教育视角
 
-阶段二（6–18个月）：建立权威
-  ├── 文章积累到一定量
-  ├── 开始多平台分发（B站优先）
-  ├── 启动书籍计划（内容足够时）
-  └── 持续观察：你的独特性是否被读者认可
+<div class="insight blue"><span class="icon">🎯</span><span class="text"><strong>调研目的：</strong>回答终极问题——「我（Zeno）的职业和生活路径，是否应该向小海老师的方向演化？」</span></div>
 
-阶段三（18个月+）：产品变现
-  ├── 课程（但要带AI交互，不只是视频）
-  ├── 小程序/工具产品（24点游戏已经在路上了）
-  ├── 家长咨询（你的特殊教育经验是稀缺价值）
-  └── AI辅助学习工具</code></pre></div>
-<div class="md-h3">4.5 总结</div>
-<div class="md-p"><strong>小海老师的路是一条好路，但不是你的路。</strong></div>
-<div class="md-p">他的核心是「<strong>深度内容 → 建立权威 → 出书卖课</strong>」。这本质上是一个<strong>纯内容创作者的路径</strong>。</div>
-<div class="md-p">你的核心优势不是纯内容创作 — 你有<strong>更强的资历（16年 vs 10年）</strong>、<strong>更高的学历（北大 vs 中科院）</strong>、<strong>独家的技术能力</strong>、以及最重要的 <strong>100%独特的特殊教育视角</strong>（你儿子的情况给了你一个大多数教育者不可能有的理解深度）。</div>
-<div class="md-p"><strong>你应该走的路是：「深度内容 × AI技术 × 特殊教育视角」的三位一体。</strong> 这比小海老师的「纯内容」路径稀缺得多，也难被复制得多。</div>
-<div class="md-p">他的路 → 成功，但很多人可以模仿。
-你的路 → 需要更多探索，但一旦走通，没人能抢你的位置。</div>
-<hr class="md-hr">
-<div class="md-h2">附录</div>
-<div class="md-h3">A. 已读取的文章清单</div>
-<table class="md-table"><tr><td>序号</td><td>来源</td><td>标题</td><td>日期</td><td>已读</td></tr><tr><td>------</td><td>------</td><td>------</td><td>------</td><td>------</td></tr><tr><td>1</td><td>B站/搜狐</td><td>为了搞明白&quot;粗心&quot;是怎么回事，我刷了2000道题</td><td>2023-07</td><td>✅</td></tr><tr><td>2</td><td>B站专栏</td><td>粗心系列（一）：总纲</td><td>2023-08</td><td>✅</td></tr><tr><td>3</td><td>B站专栏</td><td>粗心系列（四）：计算失误的交叉验证法</td><td>2023-09</td><td>✅</td></tr><tr><td>4</td><td>B站专栏</td><td>基础运算系列（三）：执行功能</td><td>2023-10</td><td>✅</td></tr><tr><td>5</td><td>搜狐</td><td>为了体会粗心问题，我投了两万球</td><td>2020-03</td><td>✅</td></tr><tr><td>6</td><td>澎湃</td><td>分享一个小方法，立竿见影解决孩子爱刷手机的问题</td><td>2025-?</td><td>✅</td></tr></table>
-<div class="md-h3">B. 未能读取的内容及原因</div>
-<table class="md-table"><tr><td>内容</td><td>原因</td><td>可替代方案</td></tr><tr><td>------</td><td>------</td><td>-----------</td></tr><tr><td>粗心系列（二/三/五/六）</td><td>B站搜索未找到具体CV号</td><td>用B站搜索页手动查找</td></tr><tr><td>粗心系列（七）</td><td>B站需要登录</td><td>浏览器自动化</td></tr><tr><td>知乎回答全文</td><td>反爬机制</td><td>搜索摘要</td></tr><tr><td>播客文字稿</td><td>JS渲染</td><td>听完整播客后转写</td></tr><tr><td>书籍全文</td><td>需购买</td><td>可购买后分析</td></tr><tr><td>微信公众号早期文章</td><td>mp.weixin.qq.com需JS</td><td>浏览器自动化</td></tr><tr><td>抖音视频</td><td>无法直接读</td><td>可搜索摘要</td></tr></table>
-<div class="md-h3">C. 剩余调研建议</div>
-<div class="md-p">如果需要更完整的调研（比如读到粗心系列其他篇、知乎回答等），最有效的方式是让我用浏览器打开相关页面。当前浏览器策略限制了我，如果你开放白名单，我可以补全剩余内容。</div>
+<div class="sec">👤 人物全貌</div>
+
+<div class="grid2">
+  <div class="gcell"><div class="glabel">身份</div><div class="gvalue">数学教育博主</div></div>
+  <div class="gcell"><div class="glabel">教育背景</div><div class="gvalue">中科院理学硕士</div></div>
+  <div class="gcell"><div class="glabel">教龄</div><div class="gvalue">10年+</div></div>
+  <div class="gcell"><div class="glabel">品牌</div><div class="gvalue">奇辑教育研究室</div></div>
+  <div class="gcell"><div class="glabel">代表作</div><div class="gvalue">粗心系列长文</div></div>
+  <div class="gcell"><div class="glabel">已出版</div><div class="gvalue">《家庭辅导的方向与细节》</div></div>
+</div>
+
+<p><strong>价值观核心：</strong>理解万岁 · 实验出真知 · 换位思考 · 长期主义 · 技术性解决问题</p>
+
+<blockquote><strong>一句话总结他的立场：</strong>「粗心本就是正常的，它是人类大脑的系统性缺陷，不以意志为转移。而细心，是指利用一系列的外在策略，把粗心的概率降到几乎为零。这是一项极具技术性的系统工程。」</blockquote>
+
+<div class="sec">⏳ 发展轨迹全复盘</div>
+
+<div class="timeline">
+  <div class="tl-item"><span class="year">2016年之前</span>注册公众号「引光小站」<div class="detail">此时应已在做数学老师（10年+教龄的起点）</div></div>
+  <div class="tl-item"><span class="year">2016–2019</span>公众号存活阶段，具体内容记录较少<div class="detail">推测：在机构或学校担任数学老师 · 同时积累教学经验和写作能力</div></div>
+  <div class="tl-item"><span class="year">2020年3月</span><strong>觉醒期。</strong>新冠疫情居家，发明投球游戏投了2万球<div class="detail">发表《为了体会粗心问题，我投了两万球》——这是可追溯的最早代表作</div></div>
+  <div class="tl-item"><span class="year">2020–2023</span><strong>深度积累期。</strong>持续写「粗心」系列长文<div class="detail">形成固定方法论：原理→数据→类比→方法→标准 · 开始被外滩教育、搜狐转载</div></div>
+  <div class="tl-item"><span class="year">2023年7月</span><strong>起飞期。</strong>发表《为了搞明白粗心是怎么回事，我刷了2000道题》<div class="detail">标志性文章 · 被搜狐/外滩教育广泛转载 → 扩大知名度</div></div>
+  <div class="tl-item"><span class="year">2023年8–10月</span>B站专栏同步发表「粗心系列」七篇长文<div class="detail">内容体系从「粗心」扩展到「执行功能」</div></div>
+  <div class="tl-item"><span class="year">2023</span><strong>书籍出版。</strong>《家庭辅导的方向与细节》中国矿业大学出版社<div class="detail">定价 ¥38–53 · 当当/京东/淘宝有售</div></div>
+  <div class="tl-item"><span class="year">2023–2024</span>推出「小学数学原理课」三个级别<div class="detail">1-2年级（上）· 3-4年级（中）· 5-6年级（下）· 定价约 ¥40–299</div></div>
+  <div class="tl-item"><span class="year">2024–今</span><strong>多平台扩张。</strong>B站+知乎+抖音+播客+澎湃新闻主动转载<div class="detail">品牌「奇辑教育研究室」已建立</div></div>
+</div>
+
+<div class="sec">📝 写作方法论</div>
+
+<p>小海老师的文章有非常固定的结构模式：</p>
+
+<div class="card blue">
+  <div class="card-title">写作公式（6步法）</div>
+  <div class="ul">
+    <li><strong>标题：</strong>直击痛点型 — 「为什么大量学生反复错基础运算？」</li>
+    <li><strong>开篇：</strong>抛出问题 + 说明不是什么 — 「这不是态度问题」</li>
+    <li><strong>核心：</strong>用类比解释原理 — 粗心→开车 / 计算→通信传输 / 执行→流水线</li>
+    <li><strong>中间：</strong>实验数据 + 个人经历 — 「我刷了2000道题」「我投了2万球」</li>
+    <li><strong>方法：</strong>具体的可执行步骤 — 竖式标准精确分界 / 草稿纸规范</li>
+    <li><strong>结语：</strong>升华到教育理念 — 理解孩子 / 长期主义</li>
+  </div>
+</div>
+
+<div class="insight gold"><span class="icon">💡</span><span class="text"><strong>这种结构为什么有效？</strong>先解决「为什么」再解决「怎么做」——读者先被说服了才愿意执行。类比降低了理解门槛。数据让人信服。个人经历建立情感连接。</span></div>
+
+<div class="sec">💰 商业模式拆解</div>
+
+<div class="card gold">
+  <div class="card-title">三层漏斗模型</div>
+  <p><strong>内容层（免费）</strong> → 公众号长文（核心内容池）+ B站专栏（同步分发）+ 搜狐/澎湃（转载扩大影响）+ 知乎回答（精准引流）</p>
+  <p><strong>权威层（付费）</strong> → 书籍《家庭辅导的方向与细节》¥38–53，建立「出了书的作者」身份</p>
+  <p><strong>产品层（高利润）</strong> → 小学数学原理课（三个级别），从原理角度阐述数学发展脉络</p>
+</div>
+
+<div class="grid2">
+  <div class="gcell"><div class="glabel">书籍版税（估算）</div><div class="gvalue">≈ ¥9,000–15,000</div></div>
+  <div class="gcell"><div class="glabel">课程收入（估算）</div><div class="gvalue">≈ ¥2,000–40,000/月</div></div>
+  <div class="gcell"><div class="glabel">团队规模</div><div class="gvalue">1人工作室</div></div>
+  <div class="gcell"><div class="glabel">模式特征</div><div class="gvalue">极低成本的个人模式</div></div>
+</div>
+
+<div class="insight blue"><span class="icon">🔑</span><span class="text"><strong>关键判断：</strong>这个模式可复制，但无法快速→高利润。需要长时间的免费内容积累（3–5年），然后才能通过书籍和课程转化。不是一个「快速致富」的模式，但对愿意深耕的人来说是可持续、有尊严的。</span></div>
+
+<div class="sec">🔄 你（Zeno）vs 小海老师</div>
+
+<div class="card purple">
+  <div class="card-title">核心对比</div>
+  <div class="grid2" style="margin-top:0.3rem">
+    <div class="gcell" style="border-color:var(--accent)"><div class="glabel">👤 小海老师</div><div class="gvalue">10年教龄 · 中科院 · 纯内容创作者</div></div>
+    <div class="gcell" style="border-color:var(--gold)"><div class="glabel">🦞 你（Zeno）</div><div class="gvalue">16年教龄 · 北大 · 内容+技术+AI</div></div>
+    <div class="gcell"><div class="glabel">定位</div><div class="gvalue">大众市场·小学数学</div></div>
+    <div class="gcell"><div class="glabel">定位</div><div class="gvalue">奥数思维+学习科学+特教视角</div></div>
+    <div class="gcell"><div class="glabel">技术</div><div class="gvalue">无技术产品</div></div>
+    <div class="gcell"><div class="glabel">技术</div><div class="gvalue">AI+小程序+游戏化产品</div></div>
+    <div class="gcell"><div class="glabel">独特视角</div><div class="gvalue">——</div></div>
+    <div class="gcell"><div class="glabel">独特视角</div><div class="gvalue">特殊需求孩子学习机制</div></div>
+  </div>
+</div>
+
+<div class="sec sub">🎯 核心结论</div>
+
+<div class="insight gold"><span class="icon">💎</span><span class="text"><strong>结论：他的路径可以借鉴，但不应该复制。你的路应该是他的路的「升级版」。</strong></span></div>
+
+<div class="card green">
+  <div class="card-title">✅ 可以借鉴的</div>
+  <div class="ul">
+    <li><strong>「实验+内容」的写作方法</strong> — 刷2000道题那种。你做奥数也可以做类似实验</li>
+    <li><strong>公众号→出书→卖课的转化路径</strong> — 已被验证可行</li>
+    <li><strong>多平台分发策略</strong> — B站专栏值得投入（内容同步就行）</li>
+    <li><strong>同类比的写作手法</strong> — 用具体生活场景解释抽象原理</li>
+  </div>
+</div>
+
+<div class="card pink">
+  <div class="card-title">❌ 不应复制的</div>
+  <div class="ul">
+    <li><strong>纯写文章不碰技术</strong> — 你有AI和技术能力，这是你的破局点</li>
+    <li><strong>大众市场的定位</strong> — 小学数学太卷了，你的奥数+初中物化更精准</li>
+    <li><strong>没有技术产品</strong> — 他只有课程（视频播放），你可以做交互产品</li>
+  </div>
+</div>
+
+<div class="insight blue"><span class="icon">🚀</span><span class="text"><strong>你独有的路径：</strong>「深度内容 × AI技术 × 特殊教育视角」的三位一体。这比小海老师的「纯内容」路径稀缺得多，也难被复制得多。他的路→成功，但很多人可以模仿。你的路→一旦走通，没人能抢你的位置。</span></div>
+
+<div class="sec sub">📋 建议行动路线</div>
+
+<div class="phase">
+  <div class="phase-item">
+    <span class="p-num">阶段一（现在–6个月）</span>
+    <span class="p-title">内容起步</span>
+    <span class="p-desc">不用全职投入。每周1–2篇深度文章，从学习方法入手。AI辅助但不用AI写。同步到B站。</span>
+  </div>
+  <div class="phase-item" style="border-left-color:var(--gold)">
+    <span class="p-num" style="color:var(--gold)">阶段二（6–18个月）</span>
+    <span class="p-title">建立权威</span>
+    <span class="p-desc">文章积累到一定量。多平台分发（B站优先）。启动书籍计划。观察独特性是否被读者认可。</span>
+  </div>
+  <div class="phase-item" style="border-left-color:var(--green)">
+    <span class="p-num" style="color:var(--green)">阶段三（18个月+）</span>
+    <span class="p-title">产品变现</span>
+    <span class="p-desc">课程（带AI交互，不只是视频）。小程序/工具产品（24点游戏已在路上）。家长咨询（特殊教育经验是稀缺价值）。AI辅助学习工具。</span>
+  </div>
+</div>
+
+<div class="insight gold"><span class="icon">🌟</span><span class="text"><strong>一句话总结：</strong>他的全职创作模式不适合你。但<strong>他的内容创作方法 + 你的AI能力 + 你的特殊教育视角</strong>，可以组合成一条更适合你的路。</span></div>
+
+<div class="hr"></div>
+<div style="font-size:0.65rem;color:var(--muted);text-align:center;padding:0.5rem 0">调研完成时间：2026-05-26 · 主宰面板出品 🦞👑</div>
+
 </div>
 </body>
 </html>
