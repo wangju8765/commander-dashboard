@@ -21,6 +21,7 @@ html{font-size:calc(100vw/375*20);touch-action:manipulation}
 body{background:#0f0f13;color:#fff}
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh}
 #mobileView{display:flex;flex-direction:column;flex:1;overflow:hidden}
+#desktopView{display:none}
 
 /* Header */
 .header{padding:calc(1.25rem + env(safe-area-inset-top,0px)) 1rem 0.5rem;background:#0f0f13;position:sticky;top:0;z-index:10}
@@ -252,6 +253,7 @@ body{background:#0f0f13;color:#fff}
 html{font-size:clamp(16px,1.2vw,24px)}
 body{background:#0f0f13;color:#fff}
 .app{display:flex;min-height:100vh}
+#mobileView{display:none}
 #desktopView{display:flex;min-height:100vh}
 
 /* Sidebar */
