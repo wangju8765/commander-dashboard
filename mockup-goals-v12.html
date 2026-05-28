@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>方向与聚焦</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0a0a12}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none;color:#f0f0f4;-webkit-user-select:none;user-select:none}
+  .app{width:100%;height:100%;height:100dvh;display:flex;flex-direction:column;background:#0a0a12;position:relative;overflow:hidden}
+
+  /* ===== HEADER ===== */
+  .header{position:relative;z-index:20;padding:1.35rem 1rem 0.1rem;text-align:center}
+  .header h1{font-size:22px;font-weight:600;color:#ffd700;letter-spacing:0.08em}
+  .header .sub{font-size:14px;color:rgba(255,215,0,0.12);margin-top:0.05rem}
+
+  /* ===== SCROLLER ===== */
+  .scroller-wrap{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .scroller{display:flex;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x mandatory;flex:1}
+  .scroller::-webkit-scrollbar{display:none}
+  .page{
+    min-width:100vw;scroll-snap-align:center;
+    padding:0.5rem 1rem 0.3rem;
+    display:flex;flex-direction:column;
+    overflow-y:auto;
+  }
+  .page::-webkit-scrollbar{display:none}
+
+  /* ===== CARD ===== */
+  .card{
+    background:rgba(255,255,255,0.012);
+    border:1px solid rgba(255,255,255,0.02);
+    border-radius:0.75rem;
+    padding:0.7rem 0.65rem 0.5rem;
+    display:flex;flex-direction:column;
+  }
+  .card-label{
+    font-size:17px;
+    color:rgba(255,255,255,0.4);
+    letter-spacing:0.06em;
+    margin-bottom:0.45rem;
+  }
+
+  /* ===== ITEMS ===== */
+  .item{
+    display:flex;align-items:center;gap:0.45rem;
+    padding:0.5rem 0.5rem;
+    border-radius:0.5rem;
+    cursor:pointer;
+    transition:background 0.1s;
+  }
+  .item+.item{margin-top:0.05rem}
+
+  .item .orb{
+    width:1.6rem;height:1.6rem;
+    border-radius:0.4rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;flex-shrink:0;
+  }
+  .item .name{
+    flex:1;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    font-size:17px;
+  }
+
+  /* ---- Active items: subtle background glow ---- */
+  .item.act{
+    background:rgba(91,154,255,0.05);
+    border:1px solid rgba(91,154,255,0.06);
+    margin-bottom:0.2rem;
+  }
+  .item.act .orb{
+    background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0);
+    box-shadow:0 0 6px rgba(91,154,255,0.1);
+  }
+  .item.act .name{color:#fff;font-weight:500;font-size:18px}
+
+  /* ---- Done items: normal, readable, no dimming ---- */
+  .item.done{padding:0.4rem 0.5rem}
+  .item.done .orb{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.03);
+  }
+  .item.done .name{color:rgba(255,255,255,0.45);font-size:16px}
+
+  /* ===== DOTS ===== */
+  .dots{display:flex;justify-content:center;gap:0.4rem;padding:0.2rem 0 0.1rem}
+  .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.06);transition:all 0.2s}
+  .dot.cur{background:#5b9aff;width:20px;border-radius:4px}
+
+  /* ===== TOOLTIP ===== */
+  .tooltip{
+    position:fixed;z-index:50;
+    background:rgba(20,20,35,0.97);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.65rem;
+    padding:0.65rem 0.85rem;
+    min-width:5rem;
+    backdrop-filter:blur(12px);
+    box-shadow:0 4px 24px rgba(0,0,0,0.5);
+    pointer-events:none;
+    opacity:0;transition:opacity 0.2s;
+  }
+  .tooltip.show{opacity:1}
+  .tooltip .t-t{font-size:18px;font-weight:600;color:#fff;margin-bottom:0.1rem}
+  .tooltip .t-m{font-size:15px;color:rgba(255,255,255,0.3)}
+
+  /* ===== BOTTOM ===== */
+  .bottom-bar{
+    position:relative;z-index:20;
+    background:linear-gradient(180deg,transparent 0%,rgba(10,10,18,0.93) 20%);
+    padding:0.15rem 1rem 0.25rem;
+  }
+  .b-inner{display:flex;gap:0.35rem;overflow-x:auto;scrollbar-width:none;justify-content:center;-webkit-overflow-scrolling:touch}
+  .b-inner::-webkit-scrollbar{display:none}
+  .b-chip{
+    flex-shrink:0;display:flex;align-items:center;gap:0.25rem;
+    padding:0.25rem 0.5rem 0.25rem 0.25rem;
+    background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.035);
+    border-radius:1rem;font-size:14px;color:rgba(255,255,255,0.2);
+  }
+  .b-chip .bd{width:1rem;height:1rem;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .b-add{
+    flex-shrink:0;display:flex;align-items:center;gap:0.2rem;
+    padding:0.25rem 0.5rem;border:1px dashed rgba(255,255,255,0.04);
+    border-radius:1rem;font-size:15px;color:rgba(91,154,255,0.3);
+    background:none;cursor:pointer;
+  }
+  .tab-bar{
+    position:relative;z-index:20;
+    background:rgba(10,10,18,0.95);backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.02);
+    display:flex;padding:0.15rem 0 0.5rem;
+  }
+  .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.05rem;padding:0.15rem;background:none;border:none;color:rgba(255,255,255,0.1);font-size:12px;cursor:pointer}
+  .tab-btn .icon{font-size:18px;line-height:1}
+  .tab-btn.active{color:rgba(255,255,255,0.4)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>✦ 生活即工作</h1>
+    <div class="sub">方向 · · · · · · · · · · · · · 行动</div>
+  </div>
+
+  <div class="scroller-wrap">
+    <div class="scroller" id="scroller">
+
+      <!-- 产品 -->
+      <div class="page">
+        <div class="card">
+          <div class="card-label">🪐 产品</div>
+          <div class="item act"><span class="orb">🎮</span><span class="name">写字小程序</span></div>
+          <div class="item done"><span class="orb" style="font-size:14px">24</span><span class="name">24点游戏</span></div>
+        </div>
+      </div>
+
+      <!-- AI数字化 -->
+      <div class="page">
+        <div class="card">
+          <div class="card-label">🛸 AI数字化</div>
+          <div class="item act"><span class="orb">🖥️</span><span class="name">主宰面板</span></div>
+          <div class="item done"><span class="orb" style="font-size:14px">📋</span><span class="name">AI Agent日报</span></div>
+        </div>
+      </div>
+
+      <!-- 内容 -->
+      <div class="page">
+        <div class="card">
+          <div class="card-label">🌐 内容</div>
+          <div class="item act"><span class="orb">✏️</span><span class="name">公众号</span></div>
+          <div class="item done"><span class="orb" style="font-size:14px">🔍</span><span class="name">引光小站调研</span></div>
+          <div class="item done"><span class="orb" style="font-size:13px">🐼</span><span class="name">天才小熊猫调研</span></div>
+        </div>
+      </div>
+
+      <!-- 家庭 -->
+      <div class="page">
+        <div class="card">
+          <div class="card-label">🏠 家庭</div>
+          <div class="item act"><span class="orb" style="font-size:15px">📋</span><span class="name">每日打卡</span></div>
+          <div class="item act"><span class="orb" style="font-size:15px">👧</span><span class="name">老二陪伴</span></div>
+          <div class="item done"><span class="orb" style="font-size:13px">📖</span><span class="name">心理学笔记</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="dots" id="dots">
+      <span class="dot cur"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+
+    <div class="tooltip" id="tip">
+      <div class="t-t"></div>
+      <div class="t-m"></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="b-inner">
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🖥️</span>面板</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🎮</span>写字</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(255,160,80,0.04)">👧</span>老二</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(180,100,255,0.04)">📋</span>打卡</div>
+      <button class="b-add">＋</button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn"><span class="icon">📅</span>日历</button>
+    <button class="tab-btn"><span class="icon">📊</span>项目</button>
+    <button class="tab-btn active"><span class="icon">🎯</span>方向</button>
+    <button class="tab-btn"><span class="icon">📝</span>库</button>
+  </div>
+</div>
+
+<script>
+// Tooltip
+(function(){
+  var tip=document.getElementById('tip');
+  var m={'写字小程序':'进行中','24点游戏':'已上线','主宰面板':'进行中','AI Agent日报':'已存档','公众号':'持续更新','引光小站调研':'已存档','天才小熊猫调研':'已存档','每日打卡':'老大训练中','老二陪伴':'日常关注','心理学笔记':'已读完'};
+  document.querySelectorAll('.item').forEach(function(s){
+    s.addEventListener('click',function(e){
+      var n=s.querySelector('.name');if(!n)return;
+      var t=n.textContent.trim(),d=m[t];if(!d){tip.classList.remove('show');return;}
+      tip.querySelector('.t-t').textContent=t;
+      tip.querySelector('.t-m').textContent=d||'';
+      var r=s.getBoundingClientRect();
+      tip.style.left=Math.max(4,Math.min(r.left-5,innerWidth-200))+'px';
+      tip.style.top=Math.max(4,r.top-35)+'px';
+      tip.classList.add('show');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click',function(){tip.classList.remove('show')});
+})();
+
+// Dot sync
+(function(){
+  var scroller=document.getElementById('scroller');
+  var dots=document.querySelectorAll('.dot');
+  if(!scroller||!dots.length)return;
+  scroller.addEventListener('scroll',function(){
+    var idx=Math.round(scroller.scrollLeft/innerWidth);
+    if(idx<0)idx=0;if(idx>=dots.length)idx=dots.length-1;
+    dots.forEach(function(d,i){d.classList.toggle('cur',i===idx);});
+  });
+})();
+</script>
+</body>
+</html>

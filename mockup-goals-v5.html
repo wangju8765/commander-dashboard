@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>⋆｡°✩ 星图</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:#04040a}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none;-webkit-user-select:none;user-select:none;color:#e8e8ed}
+
+  .app{
+    width:100%;height:100%;height:100dvh;
+    display:flex;flex-direction:column;
+    background:#04040a;position:relative;overflow:hidden;
+  }
+
+  /* ---- Header ---- */
+  .header{
+    position:relative;z-index:20;
+    padding:1.25rem 1rem 0;
+    text-align:center;
+    height:2.5rem;
+  }
+  .header .title{font-size:0.75rem;font-weight:400;color:rgba(255,255,255,0.25);letter-spacing:0.12em}
+
+  /* ---- Sky ---- */
+  .sky{
+    flex:1;position:relative;overflow:hidden;
+    z-index:10;
+  }
+
+  /* Background stars (decorative) */
+  #bgStars{position:absolute;inset:0;pointer-events:none;}
+
+  /* ---- Galaxy nebulae ---- */
+  .nebula{
+    position:absolute;border-radius:50%;filter:blur(60px);
+    pointer-events:none;opacity:0.5;
+  }
+
+  /* ---- Star base positioning (all CSS, no JS) ---- */
+  .star{
+    position:absolute;
+    cursor:pointer;z-index:5;
+    display:flex;flex-direction:column;align-items:center;
+    pointer-events:auto;
+    /* transform handles the floating offset; base position via left/top % */
+  }
+  .star .orb{
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+    transition:box-shadow 0.4s;
+  }
+  .star .lbl{
+    position:absolute;top:100%;margin-top:0.15rem;
+    font-size:0.42rem;white-space:nowrap;
+    letter-spacing:0.02em;
+    pointer-events:none;
+    transition:opacity 0.3s;
+  }
+  /* By default labels very faded, visible on tap/hover */
+  .star .lbl{opacity:0.35;}
+  .star.polaris .lbl,.star.major .lbl{opacity:0.7;}
+
+  /* Polaris */
+  .star.polaris .orb{
+    background:radial-gradient(circle at 30% 30%, #ffe680, #cc8a00);
+    box-shadow:0 0 40px rgba(255,200,0,0.3), 0 0 100px rgba(255,200,0,0.05);
+    animation:starPulse 3s ease-in-out infinite;
+  }
+  @keyframes starPulse{
+    0%,100%{box-shadow:0 0 40px rgba(255,200,0,0.3),0 0 100px rgba(255,200,0,0.05)}
+    50%{box-shadow:0 0 55px rgba(255,200,0,0.4),0 0 120px rgba(255,200,0,0.08)}
+  }
+  .star.polaris .lbl{color:#ffd700;font-weight:600;font-size:0.48rem;text-shadow:0 0 12px rgba(255,215,0,0.15);opacity:1;}
+
+  /* Major */
+  .star.major .orb{
+    background:radial-gradient(circle at 30% 30%, #c8a8ff, #7c5cf0);
+    box-shadow:0 0 25px rgba(160,120,255,0.2);
+    animation:majorPulse 4s ease-in-out infinite;
+  }
+  @keyframes majorPulse{
+    0%,100%{box-shadow:0 0 25px rgba(160,120,255,0.2)}
+    50%{box-shadow:0 0 35px rgba(160,120,255,0.3)}
+  }
+  .star.major .lbl{color:#b088ff;font-weight:500;font-size:0.45rem;text-shadow:0 0 8px rgba(160,120,255,0.08);opacity:0.9;}
+
+  /* Active */
+  .star.active .orb{
+    background:radial-gradient(circle at 30% 30%, #7cbaff, #3d7ae0);
+    box-shadow:0 0 12px rgba(91,154,255,0.15);
+  }
+  .star.active .lbl{color:#7aaaef;}
+
+  /* Done */
+  .star.done .orb{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.025);
+    opacity:0.4;
+  }
+  .star.done .lbl{color:rgba(255,255,255,0.12);}
+
+  /* Star sizes */
+  .star.polaris .orb{width:2.8rem;height:2.8rem;font-size:1.1rem}
+  .star.major .orb{width:2rem;height:2rem;font-size:0.85rem}
+  .star.active .orb{width:1.3rem;height:1.3rem;font-size:0.6rem}
+  .star.done .orb{width:0.9rem;height:0.9rem;font-size:0.4rem}
+
+  /* ---- Orbits (tiny stars circling bigger ones) ---- */
+  .orbit-star{
+    position:absolute;
+    width:0.5rem;height:0.5rem;
+    border-radius:50%;
+    background:rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.03);
+    pointer-events:none;
+  }
+
+  /* ---- Tooltip ---- */
+  .tooltip{
+    position:fixed;z-index:50;
+    background:rgba(12,12,22,0.94);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:0.6rem;
+    padding:0.5rem 0.65rem;
+    min-width:5rem;
+    backdrop-filter:blur(12px);
+    box-shadow:0 4px 24px rgba(0,0,0,0.5);
+    pointer-events:none;
+    opacity:0;
+    transition:opacity 0.2s;
+  }
+  .tooltip.show{opacity:1}
+  .tooltip .t-title{font-size:0.7rem;font-weight:600;color:#fff;margin-bottom:0.1rem}
+  .tooltip .t-meta{font-size:0.48rem;color:rgba(255,255,255,0.3)}
+  .tooltip .t-link{font-size:0.48rem;color:#a078ff;margin-top:0.05rem}
+
+  /* ---- Bottom strip ---- */
+  .bottom-strip{
+    position:relative;z-index:20;
+    background:linear-gradient(180deg, transparent 0%, rgba(4,4,10,0.92) 20%);
+    padding:0.4rem 1rem 0.45rem;
+  }
+  .strip-inner{
+    display:flex;gap:0.3rem;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    justify-content:center;
+  }
+  .strip-inner::-webkit-scrollbar{display:none}
+  .chip{
+    flex-shrink:0;
+    display:flex;align-items:center;gap:0.25rem;
+    padding:0.2rem 0.45rem 0.2rem 0.25rem;
+    background:rgba(255,255,255,0.015);
+    border:1px solid rgba(255,255,255,0.03);
+    border-radius:1rem;
+    font-size:0.5rem;
+    color:rgba(255,255,255,0.3);
+  }
+  .chip .cd{
+    width:0.95rem;height:0.95rem;
+    border-radius:0.2rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.45rem;flex-shrink:0;
+  }
+  .chip-add{
+    flex-shrink:0;
+    display:flex;align-items:center;gap:0.2rem;
+    padding:0.2rem 0.45rem;
+    border:1px dashed rgba(255,255,255,0.04);
+    border-radius:1rem;
+    font-size:0.5rem;color:rgba(91,154,255,0.5);
+    background:none;cursor:pointer;
+  }
+
+  /* ---- Tab bar ---- */
+  .tab-bar{
+    position:relative;z-index:20;
+    background:rgba(4,4,10,0.95);
+    backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.02);
+    display:flex;
+    padding:0.15rem 0 0.5rem;
+  }
+  .tab-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:0.05rem;
+    padding:0.15rem;background:none;border:none;
+    color:rgba(255,255,255,0.1);font-size:0.45rem;cursor:pointer;transition:color 0.15s;
+  }
+  .tab-btn .icon{font-size:0.9rem;line-height:1}
+  .tab-btn.active{color:rgba(255,255,255,0.5)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="title">✦ 星 图 ✦</div>
+  </div>
+
+  <div class="sky" id="sky">
+
+    <!-- background stars (JS) -->
+    <div id="bgStars"></div>
+
+    <!-- Nebulae -->
+    <div class="nebula" style="width:220px;height:220px;background:radial-gradient(circle,rgba(255,200,50,0.03) 0%,transparent 70%);top:-5%;left:35%;"></div>
+    <div class="nebula" style="width:150px;height:150px;background:radial-gradient(circle,rgba(91,140,255,0.03) 0%,transparent 70%);top:28%;left:8%;"></div>
+    <div class="nebula" style="width:140px;height:140px;background:radial-gradient(circle,rgba(60,190,255,0.03) 0%,transparent 70%);top:26%;left:40%;"></div>
+    <div class="nebula" style="width:160px;height:160px;background:radial-gradient(circle,rgba(180,100,255,0.03) 0%,transparent 70%);top:30%;right:5%;"></div>
+    <div class="nebula" style="width:180px;height:180px;background:radial-gradient(circle,rgba(255,160,80,0.025) 0%,transparent 70%);bottom:3%;left:30%;"></div>
+
+    <!-- ===== LEVEL 1 · 北极星 ===== -->
+    <div class="star polaris" style="left:50%;top:7%;" data-orbit="true">
+      <div class="orb">⭐</div>
+      <div class="lbl">生活即工作</div>
+    </div>
+
+    <!-- ===== LEVEL 2 · 银河 ===== -->
+    <div class="star major" style="left:50%;top:20%;">
+      <div class="orb">🌐</div>
+      <div class="lbl">AI数字化人生</div>
+    </div>
+
+    <!-- ===== GALAXY · 产品 ===== -->
+    <div class="star active" style="left:15%;top:37%;">
+      <div class="orb">🎮</div>
+      <div class="lbl">写字小程序</div>
+    </div>
+    <div class="star done" style="left:10%;top:52%;">
+      <div class="orb" style="font-size:0.35rem">24</div>
+      <div class="lbl">24点游戏</div>
+    </div>
+
+    <!-- ===== GALAXY · AI ===== -->
+    <div class="star active" style="left:47%;top:35%;">
+      <div class="orb">🖥️</div>
+      <div class="lbl">主宰面板</div>
+    </div>
+    <div class="star done" style="left:55%;top:50%;">
+      <div class="orb" style="font-size:0.35rem">📋</div>
+      <div class="lbl">Agent日报</div>
+    </div>
+
+    <!-- ===== GALAXY · 内容 ===== -->
+    <div class="star active" style="left:82%;top:40%;">
+      <div class="orb">✏️</div>
+      <div class="lbl">公众号</div>
+    </div>
+    <div class="star done" style="left:88%;top:55%;">
+      <div class="orb" style="font-size:0.35rem">🔍</div>
+      <div class="lbl">引光小站</div>
+    </div>
+    <div class="star done" style="left:75%;top:62%;">
+      <div class="orb" style="font-size:0.3rem">🐼</div>
+      <div class="lbl">天才小熊猫</div>
+    </div>
+
+    <!-- ===== GALAXY · 家庭 ===== -->
+    <div class="star active" style="left:33%;top:82%;">
+      <div class="orb" style="width:1.1rem;height:1.1rem;font-size:0.45rem">📋</div>
+      <div class="lbl" style="font-size:0.35rem">每日打卡</div>
+    </div>
+    <div class="star active" style="left:50%;top:77%;">
+      <div class="orb" style="width:1.1rem;height:1.1rem;font-size:0.45rem">👧</div>
+      <div class="lbl" style="font-size:0.35rem">老二陪伴</div>
+    </div>
+    <div class="star done" style="left:65%;top:85%;">
+      <div class="orb" style="width:0.75rem;height:0.75rem;font-size:0.3rem">📖</div>
+      <div class="lbl" style="font-size:0.3rem">心理学笔记</div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tip">
+      <div class="t-title"></div>
+      <div class="t-meta"></div>
+      <div class="t-link"></div>
+    </div>
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom-strip">
+    <div class="strip-inner">
+      <div class="chip"><span class="cd" style="background:rgba(91,154,255,0.04)">🖥️</span>主宰面板</div>
+      <div class="chip"><span class="cd" style="background:rgba(91,154,255,0.04)">🎮</span>写字小程序</div>
+      <div class="chip"><span class="cd" style="background:rgba(255,160,80,0.04)">👧</span>老二陪伴</div>
+      <div class="chip"><span class="cd" style="background:rgba(180,100,255,0.04)">📋</span>每日打卡</div>
+      <button class="chip-add">＋</button>
+    </div>
+  </div>
+
+  <!-- Tab bar -->
+  <div class="tab-bar">
+    <button class="tab-btn"><span class="icon">📅</span>日历</button>
+    <button class="tab-btn"><span class="icon">📊</span>项目</button>
+    <button class="tab-btn active"><span class="icon">🎯</span>星图</button>
+    <button class="tab-btn"><span class="icon">📝</span>库</button>
+  </div>
+</div>
+
+<script>
+// === Background stars ===
+(function(){
+  var c=document.getElementById('bgStars');
+  if(!c)return;
+  var h='';
+  for(var i=0;i<80;i++){
+    var x=Math.random()*100;
+    var y=Math.random()*100;
+    var s=0.4+Math.random()*1.2;
+    var d=Math.random()*5;
+    var o=0.06+Math.random()*0.12;
+    h+='<div style="position:absolute;left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;border-radius:50%;background:rgba(255,255,255,'+o+');animation:bgTwinkle 3s ease-in-out infinite;animation-delay:'+d+'s;pointer-events:none"></div>';
+  }
+  c.innerHTML=h;
+})();
+// Inject bgTwinkle keyframe
+var st=document.createElement('style');
+st.textContent='@keyframes bgTwinkle{0%,100%{opacity:0.2}50%{opacity:0.04}}';
+document.head.appendChild(st);
+
+// === Floating animation (transform only — no left/top) ===
+(function(){
+  var stars=document.querySelectorAll('.star');
+  var data=[];
+  stars.forEach(function(s){
+    data.push({
+      el:s,
+      ox:(Math.random()-0.5)*8,
+      oy:(Math.random()-0.5)*5,
+      sx:0.3+Math.random()*0.5,
+      sy:0.2+Math.random()*0.4,
+      px:Math.random()*6.28,
+      py:Math.random()*6.28
+    });
+  });
+  function tick(){
+    var t=Date.now()/1000;
+    data.forEach(function(d){
+      var dx=Math.sin(t*d.sx+d.px)*d.ox;
+      var dy=Math.sin(t*d.sy+d.py)*d.oy;
+      d.el.style.transform='translate('+dx.toFixed(1)+'px,'+dy.toFixed(1)+'px)';
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+// === Tooltip ===
+(function(){
+  var tip=document.getElementById('tip');
+  var labels={
+    '生活即工作':['⭐ 一辈子的大方向',null],
+    'AI数字化人生':['🌟 长期目标 · 1-2年',null],
+    '写字小程序':['🔭 当前聚焦 · 进行中','→ 产品星系'],
+    '24点游戏':['⚪ 已完成 · 已上线','→ 产品星系'],
+    '主宰面板':['🔭 当前聚焦 · 进行中','→ AI工具星系'],
+    'Agent日报':['⚪ 已完成 · 存档','→ AI工具星系'],
+    '公众号':['🔭 当前聚焦 · 持续更新','→ 内容星系'],
+    '引光小站':['⚪ 已完成 · 存档','→ 内容星系'],
+    '天才小熊猫':['⚪ 已完成 · 存档','→ 内容星系'],
+    '每日打卡':['🔭 日常 · 老大训练','→ 家庭星系'],
+    '老二陪伴':['🔭 日常 · 持续关注','→ 家庭星系'],
+    '心理学笔记':['⚪ 已完成','→ 家庭星系'],
+  };
+  var allStars=document.querySelectorAll('.star');
+  allStars.forEach(function(s){
+    s.addEventListener('click',function(e){
+      var lbl=s.querySelector('.lbl');
+      if(!lbl)return;
+      var name=lbl.textContent.trim();
+      var info=labels[name];
+      if(!info){tip.classList.remove('show');return;}
+      tip.querySelector('.t-title').textContent=name;
+      tip.querySelector('.t-meta').textContent=info[0];
+      var lnk=tip.querySelector('.t-link');
+      if(info[1]){lnk.textContent=info[1];lnk.style.display='block';}
+      else lnk.style.display='none';
+      var r=s.getBoundingClientRect();
+      var tx=Math.max(4,Math.min(r.left-5,window.innerWidth-180));
+      var ty=Math.max(4,r.top-38);
+      tip.style.left=tx+'px';
+      tip.style.top=ty+'px';
+      tip.classList.add('show');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click',function(){tip.classList.remove('show')});
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>方向与聚焦</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:clamp(16px,100vw/375*20,24px)}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0a0a12}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none;color:#f0f0f4;-webkit-user-select:none;user-select:none}
+  .app{width:100%;height:100%;height:100dvh;display:flex;flex-direction:column;background:#0a0a12;position:relative;overflow:hidden}
+
+  /* ===== HEADER ===== */
+  .header{position:relative;z-index:20;padding:1.25rem 1rem 0.2rem;text-align:center}
+  .header h1{font-size:1.1rem;font-weight:600;color:#f0f0f4;letter-spacing:0.06em}
+  .header .axis{font-size:0.45rem;color:rgba(255,255,255,0.06);margin-top:0.05rem;display:flex;justify-content:space-between;padding:0 0.5rem}
+
+  /* ===== POLARIS (总是显示) ===== */
+  .polaris-bar{
+    position:relative;z-index:20;
+    display:flex;justify-content:center;gap:0.75rem;
+    padding:0.3rem 1rem 0.4rem;
+    border-bottom:1px solid rgba(255,255,255,0.02);
+  }
+  .p-star{
+    display:flex;align-items:center;gap:0.3rem;
+  }
+  .p-star .orb{
+    width:1.4rem;height:1.4rem;
+    border-radius:0.35rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.65rem;flex-shrink:0;
+  }
+  .p-star .name{
+    font-size:0.7rem;
+    white-space:nowrap;
+  }
+  .p-star.p0 .orb{background:radial-gradient(circle at 30% 30%,#ffe680,#cc8a00);box-shadow:0 0 12px rgba(255,200,0,0.12)}
+  .p-star.p0 .name{color:#ffd700;font-weight:600}
+  .p-star.p1 .orb{background:radial-gradient(circle at 30% 30%,#c8a8ff,#7c5cf0);box-shadow:0 0 8px rgba(160,120,255,0.08)}
+  .p-star.p1 .name{color:#b088ff;font-weight:500}
+
+  /* ===== SCROLLER ===== */
+  .scroller-wrap{
+    flex:1;position:relative;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .scroller{
+    display:flex;
+    gap:0;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    scroll-snap-type:x mandatory;
+    flex:1;
+  }
+  .scroller::-webkit-scrollbar{display:none}
+
+  .page{
+    min-width:100vw;
+    scroll-snap-align:center;
+    padding:0.75rem 1rem 0.5rem;
+    display:flex;flex-direction:column;
+    gap:0.5rem;
+    overflow-y:auto;
+  }
+  .page::-webkit-scrollbar{display:none}
+
+  /* ===== CARD (each galaxy) ===== */
+  .g-card{
+    background:rgba(255,255,255,0.012);
+    border:1px solid rgba(255,255,255,0.025);
+    border-radius:0.7rem;
+    padding:0.55rem 0.5rem 0.4rem;
+  }
+  .g-label{
+    font-size:0.5rem;
+    color:rgba(255,255,255,0.08);
+    letter-spacing:0.06em;
+    margin-bottom:0.3rem;
+    padding:0 0.1rem;
+  }
+
+  /* ===== ITEMS ===== */
+  .item{
+    display:flex;align-items:center;gap:0.35rem;
+    padding:0.3rem 0.35rem;
+    border-radius:0.45rem;
+    cursor:pointer;
+    transition:background 0.1s;
+  }
+  .item:active{background:rgba(255,255,255,0.025)}
+  .item+.item{margin-top:0.1rem}
+
+  .item .orb{
+    width:1.3rem;height:1.3rem;
+    border-radius:0.3rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.55rem;flex-shrink:0;
+  }
+  .item .name{
+    flex:1;font-size:0.7rem;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .item .tag{
+    font-size:0.4rem;padding:0.04rem 0.2rem;
+    border-radius:0.15rem;flex-shrink:0;
+  }
+
+  .item.act .orb{background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0);box-shadow:0 0 4px rgba(91,154,255,0.06)}
+  .item.act .name{color:#8ab8ff}
+  .item.act .tag{background:rgba(91,154,255,0.08);color:#5b9aff}
+  .item.done .orb{background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.02);opacity:0.4}
+  .item.done .name{color:rgba(255,255,255,0.12)}
+  .item.done .tag{background:rgba(255,255,255,0.015);color:rgba(255,255,255,0.08)}
+
+  /* Section mini-title inside card */
+  .sub-h{
+    font-size:0.45rem;
+    color:rgba(255,255,255,0.04);
+    letter-spacing:0.04em;
+    padding:0.1rem 0.1rem 0.15rem;
+    margin-top:0.1rem;
+  }
+
+  /* ===== DOTS ===== */
+  .dots{
+    display:flex;justify-content:center;gap:0.35rem;
+    padding:0.25rem 0 0.15rem;
+  }
+  .dot{
+    width:0.4rem;height:0.4rem;
+    border-radius:50%;
+    background:rgba(255,255,255,0.04);
+    transition:background 0.2s,width 0.2s;
+  }
+  .dot.cur{
+    background:rgba(255,255,255,0.2);
+    width:0.65rem;
+    border-radius:0.25rem;
+  }
+
+  /* ===== TOOLTIP ===== */
+  .tooltip{
+    position:fixed;z-index:50;
+    background:rgba(15,15,28,0.96);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.65rem;
+    padding:0.55rem 0.75rem;
+    min-width:5rem;
+    backdrop-filter:blur(12px);
+    box-shadow:0 4px 24px rgba(0,0,0,0.5);
+    pointer-events:none;
+    opacity:0;transition:opacity 0.2s;
+  }
+  .tooltip.show{opacity:1}
+  .tooltip .t-t{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.1rem}
+  .tooltip .t-m{font-size:0.6rem;color:rgba(255,255,255,0.3)}
+
+  /* ===== BOTTOM ===== */
+  .bottom-bar{
+    position:relative;z-index:20;
+    background:linear-gradient(180deg,transparent 0%,rgba(10,10,18,0.93) 20%);
+    padding:0.25rem 1rem 0.3rem;
+  }
+  .b-inner{display:flex;gap:0.35rem;overflow-x:auto;scrollbar-width:none;justify-content:center;-webkit-overflow-scrolling:touch}
+  .b-inner::-webkit-scrollbar{display:none}
+  .b-chip{
+    flex-shrink:0;display:flex;align-items:center;gap:0.25rem;
+    padding:0.2rem 0.45rem 0.2rem 0.2rem;
+    background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.035);
+    border-radius:1rem;font-size:0.55rem;color:rgba(255,255,255,0.2);
+  }
+  .b-chip .bd{width:0.9rem;height:0.9rem;border-radius:0.2rem;display:flex;align-items:center;justify-content:center;font-size:0.4rem;flex-shrink:0}
+  .b-add{
+    flex-shrink:0;display:flex;align-items:center;gap:0.2rem;
+    padding:0.2rem 0.45rem;border:1px dashed rgba(255,255,255,0.04);
+    border-radius:1rem;font-size:0.55rem;color:rgba(91,154,255,0.3);
+    background:none;cursor:pointer;
+  }
+  .tab-bar{
+    position:relative;z-index:20;
+    background:rgba(10,10,18,0.95);backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.02);
+    display:flex;padding:0.15rem 0 0.5rem;
+  }
+  .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.05rem;padding:0.15rem;background:none;border:none;color:rgba(255,255,255,0.1);font-size:0.5rem;cursor:pointer}
+  .tab-btn .icon{font-size:0.9rem;line-height:1}
+  .tab-btn.active{color:rgba(255,255,255,0.4)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🎯 方向与聚焦</h1>
+    <div class="axis"><span>方向</span><span>••••</span><span>行动</span></div>
+  </div>
+
+  <!-- 北极星固定条 -->
+  <div class="polaris-bar">
+    <div class="p-star p0"><span class="orb">⭐</span><span class="name">生活即工作</span></div>
+    <div class="p-star p1"><span class="orb">🌐</span><span class="name">AI数字化人生</span></div>
+  </div>
+
+  <!-- 滑动容器 -->
+  <div class="scroller-wrap">
+    <div class="scroller" id="scroller">
+
+      <!-- ===== PAGE 1: 产品 ===== -->
+      <div class="page">
+        <div class="g-card">
+          <div class="g-label">🪐 产品星系</div>
+          <div class="sub-h">⚡ 当前聚焦</div>
+          <div class="item act"><span class="orb">🎮</span><span class="name">写字小程序</span><span class="tag">活跃</span></div>
+          <div class="sub-h">✧ 已完成</div>
+          <div class="item done"><span class="orb" style="font-size:0.45rem">24</span><span class="name">24点游戏</span><span class="tag">已上线</span></div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE 2: AI工具 ===== -->
+      <div class="page">
+        <div class="g-card">
+          <div class="g-label">🛸 AI工具星系</div>
+          <div class="sub-h">⚡ 当前聚焦</div>
+          <div class="item act"><span class="orb">🖥️</span><span class="name">主宰面板</span><span class="tag">活跃</span></div>
+          <div class="sub-h">✧ 已完成</div>
+          <div class="item done"><span class="orb" style="font-size:0.45rem">📋</span><span class="name">AI Agent日报</span><span class="tag">存档</span></div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE 3: 内容 ===== -->
+      <div class="page">
+        <div class="g-card">
+          <div class="g-label">🌐 内容星系</div>
+          <div class="sub-h">⚡ 当前聚焦</div>
+          <div class="item act"><span class="orb">✏️</span><span class="name">公众号</span><span class="tag">进行</span></div>
+          <div class="sub-h">✧ 已完成</div>
+          <div class="item done"><span class="orb" style="font-size:0.45rem">🔍</span><span class="name">引光小站调研</span><span class="tag">存档</span></div>
+          <div class="item done"><span class="orb" style="font-size:0.35rem">🐼</span><span class="name">天才小熊猫调研</span><span class="tag">存档</span></div>
+        </div>
+      </div>
+
+      <!-- ===== PAGE 4: 家庭 ===== -->
+      <div class="page">
+        <div class="g-card">
+          <div class="g-label">🏠 家庭星系</div>
+          <div class="sub-h">⚡ 当前聚焦</div>
+          <div class="item act"><span class="orb" style="font-size:0.5rem">📋</span><span class="name">每日打卡</span></div>
+          <div class="item act"><span class="orb" style="font-size:0.5rem">👧</span><span class="name">老二陪伴</span></div>
+          <div class="sub-h">✧ 已完成</div>
+          <div class="item done"><span class="orb" style="font-size:0.35rem">📖</span><span class="name">心理学笔记</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Dot indicator -->
+    <div class="dots" id="dots">
+      <span class="dot cur"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tip">
+      <div class="t-t"></div>
+      <div class="t-m"></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="b-inner">
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🖥️</span>主宰面板</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🎮</span>写字小程序</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(255,160,80,0.04)">👧</span>老二陪伴</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(180,100,255,0.04)">📋</span>每日打卡</div>
+      <button class="b-add">＋</button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn"><span class="icon">📅</span>日历</button>
+    <button class="tab-btn"><span class="icon">📊</span>项目</button>
+    <button class="tab-btn active"><span class="icon">🎯</span>方向</button>
+    <button class="tab-btn"><span class="icon">📝</span>库</button>
+  </div>
+</div>
+
+<script>
+// Tooltip
+(function(){
+  var tip=document.getElementById('tip');
+  var m={'写字小程序':'当前聚焦 · 进行中','24点游戏':'已完成 · 已上线','主宰面板':'当前聚焦 · 进行中','AI Agent日报':'已完成 · 存档','公众号':'当前聚焦 · 持续更新','引光小站调研':'已完成 · 存档','天才小熊猫调研':'已完成 · 存档','每日打卡':'日常 · 老大训练','老二陪伴':'日常 · 持续关注','心理学笔记':'已完成 · 读完'};
+  document.querySelectorAll('.item').forEach(function(s){
+    s.addEventListener('click',function(e){
+      var n=s.querySelector('.name');if(!n)return;
+      var t=n.textContent.trim(),d=m[t];if(!d){tip.classList.remove('show');return;}
+      tip.querySelector('.t-t').textContent=t;
+      tip.querySelector('.t-m').textContent=d||'';
+      var r=s.getBoundingClientRect();
+      tip.style.left=Math.max(4,Math.min(r.left-5,innerWidth-190))+'px';
+      tip.style.top=Math.max(4,r.top-35)+'px';
+      tip.classList.add('show');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click',function(){tip.classList.remove('show')});
+})();
+
+// Dot sync with scroll
+(function(){
+  var scroller=document.getElementById('scroller');
+  var dots=document.querySelectorAll('.dot');
+  if(!scroller||!dots.length)return;
+  scroller.addEventListener('scroll',function(){
+    var idx=Math.round(scroller.scrollLeft/window.innerWidth);
+    if(idx<0)idx=0;if(idx>=dots.length)idx=dots.length-1;
+    dots.forEach(function(d,i){d.classList.toggle('cur',i===idx);});
+  });
+})();
+</script>
+</body>
+</html>

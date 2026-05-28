@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>方向与聚焦 · 终版</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:calc(100vw/375*20);touch-action:manipulation}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0a0a12}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none;color:#e8e8ed;-webkit-user-select:none;user-select:none}
+  .app{width:100%;height:100%;height:100dvh;display:flex;flex-direction:column;background:#0a0a12;position:relative;overflow:hidden}
+
+  /* ===== HEADER ===== */
+  .header{position:relative;z-index:20;padding:1.5rem 1rem 0.25rem;text-align:center;flex-shrink:0}
+  .header .maintitle{
+    font-size:1.15rem;font-weight:700;color:#fff;
+    letter-spacing:0.08em;margin-bottom:0.2rem;
+  }
+  .header .subtitle{
+    font-size:1rem;font-weight:700;color:#a0a0a8;
+    margin-bottom:0.7rem;
+  }
+  .polaris{
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .polaris .p-item{
+    display:flex;align-items:center;gap:0.55rem;
+  }
+  .polaris .p-item .orb{
+    border-radius:0.45rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .polaris .p-item .name{font-weight:700;letter-spacing:0.03em}
+  .polaris .north .orb{
+    width:2.5rem;height:2.5rem;font-size:1.4rem;
+    background:radial-gradient(circle at 30% 30%,#ffe680,#cc8a00);
+    box-shadow:0 0 28px rgba(255,215,0,0.2);
+  }
+  .polaris .north .name{font-size:1.15rem;color:#ffd700}
+
+  /* axis 分隔线 */
+  .header .axis-divider{
+    height:1px;
+    background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,0.06) 20%,rgba(255,255,255,0.06) 80%,transparent 95%);
+    margin:0.4rem 2rem 0;
+  }
+
+  /* ===== SCROLLER ===== */
+  .scroller-wrap{flex:1;position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .scroller{
+    display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    scroll-snap-type:x mandatory;flex:1;scroll-behavior:smooth;
+  }
+  .scroller::-webkit-scrollbar{display:none}
+
+  .page{
+    min-width:100vw;scroll-snap-align:start;
+    padding:0.85rem 1.25rem 0.5rem;
+    display:flex;flex-direction:column;
+    overflow-y:auto;
+  }
+  .page::-webkit-scrollbar{display:none}
+
+  /* ===== CARD ===== */
+  .card{
+    background:rgba(255,255,255,0.012);
+    border:1px solid rgba(255,255,255,0.03);
+    border-radius:0.85rem;
+    padding:0.9rem 0.9rem 0.75rem;
+    display:flex;flex-direction:column;
+    justify-content:flex-start;
+    min-height:8rem;
+  }
+  .card.tint-product{border-color:rgba(91,154,255,0.06);background:rgba(91,154,255,0.008)}
+  .card.tint-ai{border-color:rgba(160,120,255,0.06);background:rgba(160,120,255,0.008)}
+  .card.tint-content{border-color:rgba(255,159,67,0.06);background:rgba(255,159,67,0.008)}
+  .card.tint-family{border-color:rgba(46,213,115,0.06);background:rgba(46,213,115,0.008)}
+
+  .card-label{
+    font-size:1rem;font-weight:700;
+    color:#909098;
+    margin-bottom:0.65rem;
+  }
+
+  /* ===== ITEMS ===== */
+  .item{
+    display:flex;align-items:center;gap:0.65rem;
+    padding:0.65rem 0.75rem;
+    border-radius:0.55rem;
+  }
+  .item+.item{margin-top:0.25rem}
+
+  .item .orb{
+    width:2rem;height:2rem;
+    border-radius:0.45rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1rem;flex-shrink:0;
+  }
+  .item .name{
+    flex:1;font-weight:700;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    font-size:1rem;color:#e8e8ed;
+  }
+
+  /* ---- Active items: blue box ---- */
+  .item.act{
+    background:rgba(91,154,255,0.1);
+    border:1px solid rgba(91,154,255,0.15);
+  }
+  .item.act .orb{
+    background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0);
+    box-shadow:0 0 10px rgba(91,154,255,0.15);
+  }
+  .item.act .name{color:#fff}
+
+  /* ---- Done items: readable, no box ---- */
+  .item.done{padding:0.55rem 0.75rem}
+  .item.done .orb{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .item.done .name{color:#909098}
+
+  /* ===== DOTS ===== */
+  .dots{display:flex;justify-content:center;gap:0.5rem;padding:0.35rem 0 0.2rem;flex-shrink:0}
+  .dot{width:0.4rem;height:0.4rem;border-radius:50%;background:rgba(255,255,255,0.1);transition:all 0.2s}
+  .dot.cur{background:#5b9aff;width:1.3rem;border-radius:4px}
+
+  /* ===== TOOLTIP ===== */
+  .tooltip{
+    position:fixed;z-index:50;
+    background:rgba(22,22,40,0.97);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.65rem;
+    padding:0.6rem 0.85rem;
+    min-width:5rem;
+    backdrop-filter:blur(12px);
+    box-shadow:0 4px 28px rgba(0,0,0,0.5);
+    pointer-events:none;
+    opacity:0;transition:opacity 0.2s;
+  }
+  .tooltip.show{opacity:1}
+  .tooltip .tt{font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:0.1rem}
+  .tooltip .tm{font-size:1rem;font-weight:700;color:#909098}
+
+  /* ===== BOTTOM ===== */
+  .bottom-bar{
+    position:relative;z-index:20;
+    background:linear-gradient(180deg,transparent 0%,rgba(10,10,18,0.93) 20%);
+    padding:0.3rem 1rem 0.35rem;flex-shrink:0;
+  }
+  .b-inner{display:flex;gap:0.45rem;overflow-x:auto;scrollbar-width:none;justify-content:center;-webkit-overflow-scrolling:touch}
+  .b-inner::-webkit-scrollbar{display:none}
+  .b-chip{
+    flex-shrink:0;display:flex;align-items:center;gap:0.3rem;
+    padding:0.35rem 0.6rem 0.35rem 0.35rem;
+    background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.04);
+    border-radius:1rem;font-size:1rem;font-weight:700;color:#a0a0a8;
+  }
+  .b-chip .bd{width:1.2rem;height:1.2rem;border-radius:0.3rem;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
+  .b-add{
+    flex-shrink:0;display:flex;align-items:center;gap:0.2rem;
+    padding:0.35rem 0.6rem;border:1px dashed rgba(255,255,255,0.05);
+    border-radius:1rem;font-size:1rem;font-weight:700;color:rgba(91,154,255,0.5);
+    background:none;cursor:pointer;
+  }
+
+  /* ===== TAB ===== */
+  .tab-bar{
+    position:relative;z-index:20;
+    background:rgba(10,10,18,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.02);
+    display:flex;padding:0.25rem 0 0.55rem;flex-shrink:0;
+  }
+  .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.05rem;padding:0.15rem;background:none;border:none;color:rgba(255,255,255,0.25);font-size:1rem;font-weight:700;cursor:pointer}
+  .tab-btn .icon{font-size:1.2rem;line-height:1}
+  .tab-btn.active{color:rgba(255,255,255,0.5)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="maintitle">🎯 方向与聚焦</div>
+    <div class="subtitle">你做的每件事，都在星图里有一个位置</div>
+    <div class="polaris">
+      <div class="p-item north">
+        <span class="orb">⭐</span>
+        <span class="name">生活即工作</span>
+      </div>
+    </div>
+    <div class="axis-divider"></div>
+  </div>
+
+  <div class="scroller-wrap">
+    <div class="scroller" id="scroller">
+
+      <!-- 🪐 产品 -->
+      <div class="page">
+        <div class="card tint-product">
+          <div class="card-label">🪐 产品</div>
+          <div class="item act"><span class="orb">🎮</span><span class="name">写字小程序</span></div>
+          <div class="item done"><span class="orb" style="font-size:0.85rem">24</span><span class="name">24点游戏</span></div>
+        </div>
+      </div>
+
+      <!-- 🛸 AI数字化 -->
+      <div class="page">
+        <div class="card tint-ai">
+          <div class="card-label">🛸 AI数字化</div>
+          <div class="item act"><span class="orb">🖥️</span><span class="name">主宰面板</span></div>
+          <div class="item done"><span class="orb" style="font-size:0.85rem">📋</span><span class="name">Agent日报</span></div>
+        </div>
+      </div>
+
+      <!-- 🌐 内容 -->
+      <div class="page">
+        <div class="card tint-content">
+          <div class="card-label">🌐 内容</div>
+          <div class="item act"><span class="orb">✏️</span><span class="name">公众号</span></div>
+          <div class="item done"><span class="orb" style="font-size:0.85rem">🔍</span><span class="name">引光小站调研</span></div>
+          <div class="item done"><span class="orb" style="font-size:0.75rem">🐼</span><span class="name">天才小熊猫调研</span></div>
+        </div>
+      </div>
+
+      <!-- 🏠 家庭 -->
+      <div class="page">
+        <div class="card tint-family">
+          <div class="card-label">🏠 家庭</div>
+          <div class="item act"><span class="orb" style="font-size:0.9rem">📋</span><span class="name">每日打卡</span></div>
+          <div class="item act"><span class="orb" style="font-size:0.9rem">👧</span><span class="name">老二陪伴</span></div>
+          <div class="item done"><span class="orb" style="font-size:0.8rem">📖</span><span class="name">心理学笔记</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="dots" id="dots">
+      <span class="dot cur"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+
+    <div class="tooltip" id="tip">
+      <div class="tt"></div>
+      <div class="tm"></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="b-inner">
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🖥️</span>面板</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🎮</span>写字</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(180,100,255,0.04)">👧</span>老二</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(255,160,80,0.04)">📋</span>打卡</div>
+      <button class="b-add">＋</button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn"><span class="icon">📅</span>日历</button>
+    <button class="tab-btn"><span class="icon">📊</span>项目</button>
+    <button class="tab-btn active"><span class="icon">🎯</span>方向</button>
+    <button class="tab-btn"><span class="icon">📝</span>库</button>
+  </div>
+</div>
+
+<script>
+// Snap dot sync
+(function(){
+  var s=document.getElementById('scroller'),ds=document.querySelectorAll('.dot');
+  if(!s||!ds.length)return;
+  s.addEventListener('scroll',function(){
+    var i=Math.round(s.scrollLeft/innerWidth);
+    if(i<0)i=0;if(i>=ds.length)i=ds.length-1;
+    ds.forEach(function(d,j){d.classList.toggle('cur',j===i)});
+  });
+})();
+
+// Tooltip
+(function(){
+  var t=document.getElementById('tip');
+  var m={'写字小程序':'当前聚焦 · 进行中','24点游戏':'已完成 · 已上线','主宰面板':'当前聚焦 · 进行中','Agent日报':'已完成 · 已存档','公众号':'当前聚焦 · 持续更新','引光小站调研':'已完成 · 已存档','天才小熊猫调研':'已完成 · 已存档','每日打卡':'日常 · 老大训练中','老二陪伴':'日常 · 持续关注','心理学笔记':'已完成 · 已读完'};
+  document.querySelectorAll('.item').forEach(function(s){
+    s.addEventListener('click',function(e){
+      var n=s.querySelector('.name');if(!n)return;
+      var c=n.textContent.trim(),d=m[c];if(!d){t.classList.remove('show');return;}
+      t.querySelector('.tt').textContent=c;
+      t.querySelector('.tm').textContent=d||'';
+      var r=s.getBoundingClientRect();
+      t.style.left=Math.max(6,Math.min(r.left-5,innerWidth-210))+'px';
+      t.style.top=Math.max(6,r.top-42)+'px';
+      t.classList.add('show');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click',function(){t.classList.remove('show')});
+})();
+</script>
+</body>
+</html>

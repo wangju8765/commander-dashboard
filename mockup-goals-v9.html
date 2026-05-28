@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>方向与聚焦</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:clamp(16px,100vw/375*20,24px)}
+  html,body{width:100%;height:100%;overflow:hidden;background:#0a0a12}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;-webkit-font-smoothing:antialiased;overscroll-behavior:none;color:#f0f0f4;-webkit-user-select:none;user-select:none}
+  .app{width:100%;height:100%;height:100dvh;display:flex;flex-direction:column;background:#0a0a12;position:relative;overflow:hidden}
+
+  /* ===== HEADER ===== */
+  .header{position:relative;z-index:20;padding:1.25rem 1rem 0.25rem;text-align:center}
+  .header h1{font-size:1.2rem;font-weight:600;color:#f0f0f4;letter-spacing:0.06em}
+  .header .sub{font-size:0.6rem;color:rgba(255,255,255,0.15);margin-top:0.05rem}
+  .header .axis{font-size:0.5rem;color:rgba(255,255,255,0.06);margin-top:0.1rem;display:flex;justify-content:space-between;padding:0 0.5rem}
+
+  /* ===== SKY ===== */
+  .sky{flex:1;position:relative;overflow:hidden;z-index:10;display:flex;flex-direction:column;gap:0.5rem;padding:0 1rem 0.5rem}
+
+  /* ===== CARD ===== */
+  .card{
+    background:rgba(255,255,255,0.015);
+    border:1px solid rgba(255,255,255,0.03);
+    border-radius:0.7rem;
+    padding:0.55rem 0.5rem 0.4rem;
+    flex-shrink:0;
+  }
+  .card-label{
+    font-size:0.5rem;
+    color:rgba(255,255,255,0.1);
+    letter-spacing:0.06em;
+    margin-bottom:0.35rem;
+    padding:0 0.1rem;
+  }
+
+  /* ===== STAR ITEMS ===== */
+  .star-item{
+    display:flex;
+    align-items:center;
+    gap:0.35rem;
+    padding:0.3rem 0.35rem;
+    border-radius:0.45rem;
+    cursor:pointer;
+    transition:background 0.1s;
+  }
+  .star-item:active{background:rgba(255,255,255,0.03)}
+  .star-item+.star-item{margin-top:0.1rem}
+
+  .star-item .orb{
+    width:1.3rem;height:1.3rem;
+    border-radius:0.35rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.55rem;
+    flex-shrink:0;
+  }
+  .star-item .name{
+    flex:1;
+    font-size:0.7rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  /* Levels */
+  .star-item.polaris .orb{
+    width:1.8rem;height:1.8rem;font-size:0.85rem;
+    background:radial-gradient(circle at 30% 30%,#ffe680,#cc8a00);
+    box-shadow:0 0 16px rgba(255,200,0,0.15);
+  }
+  .star-item.polaris .name{font-size:0.85rem;color:#ffd700;font-weight:600}
+  .star-item.polaris .badge{background:rgba(255,200,0,0.1);color:#ffd700}
+
+  .star-item.major .orb{
+    width:1.5rem;height:1.5rem;font-size:0.7rem;
+    background:radial-gradient(circle at 30% 30%,#c8a8ff,#7c5cf0);
+    box-shadow:0 0 10px rgba(160,120,255,0.1);
+  }
+  .star-item.major .name{font-size:0.8rem;color:#b088ff;font-weight:500}
+  .star-item.major .badge{background:rgba(160,120,255,0.08);color:#b088ff}
+
+  .star-item.active .orb{
+    background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0);
+    box-shadow:0 0 5px rgba(91,154,255,0.08);
+  }
+  .star-item.active .name{color:#8ab8ff}
+  .star-item.done .orb{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.025);
+    opacity:0.4;
+  }
+  .star-item.done .name{color:rgba(255,255,255,0.15)}
+
+  .star-item .badge{
+    font-size:0.4rem;
+    padding:0.04rem 0.2rem;
+    border-radius:0.15rem;
+    flex-shrink:0;
+  }
+  .star-item.active .badge{background:rgba(91,154,255,0.08);color:#5b9aff}
+  .star-item.done .badge{background:rgba(255,255,255,0.03);color:rgba(255,255,255,0.12)}
+
+  /* ===== HORIZONTAL SCROLL (galaxies) ===== */
+  .scroll-x{
+    display:flex;
+    gap:0.5rem;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    flex-shrink:0;
+    margin:0 -1rem;
+    padding:0 1rem;
+  }
+  .scroll-x::-webkit-scrollbar{display:none}
+  .scroll-x .card{min-width:75vw;flex-shrink:0}
+  .scroll-x .card:last-child{margin-right:0}
+
+  /* ===== POLARIS row (centered) ===== */
+  .polaris-row{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.35rem;
+    padding:0.15rem 0;
+  }
+
+  /* ===== TOOLTIP ===== */
+  .tooltip{
+    position:fixed;z-index:50;
+    background:rgba(15,15,28,0.96);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.65rem;
+    padding:0.55rem 0.75rem;
+    min-width:6rem;
+    backdrop-filter:blur(12px);
+    box-shadow:0 4px 24px rgba(0,0,0,0.5);
+    pointer-events:none;
+    opacity:0;transition:opacity 0.2s;
+  }
+  .tooltip.show{opacity:1}
+  .tooltip .t-title{font-size:0.85rem;font-weight:600;color:#fff;margin-bottom:0.1rem}
+  .tooltip .t-meta{font-size:0.6rem;color:rgba(255,255,255,0.3)}
+  .tooltip .t-link{font-size:0.6rem;color:#a078ff;margin-top:0.05rem}
+
+  /* ===== BOTTOM ===== */
+  .bottom-bar{
+    position:relative;z-index:20;
+    background:linear-gradient(180deg,transparent 0%,rgba(10,10,18,0.93) 20%);
+    padding:0.3rem 1rem 0.35rem;
+  }
+  .bottom-inner{display:flex;gap:0.35rem;overflow-x:auto;scrollbar-width:none;justify-content:center;-webkit-overflow-scrolling:touch}
+  .bottom-inner::-webkit-scrollbar{display:none}
+  .b-chip{
+    flex-shrink:0;display:flex;align-items:center;gap:0.25rem;
+    padding:0.2rem 0.45rem 0.2rem 0.2rem;
+    background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);
+    border-radius:1rem;font-size:0.6rem;color:rgba(255,255,255,0.25);
+  }
+  .b-chip .bd{width:1rem;height:1rem;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;font-size:0.45rem;flex-shrink:0}
+  .b-add{
+    flex-shrink:0;display:flex;align-items:center;gap:0.2rem;
+    padding:0.2rem 0.45rem;border:1px dashed rgba(255,255,255,0.04);
+    border-radius:1rem;font-size:0.6rem;color:rgba(91,154,255,0.35);
+    background:none;cursor:pointer;
+  }
+
+  /* ===== TAB ===== */
+  .tab-bar{
+    position:relative;z-index:20;
+    background:rgba(10,10,18,0.95);backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.02);
+    display:flex;padding:0.15rem 0 0.5rem;
+  }
+  .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.05rem;padding:0.15rem;background:none;border:none;color:rgba(255,255,255,0.1);font-size:0.5rem;cursor:pointer}
+  .tab-btn .icon{font-size:0.9rem;line-height:1}
+  .tab-btn.active{color:rgba(255,255,255,0.4)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🎯 方向与聚焦</h1>
+    <div class="sub">你做的每件事，都在星图里有一个位置</div>
+    <div class="axis"><span>方向</span><span>••••</span><span>行动</span></div>
+  </div>
+
+  <div class="sky">
+
+    <!-- === POLARIS === -->
+    <div class="polaris-row">
+      <div class="star-item polaris" data-tip="一辈子大方向">
+        <span class="orb">⭐</span>
+        <span class="name">生活即工作</span>
+      </div>
+      <div class="star-item major" data-tip="目标 · 1-2年">
+        <span class="orb">🌐</span>
+        <span class="name">AI数字化人生</span>
+      </div>
+    </div>
+
+    <!-- === 三个星系 · 横向滑动 === -->
+    <div class="scroll-x">
+      <div class="card">
+        <div class="card-label">🪐 产品星系</div>
+        <div class="star-item active" data-tip="当前 · 进行中">
+          <span class="orb">🎮</span>
+          <span class="name">写字小程序</span>
+          <span class="badge">活跃</span>
+        </div>
+        <div class="star-item done" data-tip="已完成 · 已上线">
+          <span class="orb" style="font-size:0.45rem">24</span>
+          <span class="name">24点游戏</span>
+          <span class="badge">完成</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">🛸 AI工具星系</div>
+        <div class="star-item active" data-tip="当前 · 进行中">
+          <span class="orb">🖥️</span>
+          <span class="name">主宰面板</span>
+          <span class="badge">活跃</span>
+        </div>
+        <div class="star-item done" data-tip="已完成 · 存档">
+          <span class="orb" style="font-size:0.45rem">📋</span>
+          <span class="name">Agent日报</span>
+          <span class="badge">存档</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">🌐 内容星系</div>
+        <div class="star-item active" data-tip="当前 · 持续更新">
+          <span class="orb">✏️</span>
+          <span class="name">公众号</span>
+          <span class="badge">进行</span>
+        </div>
+        <div class="star-item done" data-tip="已完成 · 存档">
+          <span class="orb" style="font-size:0.45rem">🔍</span>
+          <span class="name">引光小站</span>
+          <span class="badge">完成</span>
+        </div>
+        <div class="star-item done" data-tip="已完成 · 存档">
+          <span class="orb" style="font-size:0.35rem">🐼</span>
+          <span class="name">天才小熊猫</span>
+          <span class="badge">完成</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- === 家庭星系 === -->
+    <div class="card" style="margin-top:auto">
+      <div class="card-label">🏠 家庭星系</div>
+      <div style="display:flex;gap:0.4rem;flex-wrap:wrap">
+        <div class="star-item active" style="flex:1;min-width:4rem" data-tip="日常 · 老大训练">
+          <span class="orb" style="width:1.2rem;height:1.2rem;font-size:0.5rem">📋</span>
+          <span class="name" style="font-size:0.65rem">每日打卡</span>
+        </div>
+        <div class="star-item active" style="flex:1;min-width:4rem" data-tip="日常 · 持续关注">
+          <span class="orb" style="width:1.2rem;height:1.2rem;font-size:0.5rem">👧</span>
+          <span class="name" style="font-size:0.65rem">老二陪伴</span>
+        </div>
+        <div class="star-item done" style="flex:1;min-width:4rem" data-tip="已完成 · 读完">
+          <span class="orb" style="width:1rem;height:1rem;font-size:0.4rem">📖</span>
+          <span class="name" style="font-size:0.55rem">心理学笔记</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="tooltip" id="tip">
+      <div class="t-title"></div>
+      <div class="t-meta"></div>
+      <div class="t-link"></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <div class="bottom-inner">
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🖥️</span>主宰面板</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(91,154,255,0.04)">🎮</span>写字小程序</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(255,160,80,0.04)">👧</span>老二陪伴</div>
+      <div class="b-chip"><span class="bd" style="background:rgba(180,100,255,0.04)">📋</span>每日打卡</div>
+      <button class="b-add">＋</button>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn"><span class="icon">📅</span>日历</button>
+    <button class="tab-btn"><span class="icon">📊</span>项目</button>
+    <button class="tab-btn active"><span class="icon">🎯</span>方向</button>
+    <button class="tab-btn"><span class="icon">📝</span>库</button>
+  </div>
+</div>
+
+<script>
+// Tooltip
+(function(){
+  var tip=document.getElementById('tip');
+  var m={'生活即工作':'一辈子大方向','AI数字化人生':'长期目标·1-2年','写字小程序':'当前聚焦·进行中','24点游戏':'已完成·已上线','主宰面板':'当前聚焦·进行中','Agent日报':'已完成·存档','公众号':'当前聚焦·持续更新','引光小站':'已完成·存档','天才小熊猫':'已完成·存档','每日打卡':'日常·老大训练','老二陪伴':'日常·持续关注','心理学笔记':'已完成·读完'};
+  document.querySelectorAll('.star-item').forEach(function(s){
+    s.addEventListener('click',function(e){
+      var n=s.querySelector('.name');if(!n)return;
+      var t=n.textContent.trim(),d=m[t];if(!d){tip.classList.remove('show');return;}
+      tip.querySelector('.t-title').textContent=t;
+      tip.querySelector('.t-meta').textContent=d;
+      var l=tip.querySelector('.t-link');
+      var card=s.closest('.card');
+      if(card){
+        var cl=card.querySelector('.card-label');
+        if(cl){l.textContent='→ '+cl.textContent.trim();l.style.display='block';}
+        else l.style.display='none';
+      } else l.style.display='none';
+      var r=s.getBoundingClientRect();
+      tip.style.left=Math.max(4,Math.min(r.left-5,innerWidth-190))+'px';
+      tip.style.top=Math.max(4,r.top-35)+'px';
+      tip.classList.add('show');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click',function(){tip.classList.remove('show')});
+})();
+</script>
+</body>
+</html>

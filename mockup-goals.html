@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>方向与聚焦 · 星空示意图</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{font-size:calc(100vw/375*16);touch-action:manipulation}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;background:#0a0a0f;color:#e8e8ed;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  .app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
+  .header{padding:1.25rem 1rem 0.5rem;background:#0a0a0f}
+  .header h1{font-size:1.3rem;font-weight:700;color:#fff;display:flex;align-items:center;gap:0.375rem}
+  .header .sub{font-size:0.75rem;color:#555;margin-top:0.125rem}
+
+  /* ===== STARRY SKY ===== */
+  .sky-container{
+    flex:1;
+    padding:0.5rem 1rem 6rem;
+    overflow-y:auto;
+    position:relative;
+  }
+
+  /* Section titles */
+  .section-label{
+    font-size:0.7rem;
+    font-weight:600;
+    color:#555;
+    letter-spacing:0.05em;
+    margin:1.25rem 0 0.75rem;
+    display:flex;
+    align-items:center;
+    gap:0.5rem;
+  }
+  .section-label::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.04)}
+
+  /* ===== STAR CLUSTER (Canvas area) ===== */
+  .star-cluster{
+    position:relative;
+    width:100%;
+    min-height:300px;
+    background:radial-gradient(ellipse at 50% 30%, rgba(91,154,255,0.03) 0%, transparent 70%);
+    border-radius:1rem;
+    margin-bottom:1rem;
+  }
+
+  /* Individual star items - positioned absolutely */
+  .star{
+    position:absolute;
+    cursor:pointer;
+    transition:transform 0.2s;
+  }
+  .star:active{transform:scale(1.1)}
+
+  .star .circle{
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:box-shadow 0.3s;
+  }
+
+  /* North Star - biggest, brightest */
+  .star.polaris .circle{
+    background:linear-gradient(135deg, #ffd700, #ffaa00);
+    box-shadow:0 0 20px rgba(255,215,0,0.3), 0 0 60px rgba(255,215,0,0.1);
+  }
+  .star.polaris .label{
+    color:#ffd700;
+    font-weight:600;
+  }
+
+  /* Big star - major long-term */
+  .star.major .circle{
+    background:linear-gradient(135deg, #a078ff, #7c5cf0);
+    box-shadow:0 0 15px rgba(160,120,255,0.25), 0 0 40px rgba(160,120,255,0.08);
+  }
+  .star.major .label{color:#a078ff;font-weight:500}
+
+  /* Active focus - current projects */
+  .star.active .circle{
+    background:linear-gradient(135deg, #5b9aff, #3d7ae0);
+    box-shadow:0 0 12px rgba(91,154,255,0.25);
+  }
+  .star.active .label{color:#5b9aff}
+
+  /* Completed/dormant stars */
+  .star.done .circle{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.06);
+  }
+  .star.done .label{color:#555}
+
+  /* Star label */
+  .star .label{
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    font-size:0.6rem;
+    white-space:nowrap;
+    text-align:center;
+    margin-top:0.25rem;
+  }
+
+  /* ===== CONNECTION LINES (SVG overlay) ===== */
+  .connections{
+    position:absolute;
+    top:0;left:0;width:100%;height:100%;
+    pointer-events:none;
+    z-index:0;
+  }
+  .connections line{
+    stroke-width:1;
+    stroke-dasharray:3 3;
+  }
+  .connections line.to-polaris{stroke:rgba(255,215,0,0.15)}
+  .connections line.to-major{stroke:rgba(160,120,255,0.12)}
+  .connections line.active-link{stroke:rgba(91,154,255,0.15);stroke-dasharray:none;stroke-width:1.5}
+
+  /* ===== STAR GRID FALLBACK (for reference, will be replaced by positioned stars) ===== */
+
+  /* ===== BOTTOM: Focus items list ===== */
+  .focus-card{
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.75rem;
+    padding:0.85rem;
+    margin-bottom:0.625rem;
+    display:flex;
+    align-items:center;
+    gap:0.75rem;
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  .focus-card:active{background:rgba(255,255,255,0.06)}
+  .focus-dot{
+    width:2.5rem;height:2.5rem;
+    border-radius:0.625rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:1.1rem;
+    flex-shrink:0;
+  }
+  .focus-dot.dev{background:rgba(91,154,255,0.12);color:#5b9aff}
+  .focus-dot.read{background:rgba(160,120,255,0.12);color:#a078ff}
+  .focus-dot.write{background:rgba(46,213,115,0.12);color:#2ed573}
+  .focus-info{flex:1;min-width:0}
+  .focus-title{font-size:0.85rem;font-weight:500;color:#e8e8ed}
+  .focus-meta{font-size:0.65rem;color:#555;margin-top:0.05rem;display:flex;gap:0.35rem;align-items:center}
+  .focus-link{
+    font-size:0.55rem;
+    padding:0.05rem 0.3rem;
+    border-radius:0.2rem;
+    background:rgba(160,120,255,0.1);
+    color:#a078ff;
+    display:inline-flex;
+    align-items:center;
+    gap:0.15rem;
+  }
+  .focus-badge{
+    font-size:0.6rem;
+    padding:0.1rem 0.35rem;
+    border-radius:0.25rem;
+    background:rgba(46,213,115,0.1);
+    color:#2ed573;
+  }
+  .focus-more{
+    font-size:0.65rem;
+    color:#5b9aff;
+    cursor:pointer;
+  }
+
+  /* ===== TAB BAR (simulated) ===== */
+  .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,10,15,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,0.06);display:flex;padding:0.375rem 0 0.75rem;z-index:100}
+  .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.125rem;padding:0.25rem;background:none;border:none;color:#555;font-size:0.625rem;cursor:pointer}
+  .tab-btn.active{color:#fff}
+  .tab-btn .icon{font-size:1.25rem;line-height:1}
+  .tab-btn .label{font-weight:500}
+
+  /* Annotation */
+  .anno{font-size:0.65rem;color:#444;text-align:center;padding:0.75rem;border:1px dashed rgba(255,255,255,0.06);border-radius:0.5rem;margin:0.5rem 0}
+  .anno span{color:#666}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🎯 方向与聚焦</h1>
+    <div class="sub">你做的每一件事，都在星空里找到位置</div>
+  </div>
+
+  <div class="sky-container">
+
+    <!-- ===== THE SKY ===== -->
+    <div class="star-cluster" id="starCluster">
+
+      <!-- SVG Connection lines -->
+      <svg class="connections" viewBox="0 0 400 300">
+        <!-- From active projects to Polaris -->
+        <line x1="140" y1="200" x2="200" y2="50" class="to-polaris"/>
+        <line x1="260" y1="210" x2="200" y2="50" class="to-polaris"/>
+
+        <!-- From active to major goal -->
+        <line x1="70" y1="150" x2="140" y2="200" class="to-major"/>
+        <line x1="330" y1="160" x2="260" y2="210" class="active-link"/>
+
+        <!-- From done stars -->
+        <line x1="90" y1="260" x2="140" y2="200" class="to-polaris" style="stroke:rgba(255,255,255,0.03)"/>
+        <line x1="310" y1="260" x2="260" y2="210" class="to-major" style="stroke:rgba(255,255,255,0.03)"/>
+      </svg>
+
+      <!-- Polaris - North Star (Life-time goal) -->
+      <div class="star polaris" style="left:calc(50% - 1.5rem);top:1.5rem;z-index:5">
+        <div class="circle" style="width:3rem;height:3rem;font-size:1.2rem">⭐</div>
+        <div class="label" style="font-size:0.65rem;top:3.25rem">生活即工作</div>
+      </div>
+
+      <!-- Major goal 1: Digital Life -->
+      <div class="star major" style="left:calc(50% - 4rem);top:7rem;z-index:4">
+        <div class="circle" style="width:2.2rem;height:2.2rem;font-size:0.9rem">🌐</div>
+        <div class="label" style="top:2.5rem">AI数字化人生</div>
+      </div>
+
+      <!-- Major goal 2: Family -->
+      <div class="star major" style="left:calc(50% + 1.8rem);top:8rem;z-index:4">
+        <div class="circle" style="width:1.8rem;height:1.8rem;font-size:0.8rem">👨‍👩‍👧‍👦</div>
+        <div class="label" style="top:2.1rem">家庭教育</div>
+      </div>
+
+      <!-- Active focus: Dashboard -->
+      <div class="star active" style="left:calc(50% - 6rem);top:13rem;z-index:3">
+        <div class="circle" style="width:1.6rem;height:1.6rem;font-size:0.75rem">🖥️</div>
+        <div class="label" style="top:1.9rem">主宰面板</div>
+      </div>
+
+      <!-- Active focus: 公众号 -->
+      <div class="star active" style="left:calc(50% + 3.5rem);top:14rem;z-index:3">
+        <div class="circle" style="width:1.4rem;height:1.4rem;font-size:0.7rem">✏️</div>
+        <div class="label" style="top:1.7rem">公众号</div>
+      </div>
+
+      <!-- Done stars -->
+      <div class="star done" style="left:calc(50% - 8rem);top:18rem;z-index:1">
+        <div class="circle" style="width:1rem;height:1rem"></div>
+        <div class="label" style="top:1.3rem">24点游戏</div>
+      </div>
+      <div class="star done" style="left:calc(50% + 5rem);top:18.5rem;z-index:1">
+        <div class="circle" style="width:1rem;height:1rem"></div>
+        <div class="label" style="top:1.3rem">引光小站调研</div>
+      </div>
+      <div class="star done" style="left:calc(50% + 6.5rem);top:19.8rem;z-index:1">
+        <div class="circle" style="width:0.8rem;height:0.8rem"></div>
+        <div class="label" style="top:1.1rem">天才小熊猫调研</div>
+      </div>
+      <div class="star done" style="left:calc(50% - 9.5rem);top:19.5rem;z-index:1">
+        <div class="circle" style="width:0.8rem;height:0.8rem"></div>
+        <div class="label" style="top:1.1rem">小王数学</div>
+      </div>
+    </div>
+
+    <!-- Annotation -->
+    <div class="anno">
+      ⭐ 越大越亮 = 越重要 · 虚线的线 = 关联关系<br>
+      <span>点开星星可以看到详情</span>
+    </div>
+
+    <!-- ===== 本期聚焦 (Bottom list) ===== -->
+    <div class="section-label">🔭 本期聚焦</div>
+
+    <div class="focus-card">
+      <div class="focus-dot dev">🖥️</div>
+      <div class="focus-info">
+        <div class="focus-title">主宰面板</div>
+        <div class="focus-meta">
+          进行中 · 始于 05/25
+          <span class="focus-link">→ AI数字化人生</span>
+        </div>
+      </div>
+      <div class="focus-badge">活跃</div>
+    </div>
+
+    <div class="focus-card">
+      <div class="focus-dot read">📖</div>
+      <div class="focus-info">
+        <div class="focus-title">读书笔记 · 心理学系列</div>
+        <div class="focus-meta">
+          持续中
+          <span class="focus-link">→ 生活即工作</span>
+        </div>
+      </div>
+      <div class="focus-badge">进行中</div>
+    </div>
+
+    <div class="focus-card">
+      <div class="focus-dot write">✏️</div>
+      <div class="focus-info">
+        <div class="focus-title">公众号更新</div>
+        <div class="focus-meta">
+          上次更新 05/26
+          <span class="focus-link">→ AI数字化人生</span>
+        </div>
+      </div>
+      <div class="focus-badge">可继续</div>
+    </div>
+
+    <div style="text-align:center;padding:1rem 0 0.5rem">
+      <span style="font-size:0.7rem;color:#5b9aff;cursor:pointer">＋ 记录一个新的聚焦点</span>
+    </div>
+
+  </div>
+
+  <!-- ===== TAB BAR ===== -->
+  <div class="tab-bar">
+    <button class="tab-btn">📅</button>
+    <button class="tab-btn">📊</button>
+    <button class="tab-btn active"><span class="icon">🎯</span><span class="label">方向</span></button>
+    <button class="tab-btn">📚</button>
+  </div>
+</div>
+</body>
+</html>

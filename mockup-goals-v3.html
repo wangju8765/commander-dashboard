@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>方向与聚焦 · 星图 v3</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:#06060c}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;color:#e8e8ed;-webkit-font-smoothing:antialiased;overscroll-behavior:none}
+
+  .app{
+    width:100%;height:100%;height:100dvh;
+    display:flex;flex-direction:column;
+    background:#06060c;
+    position:relative;overflow:hidden;
+  }
+
+  /* Header - minimal */
+  .header{
+    padding:1.25rem 1rem 0.25rem;
+    text-align:center;
+    position:relative;z-index:20;
+  }
+  .header h1{
+    font-size:1rem;
+    font-weight:600;
+    color:#fff;
+    letter-spacing:0.06em;
+    opacity:0.7;
+  }
+  .header .sub{
+    font-size:0.55rem;
+    color:#333;
+    margin-top:0.05rem;
+    letter-spacing:0.04em;
+  }
+
+  /* ===== SKY ===== */
+  .sky{
+    flex:1;
+    position:relative;
+    overflow:hidden;
+    z-index:10;
+  }
+
+  /* Tiny background stars (no interaction) */
+  .bg-stars{
+    position:absolute;inset:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .bg-star{
+    position:absolute;
+    width:2px;height:2px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.15);
+  }
+
+  /* Nebula glows per region */
+  .glow{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(80px);
+    pointer-events:none;
+  }
+
+  /* ===== STARS ===== */
+  .star{
+    position:absolute;
+    cursor:pointer;
+    transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    z-index:5;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.1rem;
+  }
+  .star:hover{transform:scale(1.1)}
+  .star:active{transform:scale(0.95)}
+
+  .star .orb{
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    will-change:transform;
+  }
+
+  /* Twinkle animation */
+  @keyframes twinkle {
+    0%,100%{opacity:1}
+    50%{opacity:0.75}
+  }
+  @keyframes pulse-glow {
+    0%,100%{transform:scale(1);opacity:0.6}
+    50%{transform:scale(1.08);opacity:0.9}
+  }
+
+  .star.polaris .orb{
+    width:3rem;height:3rem;
+    font-size:1.2rem;
+    background:radial-gradient(circle at 30% 30%, #ffec80, #e09600);
+    box-shadow:0 0 25px rgba(255,200,0,0.3), 0 0 60px rgba(255,200,0,0.08);
+    animation:pulse-glow 3s ease-in-out infinite;
+  }
+  .star.polaris .name{color:#ffd700;font-size:0.55rem;font-weight:600;text-shadow:0 0 8px rgba(255,215,0,0.3);white-space:nowrap}
+
+  .star.major .orb{
+    background:radial-gradient(circle at 30% 30%, #b895ff, #6a4ac9);
+    box-shadow:0 0 18px rgba(160,120,255,0.2);
+  }
+  .star.major .name{color:#a078ff;font-size:0.5rem;font-weight:500;text-shadow:0 0 6px rgba(160,120,255,0.15);white-space:nowrap}
+
+  .star.active .orb{
+    background:radial-gradient(circle at 30% 30%, #7cbaff, #3d7ae0);
+    box-shadow:0 0 12px rgba(91,154,255,0.25);
+    animation:twinkle 2.5s ease-in-out infinite;
+  }
+  .star.active .name{color:#6a9eff;font-size:0.48rem;text-shadow:0 0 4px rgba(91,154,255,0.1);white-space:nowrap;letter-spacing:0.02em}
+
+  .star.done .orb{
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.04);
+    box-shadow:none;
+    opacity:0.5;
+  }
+  .star.done .name{color:#3a3a3a;font-size:0.42rem;white-space:nowrap}
+
+  /* Size variants */
+  .star.major .orb{width:2.2rem;height:2.2rem;font-size:0.9rem}
+  .star.active .orb{width:1.4rem;height:1.4rem;font-size:0.65rem}
+  .star.done .orb{width:0.9rem;height:0.9rem;font-size:0.45rem}
+
+  /* ===== BOTTOM STRIP (本期聚焦) ===== */
+  .bottom-strip{
+    position:relative;
+    z-index:20;
+    background:linear-gradient(180deg, transparent 0%, rgba(6,6,12,0.97) 30%);
+    padding:0.75rem 1rem 0.75rem;
+    pointer-events:auto;
+  }
+  .bottom-strip .label{
+    font-size:0.5rem;color:#333;letter-spacing:0.06em;
+    margin-bottom:0.4rem;text-align:center;
+    display:flex;align-items:center;justify-content:center;gap:0.4rem;
+  }
+  .bottom-strip .label::before,.bottom-strip .label::after{
+    content:'';width:2rem;height:1px;
+    background:linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent);
+  }
+
+  .focus-scroll{
+    display:flex;
+    gap:0.4rem;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    padding-bottom:0.25rem;
+  }
+  .focus-scroll::-webkit-scrollbar{display:none}
+
+  .focus-chip{
+    flex-shrink:0;
+    display:flex;
+    align-items:center;
+    gap:0.35rem;
+    padding:0.3rem 0.55rem 0.3rem 0.35rem;
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.05);
+    border-radius:1.5rem;
+    font-size:0.6rem;
+    color:#ccc;
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  .focus-chip:active{background:rgba(255,255,255,0.06)}
+  .focus-chip .dot{
+    width:1.25rem;height:1.25rem;
+    border-radius:0.3rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.6rem;
+  }
+  .focus-chip .tag{
+    font-size:0.45rem;
+    padding:0.04rem 0.2rem;
+    border-radius:0.15rem;
+    background:rgba(91,154,255,0.08);
+    color:#5b9aff;
+  }
+
+  .add-chip{
+    flex-shrink:0;
+    display:flex;align-items:center;gap:0.25rem;
+    padding:0.3rem 0.55rem;
+    border:1px dashed rgba(255,255,255,0.06);
+    border-radius:1.5rem;
+    font-size:0.6rem;color:#5b9aff;
+    cursor:pointer;background:none;
+    transition:border 0.15s;
+  }
+  .add-chip:active{border-color:rgba(91,154,255,0.2)}
+
+  /* ===== TAB BAR ===== */
+  .tab-bar{
+    position:relative;z-index:20;
+    background:rgba(6,6,12,0.95);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.04);
+    display:flex;
+    padding:0.25rem 0 0.65rem;
+    pointer-events:auto;
+  }
+  .tab-btn{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.05rem;
+    padding:0.2rem;
+    background:none;border:none;
+    color:#333;font-size:0.55rem;
+    cursor:pointer;transition:color 0.15s;
+  }
+  .tab-btn.active{color:#fff}
+  .tab-btn .icon{font-size:1.1rem;line-height:1}
+  .tab-btn .label{font-weight:500}
+
+  /* ===== TOOLTIP (on tap) / detail ===== */
+  .star-tip{
+    position:absolute;
+    background:rgba(20,20,30,0.95);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.5rem;
+    padding:0.5rem 0.65rem;
+    font-size:0.6rem;
+    color:#ccc;
+    z-index:30;
+    display:none;
+    min-width:5rem;
+    backdrop-filter:blur(8px);
+    box-shadow:0 4px 20px rgba(0,0,0,0.5);
+    pointer-events:none;
+  }
+  .star-tip.show{display:block}
+  .star-tip .tt-title{font-size:0.7rem;font-weight:600;color:#fff;margin-bottom:0.15rem}
+  .star-tip .tt-meta{font-size:0.5rem;color:#555}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <h1>🎯</h1>
+    <div class="sub">方向与聚焦</div>
+  </div>
+
+  <div class="sky" id="sky">
+
+    <!-- Background stars -->
+    <div class="bg-stars" id="bgStars"></div>
+
+    <!-- Nebula glows -->
+    <div class="glow" style="width:280px;height:280px;background:radial-gradient(circle,rgba(255,200,50,0.04) 0%,transparent 70%);top:-20px;left:50%;transform:translateX(-50%)"></div>
+    <div class="glow" style="width:200px;height:200px;background:radial-gradient(circle,rgba(160,120,255,0.03) 0%,transparent 70%);top:60px;left:15%;"></div>
+    <div class="glow" style="width:180px;height:180px;background:radial-gradient(circle,rgba(91,154,255,0.03) 0%,transparent 70%);top:90px;right:20%;"></div>
+
+    <!-- ===== POLARIS & MAJOR ===== -->
+    <div class="star polaris" style="left:calc(50% - 1.5rem);top:4%">
+      <div class="orb">⭐</div>
+      <div class="name">生活即工作</div>
+    </div>
+    <div class="star major" style="left:calc(50% - 1.1rem);top:15%">
+      <div class="orb">🌐</div>
+      <div class="name">AI数字化人生</div>
+    </div>
+
+    <!-- ===== PRODUCT CLUSTER (left area) ===== -->
+    <div class="star active" style="left:12%;top:32%">
+      <div class="orb">🎮</div>
+      <div class="name">写字小程序</div>
+    </div>
+    <div class="star done" style="left:6%;top:45%">
+      <div class="orb">24</div>
+      <div class="name">24点</div>
+    </div>
+
+    <!-- ===== AI CLUSTER (center) ===== -->
+    <div class="star active" style="left:calc(50% - 0.7rem);top:30%">
+      <div class="orb">🖥️</div>
+      <div class="name">主宰面板</div>
+    </div>
+    <div class="star done" style="left:calc(50% + 2.5rem);top:43%">
+      <div class="orb">📋</div>
+      <div class="name">AI Agent日报</div>
+    </div>
+
+    <!-- ===== CONTENT CLUSTER (right area) ===== -->
+    <div class="star active" style="right:8%;top:35%">
+      <div class="orb">✏️</div>
+      <div class="name">公众号</div>
+    </div>
+    <div class="star done" style="right:12%;top:48%">
+      <div class="orb">🔍</div>
+      <div class="name">引光小站</div>
+    </div>
+    <div class="star done" style="right:5%;top:55%">
+      <div class="orb">🐼</div>
+      <div class="name">天才小熊猫</div>
+    </div>
+
+    <!-- ===== HOME CLUSTER (bottom area) ===== -->
+    <div class="glow" style="width:160px;height:160px;background:radial-gradient(circle,rgba(255,255,255,0.02) 0%,transparent 70%);bottom:10%;left:50%;transform:translateX(-50%)"></div>
+    <div class="star active" style="left:calc(50% - 3.5rem);bottom:20%">
+      <div class="orb" style="width:1.2rem;height:1.2rem;font-size:0.55rem">📋</div>
+      <div class="name" style="font-size:0.42rem">每日打卡</div>
+    </div>
+    <div class="star active" style="left:calc(50% - 0.6rem);bottom:17%">
+      <div class="orb" style="width:1.2rem;height:1.2rem;font-size:0.55rem">👧</div>
+      <div class="name" style="font-size:0.42rem">老二陪伴</div>
+    </div>
+    <div class="star done" style="left:calc(50% + 2rem);bottom:22%">
+      <div class="orb" style="width:0.8rem;height:0.8rem;font-size:0.4rem">📖</div>
+      <div class="name" style="font-size:0.38rem">心理学笔记</div>
+    </div>
+
+    <!-- Tooltip demo -->
+    <div class="star-tip" id="starTip">
+      <div class="tt-title">主宰面板</div>
+      <div class="tt-meta">当前聚焦 · 始于 5/25</div>
+      <div class="tt-meta" style="color:#a078ff">→ AI数字化人生</div>
+    </div>
+
+  </div>
+
+  <!-- ===== BOTTOM STRIP ===== -->
+  <div class="bottom-strip">
+    <div class="label">🔭 聚焦</div>
+    <div class="focus-scroll">
+      <div class="focus-chip">
+        <span class="dot" style="background:rgba(91,154,255,0.08)">🖥️</span>
+        主宰面板
+        <span class="tag">活跃</span>
+      </div>
+      <div class="focus-chip">
+        <span class="dot" style="background:rgba(91,154,255,0.08)">🎮</span>
+        写字小程序
+        <span class="tag">持续</span>
+      </div>
+      <div class="focus-chip">
+        <span class="dot" style="background:rgba(160,120,255,0.08)">👧</span>
+        老二陪伴
+        <span class="tag">日常</span>
+      </div>
+      <div class="focus-chip">
+        <span class="dot" style="background:rgba(46,213,115,0.08)">✏️</span>
+        公众号
+        <span class="tag">可继续</span>
+      </div>
+      <button class="add-chip">＋ 新聚焦</button>
+    </div>
+  </div>
+
+  <!-- ===== TAB BAR ===== -->
+  <div class="tab-bar">
+    <button class="tab-btn">📅 <span class="label">日历</span></button>
+    <button class="tab-btn">📊 <span class="label">项目</span></button>
+    <button class="tab-btn active"><span class="icon">🎯</span><span class="label">方向</span></button>
+    <button class="tab-btn">📚 <span class="label">库</span></button>
+  </div>
+</div>
+
+<script>
+// Generate background stars
+(function(){
+  var c=document.getElementById('bgStars');
+  if(!c)return;
+  var h='';
+  for(var i=0;i<60;i++){
+    var x=Math.random()*100;
+    var y=Math.random()*100;
+    var s=Math.random()<0.3?1.5:1;
+    var o=0.08+Math.random()*0.15;
+    h+='<div class="bg-star" style="left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;opacity:'+o+'"></div>';
+  }
+  c.innerHTML=h;
+})();
+
+// Simple tooltip demo for Polaris
+var stars=document.querySelectorAll('.star');
+var tip=document.getElementById('starTip');
+stars.forEach(function(s){
+  s.addEventListener('click',function(e){
+    var rect=s.getBoundingClientRect();
+    var skyRect=document.getElementById('sky').getBoundingClientRect();
+    var tipName=s.querySelector('.name')?.textContent||'';
+    var tipType='';
+    if(s.classList.contains('polaris'))tipType='⭐ 北极星 · 一辈子';
+    else if(s.classList.contains('major'))tipType='🌟 长期目标';
+    else if(s.classList.contains('active'))tipType='🔭 当前聚焦';
+    else tipType='⚪ 已完成';
+
+    tip.querySelector('.tt-title').textContent=tipName;
+    var metas=tip.querySelectorAll('.tt-meta');
+    if(metas.length>0)metas[0].textContent=tipType;
+
+    tip.style.left=Math.min(rect.left+10,window.innerWidth-160)+'px';
+    tip.style.top=Math.min(rect.top-10,window.innerHeight-80)+'px';
+    tip.classList.add('show');
+    setTimeout(function(){tip.classList.remove('show')},2000);
+    e.stopPropagation();
+  });
+});
+document.addEventListener('click',function(){tip.classList.remove('show')});
+</script>
+</body>
+</html>

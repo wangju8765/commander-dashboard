@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>方向与聚焦 · 星系 v4</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:100%;height:100%;overflow:hidden;background:#04040a}
+  body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC","Helvetica Neue",sans-serif;color:#e8e8ed;-webkit-font-smoothing:antialiased;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+
+  .app{
+    width:100%;height:100%;height:100dvh;
+    display:flex;flex-direction:column;
+    background:#04040a;
+    position:relative;overflow:hidden;
+  }
+
+  /* Header */
+  .header{
+    padding:1.25rem 1rem 0.2rem;
+    text-align:center;
+    position:relative;z-index:20;
+  }
+  .header .title{
+    font-size:0.85rem;
+    font-weight:500;
+    color:rgba(255,255,255,0.6);
+    letter-spacing:0.08em;
+  }
+  .header .sub{
+    font-size:0.5rem;
+    color:rgba(255,255,255,0.15);
+    margin-top:0.05rem;
+    letter-spacing:0.04em;
+  }
+
+  /* ===== SKY CANVAS ===== */
+  .sky{
+    flex:1;
+    position:relative;
+    overflow:hidden;
+    z-index:10;
+  }
+
+  /* Nebula galaxies */
+  .galaxy{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(70px);
+    pointer-events:none;
+    opacity:0.6;
+  }
+
+  /* Tiny background stars */
+  .bg-stars{
+    position:absolute;inset:0;
+    pointer-events:none;
+    overflow:hidden;
+  }
+  .bg-star{
+    position:absolute;
+    border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    animation:bgTwinkle 3s ease-in-out infinite;
+  }
+  @keyframes bgTwinkle{
+    0%,100%{opacity:0.3}
+    50%{opacity:0.06}
+  }
+
+  /* ===== STARS ===== */
+  .star{
+    position:absolute;
+    cursor:pointer;
+    z-index:5;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.08rem;
+    transition:transform 0.15s;
+    will-change:transform;
+  }
+
+  .star .orb{
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    transition:box-shadow 0.3s;
+  }
+
+  /* Polaris */
+  .star.polaris .orb{
+    background:radial-gradient(circle at 30% 30%, #ffec80, #c88a00);
+    box-shadow:0 0 30px rgba(255,200,0,0.35), 0 0 80px rgba(255,200,0,0.06);
+    animation:polarisPulse 3s ease-in-out infinite;
+  }
+  @keyframes polarisPulse{
+    0%,100%{box-shadow:0 0 30px rgba(255,200,0,0.35),0 0 80px rgba(255,200,0,0.06)}
+    50%{box-shadow:0 0 40px rgba(255,200,0,0.45),0 0 100px rgba(255,200,0,0.1)}
+  }
+  .star.polaris .name{
+    color:#ffd700;
+    font-size:0.52rem;
+    font-weight:600;
+    text-shadow:0 0 10px rgba(255,215,0,0.3);
+    white-space:nowrap;
+  }
+
+  /* Major goal stars */
+  .star.major .orb{
+    background:radial-gradient(circle at 30% 30%, #c8a8ff, #7c5cf0);
+    box-shadow:0 0 20px rgba(160,120,255,0.25);
+    animation:majorPulse 4s ease-in-out infinite;
+  }
+  @keyframes majorPulse{
+    0%,100%{box-shadow:0 0 20px rgba(160,120,255,0.25)}
+    50%{box-shadow:0 0 28px rgba(160,120,255,0.35)}
+  }
+  .star.major .name{
+    color:#b088ff;
+    font-size:0.48rem;
+    font-weight:500;
+    text-shadow:0 0 6px rgba(160,120,255,0.15);
+    white-space:nowrap;
+  }
+
+  /* Active stars */
+  .star.active .orb{
+    background:radial-gradient(circle at 30% 30%, #7cbaff, #3d7ae0);
+    box-shadow:0 0 12px rgba(91,154,255,0.2);
+  }
+  .star.active .name{
+    color:#6a9eff;
+    font-size:0.45rem;
+    text-shadow:0 0 4px rgba(91,154,255,0.08);
+    white-space:nowrap;
+    letter-spacing:0.01em;
+  }
+
+  /* Done stars */
+  .star.done .orb{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.03);
+    opacity:0.5;
+  }
+  .star.done .name{
+    color:#3a3a3a;
+    font-size:0.4rem;
+    white-space:nowrap;
+  }
+
+  /* Star sizes */
+  .star.polaris .orb{width:2.8rem;height:2.8rem;font-size:1.1rem}
+  .star.major .orb{width:2rem;height:2rem;font-size:0.85rem}
+  .star.active .orb{width:1.3rem;height:1.3rem;font-size:0.6rem}
+  .star.done .orb{width:0.85rem;height:0.85rem;font-size:0.4rem}
+
+  /* ===== TOOLTIP ===== */
+  .star-tip{
+    position:fixed;
+    background:rgba(15,15,25,0.92);
+    border:1px solid rgba(255,255,255,0.06);
+    border-radius:0.5rem;
+    padding:0.45rem 0.6rem;
+    font-size:0.58rem;
+    color:#ccc;
+    z-index:50;
+    display:none;
+    min-width:5rem;
+    backdrop-filter:blur(10px);
+    box-shadow:0 4px 24px rgba(0,0,0,0.6);
+    pointer-events:none;
+    transition:opacity 0.15s;
+  }
+  .star-tip.show{display:block;opacity:1}
+  .star-tip .tt-title{font-size:0.68rem;font-weight:600;color:#fff;margin-bottom:0.1rem}
+  .star-tip .tt-meta{font-size:0.48rem;color:rgba(255,255,255,0.35);line-height:1.4}
+  .star-tip .tt-link{font-size:0.48rem;color:#a078ff;}
+
+  /* ===== BOTTOM: focus strip ===== */
+  .bottom-strip{
+    position:relative;z-index:20;
+    background:linear-gradient(180deg, transparent 0%, rgba(4,4,10,0.95) 25%);
+    padding:0.6rem 1rem 0.55rem;
+  }
+  .bottom-strip .label{
+    font-size:0.45rem;color:rgba(255,255,255,0.15);
+    text-align:center;letter-spacing:0.06em;
+    margin-bottom:0.35rem;
+  }
+  .focus-scroll{
+    display:flex;gap:0.35rem;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  .focus-scroll::-webkit-scrollbar{display:none}
+
+  .focus-chip{
+    flex-shrink:0;
+    display:flex;align-items:center;gap:0.3rem;
+    padding:0.25rem 0.5rem 0.25rem 0.3rem;
+    background:rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.04);
+    border-radius:1.5rem;
+    font-size:0.55rem;
+    color:rgba(255,255,255,0.5);
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  .focus-chip .fd{
+    width:1.1rem;height:1.1rem;
+    border-radius:0.25rem;
+    display:flex;align-items:center;justify-content:center;
+    font-size:0.55rem;
+    flex-shrink:0;
+  }
+  .add-chip{
+    flex-shrink:0;
+    display:flex;align-items:center;gap:0.2rem;
+    padding:0.25rem 0.5rem;
+    border:1px dashed rgba(255,255,255,0.05);
+    border-radius:1.5rem;
+    font-size:0.55rem;color:#5b9aff;
+    cursor:pointer;background:none;
+  }
+
+  /* ===== TAB BAR ===== */
+  .tab-bar{
+    position:relative;z-index:20;
+    background:rgba(4,4,10,0.95);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border-top:1px solid rgba(255,255,255,0.03);
+    display:flex;
+    padding:0.2rem 0 0.6rem;
+  }
+  .tab-btn{
+    flex:1;display:flex;flex-direction:column;align-items:center;gap:0.05rem;
+    padding:0.2rem;background:none;border:none;
+    color:rgba(255,255,255,0.15);font-size:0.5rem;
+    cursor:pointer;transition:color 0.15s;
+  }
+  .tab-btn.active{color:#fff}
+  .tab-btn .icon{font-size:1rem;line-height:1}
+  .tab-btn .label{font-weight:500}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="title">🎯 方向与聚焦</div>
+    <div class="sub">抽象 · · · · · · · · · · · · · · · · · · · · · · · · 具体</div>
+  </div>
+
+  <div class="sky" id="sky">
+
+    <!-- Background stars -->
+    <div class="bg-stars" id="bgStars"></div>
+
+    <!-- ===== GALAXY NEBULAE ===== -->
+    <!-- Galaxy 1: Products (left-mid) - Blue-purple -->
+    <div class="galaxy" style="width:180px;height:180px;background:radial-gradient(circle,rgba(91,120,255,0.04) 0%,transparent 70%);top:30%;left:5%;"></div>
+    <!-- Galaxy 2: AI Tools (center-mid) - Blue -->
+    <div class="galaxy" style="width:160px;height:160px;background:radial-gradient(circle,rgba(50,180,255,0.04) 0%,transparent 70%);top:28%;left:38%;"></div>
+    <!-- Galaxy 3: Content (right-mid) - Purple -->
+    <div class="galaxy" style="width:190px;height:190px;background:radial-gradient(circle,rgba(180,100,255,0.04) 0%,transparent 70%);top:32%;right:3%;"></div>
+    <!-- Galaxy 4: Family (bottom-center) - Warm -->
+    <div class="galaxy" style="width:200px;height:200px;background:radial-gradient(circle,rgba(255,180,100,0.03) 0%,transparent 70%);bottom:5%;left:30%;"></div>
+
+    <!-- ===== STARS (positions in % of .sky) ===== -->
+
+    <!-- LEVEL 1: 北极星 (抽象) -->
+    <div class="star polaris" id="s1" data-x="50" data-y="6">
+      <div class="orb">⭐</div>
+      <div class="name">生活即工作</div>
+    </div>
+
+    <!-- LEVEL 2: 银河 -->
+    <div class="star major" id="s2" data-x="50" data-y="16">
+      <div class="orb">🌐</div>
+      <div class="name">AI数字化人生</div>
+    </div>
+
+    <!-- LEVEL 3A: 🪐产品星系 -->
+    <div class="star active" id="s3a" data-x="12" data-y="33">
+      <div class="orb">🎮</div>
+      <div class="name">写字小程序</div>
+    </div>
+    <div class="star done" id="s3b" data-x="6" data-y="46">
+      <div class="orb">24</div>
+      <div class="name">24点游戏</div>
+    </div>
+
+    <!-- LEVEL 3B: 🛸AI星系 -->
+    <div class="star active" id="s3c" data-x="48" data-y="31">
+      <div class="orb">🖥️</div>
+      <div class="name">主宰面板</div>
+    </div>
+    <div class="star done" id="s3d" data-x="56" data-y="44">
+      <div class="orb">📋</div>
+      <div class="name">AI Agent日报</div>
+    </div>
+
+    <!-- LEVEL 3C: 🌐内容星系 -->
+    <div class="star active" id="s3e" data-x="85" data-y="36">
+      <div class="orb">✏️</div>
+      <div class="name">公众号</div>
+    </div>
+    <div class="star done" id="s3f" data-x="90" data-y="49">
+      <div class="orb">🔍</div>
+      <div class="name">引光小站</div>
+    </div>
+    <div class="star done" id="s3g" data-x="78" data-y="56">
+      <div class="orb">🐼</div>
+      <div class="name">天才小熊猫</div>
+    </div>
+
+    <!-- LEVEL 4: 🏠家庭星系 -->
+    <div class="star active" id="s4a" data-x="35" data-y="78">
+      <div class="orb" style="width:1.1rem;height:1.1rem;font-size:0.5rem">📋</div>
+      <div class="name" style="font-size:0.38rem">每日打卡</div>
+    </div>
+    <div class="star active" id="s4b" data-x="50" data-y="74">
+      <div class="orb" style="width:1.1rem;height:1.1rem;font-size:0.5rem">👧</div>
+      <div class="name" style="font-size:0.38rem">老二陪伴</div>
+    </div>
+    <div class="star done" id="s4c" data-x="62" data-y="81">
+      <div class="orb" style="width:0.75rem;height:0.75rem;font-size:0.35rem">📖</div>
+      <div class="name" style="font-size:0.35rem">心理学笔记</div>
+    </div>
+
+    <!-- Tooltip -->
+    <div class="star-tip" id="starTip">
+      <div class="tt-title">...</div>
+      <div class="tt-meta">...</div>
+      <div class="tt-link"></div>
+    </div>
+
+  </div>
+
+  <!-- Bottom -->
+  <div class="bottom-strip">
+    <div class="label">🔭 聚焦</div>
+    <div class="focus-scroll">
+      <div class="focus-chip"><span class="fd" style="background:rgba(91,154,255,0.06)">🖥️</span>主宰面板</div>
+      <div class="focus-chip"><span class="fd" style="background:rgba(91,154,255,0.06)">🎮</span>写字小程序</div>
+      <div class="focus-chip"><span class="fd" style="background:rgba(255,180,100,0.06)">👧</span>老二陪伴</div>
+      <div class="focus-chip"><span class="fd" style="background:rgba(180,100,255,0.06)">📋</span>每日打卡</div>
+      <div class="add-chip">＋</div>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn">📅 <span class="label">日历</span></button>
+    <button class="tab-btn">📊 <span class="label">项目</span></button>
+    <button class="tab-btn active"><span class="icon">🎯</span><span class="label">方向</span></button>
+    <button class="tab-btn">📚 <span class="label">库</span></button>
+  </div>
+</div>
+
+<script>
+// === Background stars ===
+(function(){
+  var c=document.getElementById('bgStars');
+  if(!c)return;
+  var h='';
+  for(var i=0;i<80;i++){
+    var x=Math.random()*100;
+    var y=Math.random()*100;
+    var s=0.5+Math.random()*1.5;
+    var d=1+Math.random()*5;
+    h+='<div class="bg-star" style="left:'+x+'%;top:'+y+'%;width:'+s+'px;height:'+s+'px;animation-delay:'+d+'s"></div>';
+  }
+  c.innerHTML=h;
+})();
+
+// === Floating animation ===
+var stars=document.querySelectorAll('.star');
+var sky=document.getElementById('sky');
+var skyW,skyH,starData=[];
+
+function initFloats(){
+  var rect=sky.getBoundingClientRect();
+  skyW=rect.width;
+  skyH=rect.height;
+  starData=[];
+  stars.forEach(function(s,idx){
+    var x=parseFloat(s.getAttribute('data-x'));
+    var y=parseFloat(s.getAttribute('data-y'));
+    var orb=s.querySelector('.orb');
+    var oR=orb?orb.offsetWidth||20:20;
+    // Random parameters for floating
+    starData.push({
+      el:s,
+      baseX:x/100*skyW,
+      baseY:y/100*skyH,
+      ox:Math.random()*6* (Math.random()<0.5?1:-1),
+      oy:Math.random()*4* (Math.random()<0.5?1:-1),
+      speedX:0.3+Math.random()*0.7,
+      speedY:0.2+Math.random()*0.6,
+      phaseX:Math.random()*Math.PI*2,
+      phaseY:Math.random()*Math.PI*2,
+      oR:oR
+    });
+  });
+}
+
+function animateFloats(){
+  var t=Date.now()/1000;
+  starData.forEach(function(d){
+    if(!d.el)return;
+    var dx=Math.sin(t*d.speedX+d.phaseX)*d.ox;
+    var dy=Math.sin(t*d.speedY+d.phaseY)*d.oy;
+    d.el.style.left=(d.baseX+dx-d.oR/2)+'px';
+    d.el.style.top=(d.baseY+dy-d.oR/2)+'px';
+  });
+  requestAnimationFrame(animateFloats);
+}
+
+initFloats();
+animateFloats();
+
+// Resize handler
+window.addEventListener('resize',function(){
+  initFloats();
+});
+
+// === Tooltip ===
+(function(){
+  var tip=document.getElementById('starTip');
+  var data={
+    's1':['生活即工作','⭐ 北极星 · 一辈子'],
+    's2':['AI数字化人生','🌟 长期目标 · 1-2年'],
+    's3a':['写字小程序','🔭 当前聚焦 · 进行中'],
+    's3b':['24点游戏','⚪ 已完成 · 已上线'],
+    's3c':['主宰面板','🔭 当前聚焦 · 进行中'],
+    's3d':['AI Agent日报','⚪ 已完成 · 存档'],
+    's3e':['公众号','🔭 当前聚焦 · 持续更新'],
+    's3f':['引光小站调研','⚪ 已完成 · 存档'],
+    's3g':['天才小熊猫调研','⚪ 已完成 · 存档'],
+    's4a':['每日打卡','🔭 日常 · 老大的训练'],
+    's4b':['老二陪伴','🔭 日常 · 持续关注'],
+    's4c':['心理学笔记','⚪ 已完成 · 读书结束'],
+  };
+  var links={
+    's3a':'→ 产品星系',
+    's3b':'→ 产品星系',
+    's3c':'→ AI工具星系',
+    's3d':'→ AI工具星系',
+    's3e':'→ 内容星系',
+    's3f':'→ 内容星系',
+    's3g':'→ 内容星系',
+    's4a':'→ 家庭星系',
+    's4b':'→ 家庭星系',
+    's4c':'→ 家庭星系',
+  };
+
+  stars.forEach(function(s){
+    s.addEventListener('click',function(e){
+      var id=s.id;
+      var info=data[id];
+      if(!info){tip.classList.remove('show');return;}
+      tip.querySelector('.tt-title').textContent=info[0];
+      tip.querySelector('.tt-meta').textContent=info[1];
+      var lnk=tip.querySelector('.tt-link');
+      if(links[id]){lnk.textContent=links[id];lnk.style.display='block';}
+      else lnk.style.display='none';
+
+      var rect=s.getBoundingClientRect();
+      var tx=Math.max(5,Math.min(rect.left-10,window.innerWidth-170));
+      var ty=Math.max(5,rect.top-50);
+      tip.style.left=tx+'px';
+      tip.style.top=ty+'px';
+      tip.classList.add('show');
+      e.stopPropagation();
+    });
+  });
+  document.addEventListener('click',function(){tip.classList.remove('show')});
+})();
+</script>
+</body>
+</html>

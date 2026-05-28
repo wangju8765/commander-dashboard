@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>主宰面板</title>
-<meta name="version" content="0.7.9">
+<meta name="version" content="0.8.0">
 <style>
 /* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation}
@@ -313,12 +313,62 @@ body{background:#0f0f13;color:#fff}
 .d-proj-card .p-tags{display:flex;gap:0.2rem;margin-top:0.375rem;flex-wrap:wrap}
 .d-proj-card .p-tag{font-size:0.55rem;padding:0.05rem 0.25rem;border-radius:0.2rem}
 
-/* Full goals page */
-.d-goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
-.d-goal-card{background:#1e1e28;border:1px solid #2a2a38;border-radius:0.75rem;padding:0.85rem}
-.d-goal-card .g-title{font-size:0.88rem;font-weight:600;color:#fff;margin-bottom:0.25rem}
-.d-goal-card .g-desc{font-size:0.72rem;color:#ccc}
-.d-goal-card .g-meta{font-size:0.65rem;color:#555;margin-top:0.25rem}
+/* ===== Direction & Focus ===== */
+/* Scroller */
+.dir-scroller{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x mandatory;flex:1;scroll-behavior:smooth;height:100%}
+.dir-scroller::-webkit-scrollbar{display:none}
+.dir-page{min-width:100vw;scroll-snap-align:start;padding:0.5rem 1rem 0.3rem;display:flex;flex-direction:column;overflow-y:auto;height:100%}
+.dir-page::-webkit-scrollbar{display:none}
+.dir-card{background:rgba(255,255,255,0.012);border:1px solid rgba(255,255,255,0.03);border-radius:0.85rem;padding:0.7rem 0.7rem 0.55rem;display:flex;flex-direction:column;justify-content:flex-start;min-height:7rem}
+.dir-card.tint-product{border-color:rgba(91,154,255,0.06);background:rgba(91,154,255,0.008)}
+.dir-card.tint-ai{border-color:rgba(160,120,255,0.06);background:rgba(160,120,255,0.008)}
+.dir-card.tint-content{border-color:rgba(255,159,67,0.06);background:rgba(255,159,67,0.008)}
+.dir-card.tint-family{border-color:rgba(46,213,115,0.06);background:rgba(46,213,115,0.008)}
+.dir-card-label{font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.3);margin-bottom:0.5rem}
+.dir-item{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.55rem;border-radius:0.5rem;cursor:pointer}
+.dir-item+.dir-item{margin-top:0.15rem}
+.dir-item .orb{width:1.5rem;height:1.5rem;border-radius:0.4rem;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
+.dir-item .name{flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.85rem;color:#e8e8ed}
+.dir-item.act{background:rgba(91,154,255,0.1);border:1px solid rgba(91,154,255,0.15)}
+.dir-item.act .orb{background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0);box-shadow:0 0 8px rgba(91,154,255,0.12)}
+.dir-item.act .name{color:#fff}
+.dir-item.done{padding:0.4rem 0.55rem}
+.dir-item.done .orb{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08)}
+.dir-item.done .name{color:rgba(255,255,255,0.45)}
+/* Polaris */
+.dir-polaris{text-align:center;padding:0.4rem 0 0.15rem;flex-shrink:0}
+.dir-polaris .p-item{display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.15rem 0}
+.dir-polaris .p-item .orb{border-radius:0.4rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dir-polaris .p-item .name{font-weight:700;letter-spacing:0.03em}
+.dir-polaris .north .orb{width:2rem;height:2rem;font-size:1.1rem;background:radial-gradient(circle at 30% 30%,#ffe680,#cc8a00);box-shadow:0 0 20px rgba(255,215,0,0.2)}
+.dir-polaris .north .name{font-size:0.9rem;color:#ffd700}
+.dir-polaris .axis-divider{height:1px;background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,0.04) 20%,rgba(255,255,255,0.04) 80%,transparent 95%);margin:0.3rem 2rem 0}
+/* Dots */
+.dir-dots{display:flex;justify-content:center;gap:0.4rem;padding:0.2rem 0;flex-shrink:0}
+.dir-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.08);transition:all 0.2s}
+.dir-dot.cur{background:#5b9aff;width:18px;border-radius:4px}
+/* Bottom chips */
+.dir-chips{display:flex;gap:0.35rem;overflow-x:auto;scrollbar-width:none;justify-content:center;padding:0.15rem 1rem 0.1rem;flex-shrink:0}
+.dir-chips::-webkit-scrollbar{display:none}
+.dir-chip{flex-shrink:0;display:flex;align-items:center;gap:0.25rem;padding:0.2rem 0.45rem 0.2rem 0.2rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.035);border-radius:1rem;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.3)}
+.dir-chip .bd{width:0.9rem;height:0.9rem;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;font-size:0.55rem;flex-shrink:0}
+/* Tooltip */
+.dir-tip{position:fixed;z-index:50;background:rgba(20,20,36,0.97);border:1px solid rgba(255,255,255,0.06);border-radius:0.65rem;padding:0.45rem 0.65rem;min-width:4rem;backdrop-filter:blur(12px);box-shadow:0 4px 24px rgba(0,0,0,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s}
+.dir-tip.show{opacity:1}
+.dir-tip .tt{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:0.05rem}
+.dir-tip .tm{font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.2)}
+/* Desktop directions */
+.d-dir-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.75rem}
+.d-dir-card{background:#1a1a24;border:1px solid #2a2a38;border-radius:0.75rem;padding:0.85rem}
+.d-dir-card:first-child{border-color:rgba(91,154,255,0.12)}
+.d-dir-card .dc-label{font-size:0.78rem;font-weight:700;color:#999;margin-bottom:0.5rem}
+.d-dir-item{display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.4rem;border-radius:0.4rem;font-size:0.78rem;font-weight:700;cursor:pointer}
+.d-dir-item+.d-dir-item{margin-top:0.1rem}
+.d-dir-item .orb{width:1.2rem;height:1.2rem;border-radius:0.3rem;display:flex;align-items:center;justify-content:center;font-size:0.65rem;flex-shrink:0}
+.d-dir-item.act{background:rgba(91,154,255,0.08);border:1px solid rgba(91,154,255,0.1)}
+.d-dir-item.act .orb{background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0)}
+.d-dir-item.done .orb{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06)}
+.d-dir-item.done .name{color:rgba(255,255,255,0.4)}
 .d-goal-card .g-bar{height:4px;background:rgba(255,255,255,0.12);border-radius:2px;margin-top:0.5rem;overflow:hidden}
 .d-goal-card .g-bar .fill{height:100%;border-radius:2px}
 @media(max-width:1100px){.d-goal-grid{grid-template-columns:1fr}}
@@ -583,12 +633,13 @@ body{background:#0f0f13;color:#fff}
     <div class="tab-content" id="tab-projects">
       <div class="project-grid" id="projGrid"><div class="loading"><div class="spinner"></div>加载中...</div></div>
     </div>
-    <!-- Goals -->
+    <!-- Direction & Focus -->
     <div class="tab-content" id="tab-goals">
-      <div class="section-title">长期目标</div>
-      <div id="longGoals"><div class="loading"><div class="spinner"></div>加载中...</div></div>
-      <div class="section-title">短期目标</div>
-      <div id="shortGoals"><div class="loading"><div class="spinner"></div>加载中...</div></div>
+      <div class="dir-polaris" id="dirPolaris"></div>
+      <div class="dir-scroller" id="dirScroller"><div class="loading" style="width:100%;padding:2rem 0;text-align:center"><div class="spinner"></div>加载中...</div></div>
+      <div class="dir-dots" id="dirDots"></div>
+      <div class="dir-chips" id="dirChips"></div>
+      <div class="dir-tip" id="dirTip"><div class="tt"></div><div class="tm"></div></div>
     </div>
     <!-- Library -->
     <div class="tab-content" id="tab-library">
@@ -617,7 +668,7 @@ body{background:#0f0f13;color:#fff}
   <div class="tab-bar" id="tabBar">
     <button class="tab-btn active" data-tab="today"><span class="icon">📅</span><span class="label">日历</span></button>
     <button class="tab-btn" data-tab="projects"><span class="icon">📊</span><span class="label">项目</span></button>
-    <button class="tab-btn" data-tab="goals"><span class="icon">🎯</span><span class="label">目标</span></button>
+    <button class="tab-btn" data-tab="goals"><span class="icon">🎯</span><span class="label">方向</span></button>
     <button class="tab-btn" data-tab="library"><span class="icon">📚</span><span class="label">库</span></button>
   </div>
 </div>
@@ -632,7 +683,7 @@ body{background:#0f0f13;color:#fff}
       <button class="nav-item active" data-desktop-view="overview">📋 概览</button>
       <button class="nav-item" data-desktop-view="calendar">📅 日历</button>
       <button class="nav-item" data-desktop-view="projects">📊 项目 <span class="badge" id="pBadge2">0</span></button>
-      <button class="nav-item" data-desktop-view="goals">🎯 目标 <span class="badge" id="gBadge2">0</span></button>
+      <button class="nav-item" data-desktop-view="goals">🎯 方向 <span class="badge" id="gBadge2">0</span></button>
       <button class="nav-item" data-desktop-view="library">📚 库</button>
       <div class="nav-divider"></div>
       <button class="nav-item" id="exportBtn">📥 导出备份</button>
@@ -668,7 +719,7 @@ body{background:#0f0f13;color:#fff}
             <div class="panel-body" id="dProj"><div class="loading"><div class="spinner"></div></div></div>
           </div>
           <div class="panel">
-            <div class="panel-header"><span class="panel-title">🎯 目标进度</span></div>
+            <div class="panel-header"><span class="panel-title">🎯 方向聚焦</span></div>
             <div class="panel-body" id="dGoal"><div class="loading"><div class="spinner"></div></div></div>
           </div>
         </div>
@@ -713,14 +764,14 @@ body{background:#0f0f13;color:#fff}
       </div>
     </div>
 
-    <!-- Goals view -->
+    <!-- Direction & Focus view -->
     <div class="desktop-view" data-view="goals">
       <div class="d-page">
-        <div class="d-page-title">🎯 目标 <small>长期 &middot; 短期</small></div>
-        <h3 style="font-size:0.8rem;color:#ddd;margin-bottom:0.625rem;font-weight:500">🏗️ 长期目标</h3>
-        <div class="d-goal-grid" id="dLongGrid" style="margin-bottom:1.5rem"><div class="loading" style="padding:2rem"><div class="spinner"></div></div></div>
-        <h3 style="font-size:0.8rem;color:#ddd;margin-bottom:0.625rem;font-weight:500">🎯 短期目标</h3>
-        <div class="d-goal-grid" id="dShortGrid"><div class="loading" style="padding:2rem"><div class="spinner"></div></div></div>
+        <div class="d-page-title">🎯 方向与聚焦</div>
+        <div style="text-align:center;margin-bottom:1rem">
+          <span style="font-size:0.9rem;color:#ffd700;font-weight:700">⭐ 生活即工作</span>
+        </div>
+        <div class="d-dir-grid" id="dDirGrid"><div class="loading" style="padding:2rem;grid-column:1/-1"><div class="spinner"></div></div></div>
       </div>
     </div>
 
@@ -785,7 +836,7 @@ function api(method, table, params, body) {
 
 // ==================== STATE ====================
 var S = {
-  events: [], projects: [], goals: [], entries: [],
+  events: [], projects: [], directions: [], entries: [],
   today: new Date(), selDate: new Date(),
   eFilter: 'all', loaded: false, err: null,
   page: 'projects', projDetail: null, docReader: {}
@@ -921,10 +972,10 @@ async function loadAll() {
     var r = await Promise.all([
       api('GET','calendar_events?order=event_date').then(function(r2){if(!r2.ok)throw Error('events:'+r2.status);return r2.json();}),
       api('GET','projects?order=created_at').then(function(r2){if(!r2.ok)throw Error('projects:'+r2.status);return r2.json();}),
-      api('GET','goals?order=created_at').then(function(r2){if(!r2.ok)throw Error('goals:'+r2.status);return r2.json();}),
+      api('GET','directions?order=sort_order').then(function(r2){if(!r2.ok)throw Error('directions:'+r2.status);return r2.json();}),
       api('GET','entries?order=created_at.desc&limit=50').then(function(r2){if(!r2.ok)throw Error('entries:'+r2.status);return r2.json();})
     ]);
-    S.events=r[0]||[]; S.projects=r[1]||[]; S.goals=r[2]||[]; S.entries=r[3]||[];
+    S.events=r[0]||[]; S.projects=r[1]||[]; S.directions=r[2]||[]; S.entries=r[3]||[];
   } catch(e) { S.err=e.message; console.error(e); }
   S.loaded = true;
   renderAll();
@@ -960,7 +1011,7 @@ async function deleteEvent(id) { if(await crudDelete('calendar_events',id)) { aw
 function renderAll() {
   if(S.err) {
     var eh='<div class="error-msg">❌ 加载失败<div class="detail">'+esc(S.err)+'</div></div>';
-    ['todayEvents','projGrid','longGoals','shortGoals','entryList','dCal','dToday','dProj','dGoal','dEntry','dStat'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=eh;});
+    ['todayEvents','projGrid','dirScroller','entryList','dCal','dToday','dProj','dGoal','dEntry','dStat'].forEach(function(id){var el=document.getElementById(id);if(el)el.innerHTML=eh;});
     return;
   }
   if(!S.loaded) return;
@@ -969,23 +1020,24 @@ function renderAll() {
   document.getElementById('mDate').textContent = fmt(S.today)+' · '+dow(S.today);
   document.getElementById('greeting').innerHTML = g+'，Zeno <small>'+fmt(S.today)+'</small>';
   var pb=document.getElementById('pBadge');if(pb)pb.textContent=S.projects.length;
-  var gb=document.getElementById('gBadge');if(gb)gb.textContent=S.goals.length;
+  var gb=document.getElementById('gBadge');if(gb)gb.textContent=(S.directions||[]).filter(function(d){return d.status==='active'&&d.category!=='north';}).length;
+  var gb2=document.getElementById('gBadge2');if(gb2)gb2.textContent=(S.directions||[]).filter(function(d){return d.status==='active'&&d.category!=='north';}).length;
 
   renderCal();
   renderEvents();
   renderProj();
-  renderGoals();
+  renderDirections();
   renderEntries();
   rDashCal();
   rDashToday();
   rDashProj();
-  rDashGoal();
+  rDashDirection();
   rDashEntry();
   rDashStat();
   // Desktop sub-views
   rDCalendar();
   rDProjects();
-  rDGoals();
+  rDDirections();
   rDLibrary();
 }
 
@@ -1072,15 +1124,69 @@ function renderProj() {
   el.innerHTML=html;
 }
 
-function renderGoals() {
-  ['long','short'].forEach(function(type){
-    var el=document.getElementById(type==='long'?'longGoals':'shortGoals');
-    var items=S.goals.filter(function(g){return g.type===(type==='long'?'long_term':'short_term');});
-    if(!items.length){el.innerHTML='<div class="empty-state"><div class="icon">🎯</div><div class="msg">暂无目标</div></div>';return;}
-    el.innerHTML=items.map(function(g){
-      return'<div class="card"><div class="goal-item"><div class="goal-icon '+type+'">'+(type==='long'?'🏗️':'🎯')+'</div><div class="goal-info"><div class="goal-title">'+esc(g.title)+'</div><div class="goal-meta">'+(g.due_date?'截止 '+g.due_date:'')+(g.description?' · '+esc(g.description):'')+'</div></div><div class="goal-pct"><div class="num">'+(g.progress||0)+'%</div><div class="bar"><div class="fill" style="width:'+(g.progress||0)+'%;background:'+(type==='long'?'#a078ff':'#5b9aff')+'"></div></div></div></div></div>';
-    }).join('');
+function renderDirections() {
+  var dirs=S.directions||[];
+  if(!dirs.length){document.getElementById('tab-goals').innerHTML='<div class="empty-state" style="padding:2rem 0"><div class="icon">🎯</div><div class="msg">暂无方向</div></div>';return;}
+  // Polaris
+  var north=dirs.filter(function(d){return d.category==='north';});
+  var pEl=document.getElementById('dirPolaris');
+  if(north.length){
+    pEl.innerHTML='<div class="p-item north"><span class="orb">'+north[0].icon+'</span><span class="name">'+esc(north[0].name)+'</span></div><div class="axis-divider"></div>';
+  } else pEl.innerHTML='';
+  // Categories
+  var cats=[{k:'product',l:'产品'},{k:'ai',l:'AI数字化'},{k:'content',l:'内容'},{k:'family',l:'家庭'}];
+  var scroller=document.getElementById('dirScroller');
+  scroller.innerHTML=cats.map(function(cat,i){
+    var items=dirs.filter(function(d){return d.category===cat.k;}).sort(function(a,b){return a.sort_order-b.sort_order;});
+    var tint='tint-'+cat.k;
+    var html='<div class="dir-page"><div class="dir-card '+tint+'"><div class="dir-card-label">'+(cat.k==='product'?'🪐':cat.k==='ai'?'🛸':cat.k==='content'?'🌐':'🏠')+' '+cat.l+'</div>';
+    items.forEach(function(d){
+      html+='<div class="dir-item '+(d.status==='active'?'act':'done')+'" data-name="'+esc(d.name)+'"><span class="orb"'+(d.name==='24点游戏'?' style="font-size:0.7rem"':'')+'>'+esc(d.icon)+'</span><span class="name">'+esc(d.name)+'</span></div>';
+    });
+    html+='</div></div>';
+    return html;
+  }).join('');
+  // Dots
+  var dotsEl=document.getElementById('dirDots');
+  dotsEl.innerHTML=cats.map(function(_,i){return '<span class="dir-dot'+(i===0?' cur':'')+'"></span>';}).join('');
+  // Chips
+  var chipsEl=document.getElementById('dirChips');
+  var actives=dirs.filter(function(d){return d.status==='active'&&d.category!=='north';});
+  if(actives.length){
+    chipsEl.innerHTML=actives.map(function(d){
+      return '<span class="dir-chip"><span class="bd">'+esc(d.icon)+'</span>'+esc(shortName(d.name))+'</span>';
+    }).join('')+'<button class="dir-add" style="flex-shrink:0;display:flex;align-items:center;gap:0.15rem;padding:0.2rem 0.45rem;border:1px dashed rgba(255,255,255,0.04);border-radius:1rem;font-size:0.7rem;font-weight:700;color:rgba(91,154,255,0.35);background:none;cursor:pointer;display:none">＋</button>';
+  } else chipsEl.innerHTML='';
+  // Snap-scroll dot sync
+  scroller.onscroll=function(){
+    var i=Math.round(scroller.scrollLeft/window.innerWidth);
+    var ds=document.querySelectorAll('.dir-dot');
+    if(i<0)i=0;if(i>=ds.length)i=ds.length-1;
+    ds.forEach(function(d,j){d.classList.toggle('cur',j===i);});
+  };
+  // Tooltip
+  var tip=document.getElementById('dirTip'),tipT=tip.querySelector('.tt'),tipM=tip.querySelector('.tm');
+  scroller.querySelectorAll('.dir-item').forEach(function(s){
+    s.onclick=function(e){
+      var n=this.dataset.name;
+      var d=dirs.filter(function(x){return x.name===n;})[0];
+      if(!d||!d.tip){tip.classList.remove('show');return;}
+      tipT.textContent=d.name;tipM.textContent=d.tip||'';
+      var r=this.getBoundingClientRect();
+      tip.style.left=Math.max(6,Math.min(r.left-5,window.innerWidth-190))+'px';
+      tip.style.top=Math.max(6,r.top-36)+'px';
+      tip.classList.add('show');
+      e.stopPropagation();
+    };
   });
+  document.onclick=function(){tip.classList.remove('show');};
+}
+function shortName(n){
+  if(n==='写字小程序')return'写字';if(n==='24点游戏')return'24点';
+  if(n==='主宰面板')return'面板';if(n==='Agent日报')return'日报';
+  if(n==='引光小站调研')return'引光小站';if(n==='天才小熊猫调研')return'小熊猫';
+  if(n==='每日打卡')return'打卡';if(n==='老二陪伴')return'老二';
+  if(n==='心理学笔记')return'心理';return n;
 }
 
 function renderEntries() {
@@ -1116,12 +1222,13 @@ function rDashProj() {
     return'<div class="project-mini"><div class="project-mini-info"><div class="project-mini-name">'+esc(p.name)+'</div><div style="font-size:0.6rem;color:#555;margin-top:0.1rem">'+(p.lead||'')+'</div></div></div>';
   }).join('');
 }
-function rDashGoal() {
+function rDashDirection() {
   var el=document.getElementById('dGoal');if(!el)return;
-  var items=S.goals.slice(0,3);
-  if(!items.length){el.innerHTML='<div style="font-size:0.8rem;color:#ccc;padding:0.5rem 0">暂无目标</div>';return;}
-  el.innerHTML=items.map(function(g){
-    return'<div class="goal-mini"><div class="goal-mini-icon '+(g.type==='long_term'?'long':'short')+'">'+(g.type==='long_term'?'🏗️':'🎯')+'</div><div class="goal-mini-body"><div class="goal-mini-title">'+esc(g.title)+'</div><div class="goal-mini-meta">'+(g.type==='long_term'?'长期':'短期')+'</div></div><div class="goal-mini-pct">'+(g.progress||0)+'%</div></div>';
+  var dirs=S.directions||[];
+  var active=dirs.filter(function(d){return d.status==='active'&&d.category!=='north';});
+  if(!active.length){el.innerHTML='<div style="font-size:0.8rem;color:#ccc;padding:0.5rem 0">暂无活跃方向</div>';return;}
+  el.innerHTML=active.slice(0,4).map(function(d){
+    return'<div class="goal-mini"><div class="goal-mini-icon long">'+esc(d.icon)+'</div><div class="goal-mini-body"><div class="goal-mini-title">'+esc(d.name)+'</div><div class="goal-mini-meta">'+(d.tip||'')+'</div></div></div>';
   }).join('');
 }
 function rDashEntry() {
@@ -1172,7 +1279,7 @@ document.querySelectorAll('.nav-item[data-desktop-view]').forEach(function(b){
     // Re-render when switching to a view
     if(view==='calendar') rDCalendar();
     else if(view==='projects') rDProjects();
-    else if(view==='goals') rDGoals();
+    else if(view==='goals') rDDirections();
     else if(view==='library') rDLibrary();
   });
 });
@@ -1265,18 +1372,20 @@ function rDProjects(){
   });
   el.innerHTML=html;
 }
-function rDGoals(){
-  ['Long','Short'].forEach(function(suf){
-    var type=suf==='Long'?'long_term':'short_term';
-    var el=document.getElementById('d'+suf+'Grid');
-    if(!el) return;
-    var items=S.goals.filter(function(g){return g.type===type;});
-    if(!items.length){el.innerHTML='<div style="font-size:0.78rem;color:#ccc;padding:1rem 0;text-align:center">暂无'+(suf==='Long'?'长期':'短期')+'目标</div>';return;}
-    var c=suf==='Long'?'#a078ff':'#5b9aff';
-    el.innerHTML=items.map(function(g){
-      return '<div class="d-goal-card"><div class="g-title">'+esc(g.title)+'</div><div class="g-meta">'+(g.due_date?'截止 '+g.due_date:'')+(g.description?' · '+esc(g.description):'')+'</div><div class="g-bar"><div class="fill" style="width:'+(g.progress||0)+'%;background:'+c+'"></div></div></div>';
-    }).join('');
-  });
+function rDDirections(){
+  var el=document.getElementById('dDirGrid');
+  if(!el) return;
+  var dirs=S.directions||[];
+  var cats=[{k:'product',l:'🪐 产品'},{k:'ai',l:'🛸 AI数字化'},{k:'content',l:'🌐 内容'},{k:'family',l:'🏠 家庭'}];
+  el.innerHTML=cats.map(function(cat){
+    var items=dirs.filter(function(d){return d.category===cat.k;}).sort(function(a,b){return a.sort_order-b.sort_order;});
+    var html='<div class="d-dir-card"><div class="dc-label">'+cat.l+'</div>';
+    items.forEach(function(d){
+      html+='<div class="d-dir-item '+(d.status==='active'?'act':'done')+'" title="'+(d.tip||'')+'"><span class="orb">'+esc(d.icon)+'</span><span class="name">'+esc(d.name)+'</span></div>';
+    });
+    html+='</div>';
+    return html;
+  }).join('');
 }
 function rDLibrary(){
   var el=document.getElementById('dEntryList');
@@ -1507,7 +1616,6 @@ function openModal(type) {
   var cf={
     event:{title:'📅 添加事项',fields:'<label>类型</label><div class="type-buttons"><button type="button" class="type-btn active" data-value="life" style="--type-color:#a078ff;--type-bg:rgba(160,120,255,0.15)"><span class="type-dot" style="background:#a078ff"></span>生活</button><button type="button" class="type-btn" data-value="work" style="--type-color:#ff9f43;--type-bg:rgba(255,159,67,0.15)"><span class="type-dot" style="background:#ff9f43"></span>工作</button><button type="button" class="type-btn" data-value="course" style="--type-color:#ff6b9d;--type-bg:rgba(255,107,157,0.15)"><span class="type-dot" style="background:#ff6b9d"></span>课程</button></div><input type="hidden" name="event_type" value="life"><label>标题</label><label>标题</label><input name="title" required placeholder="事项名称"><div class="form-row" style="gap:0.375rem"><div class="date-field"><label>日期</label><input name="event_date" type="date" value="'+fmt(S.selDate||S.today)+'" required></div><div class="time-field" style="flex:1"><label>开始</label><select style="flex:1">'+timeOpts('')+'</select></div><div class="time-field" style="flex:1"><label>结束</label><select style="flex:1">'+timeOpts('')+'</select></div></div><label>备注</label><textarea name="description"></textarea><div id="courseButtons" style="display:none"><label>常用课程</label><div style="display:flex;flex-wrap:wrap;gap:0.375rem"><button type="button" class="course-btn" data-name="翔哥">翔哥</button><button type="button" class="course-btn" data-name="邵子齐">邵子齐</button><button type="button" class="course-btn" data-name="郭靖宇">郭靖宇</button><button type="button" class="course-btn" data-name="蔡汐堋">蔡汐堋</button><button type="button" class="course-btn" data-name="四年级">四年级</button></div></div><button class="btn-submit" type="submit">保存</button>',sub:function(d){return addEvent(d);}},
     project:{title:'📊 新建项目',fields:'<label>项目名</label><input name="name" required placeholder="项目名称"><label>负责人</label><select name="lead"><option value="">—</option><option value="主宰" selected>👑 主宰</option><option value="史蒂夫老师">🧠 史蒂夫老师</option><option value="Erickson">🛠️ Erickson</option><option value="笔杆子">✍️ 笔杆子</option><option value="参谋">🔍 参谋</option><option value="运营官">⚙️ 运营官</option></select><label>状态</label><select name="status"><option value="planning">🎯 规划中</option><option value="in_progress" selected>🚧 进行中</option><option value="completed">✅ 已完成</option><option value="archived">📦 已归档</option></select><label>描述</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){return crudInsert('projects',d).then(function(ok){if(ok)loadAll();});}},
-    goal:{title:'🎯 新建目标',fields:'<label>标题</label><input name="title" required placeholder="目标名称"><div class="form-row"><div><label>类型</label><select name="type"><option value="long_term">长期</option><option value="short_term" selected>短期</option></select></div><div><label>截止日期</label><input name="due_date" type="date"></div></div><label>进度 %</label><input name="progress" type="number" min="0" max="100" value="0"><label>描述</label><textarea name="description"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){d.progress=parseInt(d.progress)||0;return crudInsert('goals',d).then(function(ok){if(ok)loadAll();});}},
     entry:{title:'📚 记录',fields:'<label>类型</label><select name="type"><option value="thought">💭 思考</option><option value="action">✅ 行动</option><option value="plan">🗓️ 规划</option></select><label>标题</label><input name="title" required placeholder="标题"><label>内容</label><textarea name="content" rows="3"></textarea><button class="btn-submit" type="submit">保存</button>',sub:function(d){d.entry_date=fmt(S.today);return crudInsert('entries',d).then(function(ok){if(ok)loadAll();});}}
   };
   var c=cf[type];if(!c)return;
@@ -1607,12 +1715,12 @@ function showEditForm(e,d){
 
 // Export
 document.getElementById('exportBtn').onclick=function(){
-  var blob=new Blob([JSON.stringify({events:S.events,projects:S.projects,goals:S.goals,entries:S.entries},null,2)],{type:'application/json'});
+  var blob=new Blob([JSON.stringify({events:S.events,projects:S.projects,directions:S.directions,entries:S.entries},null,2)],{type:'application/json'});
   var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dashboard-'+fmt(S.today)+'.json';a.click();
 };
 
 // Version cache busting - increment on each deploy
-var VERSION = '0.5.2';
+var VERSION = '0.8.0';
 console.log('🚀 主宰面板 v'+VERSION);
 
 // Start
