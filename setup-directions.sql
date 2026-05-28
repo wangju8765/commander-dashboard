@@ -13,6 +13,11 @@ CREATE TABLE IF NOT EXISTS directions (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+-- RLS 权限：允许匿名 key 读取
+ALTER TABLE directions ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "anon_select_directions" ON directions
+  FOR SELECT USING (true);
+
 -- 初始数据（北极星 + 4类方向卡片）
 INSERT INTO directions (name, icon, category, status, tip, sort_order) VALUES
   -- 北极星

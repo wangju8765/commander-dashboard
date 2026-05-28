@@ -2,7 +2,7 @@
 
 **目标：** 做一个个人管理面板，可视化追踪项目、目标、周计划、未来规划、思考与行动，释放认知负荷
 **状态：** 🚧 已上线（MVP）
-**版本：** v0.4.0
+**版本：** v0.8.2
 **网址：** https://wangju8765.github.io/commander-dashboard/
 **仓库：** wangju8765/commander-dashboard
 **起始：** 2026-05-25

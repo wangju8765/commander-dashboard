@@ -1,4 +1,4 @@
-const CACHE = 'commander-v5';
+const CACHE = 'commander-v6';
 
 self.addEventListener('install', e => {
   self.skipWaiting();

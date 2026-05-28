@@ -1,5 +1,65 @@
 # 主宰面板 · 运行日志
 
+## 2026-05-28 晚上session — v0.8.2 方向卡片修复
+
+### 代码变更
+- v0.8.1: 方向CSS从桌面媒体查询块移出到全局作用域（子agent修复）
+- v0.8.2: 方向Tab 6项修复（子agent修复，未推送）
+
+### 方向页面6项修复（v0.8.2）
+
+1. **删除底部标签条** — 去掉 `#dirChips` 及 chips 相关全部代码
+2. **Snap锁定修复** — `#tab-goals` 改为 `flex` 容器，卡片 `flex:1` 撑满全屏
+3. **卡片边框/底色加强** — tint 配色更明显
+4. **卡片高度撑满全屏** — `dir-card` + `dir-page` 双 flex
+5. **卡片标题居中** — `.dir-card-label { text-align: center }`
+6. **清理** — `shortName()` 孤立函数已删除
+
+### 技术教训
+- 方向CSS放在 `@media(min-width:768px)` 内导致手机端样式全失效
+- `tab-content` 是 `display:block`，内部 flex 子元素的 `height:100%` 无效，必须父容器也 flex
+- 本地无法推送 GitHub（443 timeout），需手动 push
+
+### BUG（未推送）
+- v0.8.2 commit `1449c7e` 在本地，需手动 git push
+
+## 2026-05-28 下午session
+
+### v0.8.0 方向与聚焦（全面替换目标板块）
+
+### v0.8.0 方向与聚焦（全面替换目标板块）
+
+#### 讨论
+- 用户不想要传统「目标追踪」（进度/截止日期），改为方向与聚焦
+- 从12版mockup迭代后，用户选定v9（星空+星系）风格
+- 最终混合版：北极星「⭐ 生活即工作」+4张snap锁定滑动卡片
+- 卡片分类：产品/AI数字化/内容/家庭，各有主题色边框tint
+- 所有文字≥20px全粗体，无需灰色劣化
+- 方向项由AI维护，用户只读，无新增/编辑/删除入口
+
+#### 代码变更
+- v0.8.0: 方向与聚焦板块实现
+  - 替换旧的 goals 表/视图为 directions 表
+  - 手机版：snap横向滑动4卡片 + 小圆点指示器 + 底部活跃项标签
+  - 电脑版：4列卡片网格布局
+  - 点击项目弹出tooltip显示状态
+  - 北极星独立渲染
+  - 去掉了新建/编辑目标的表单入口
+  - 旧CSS清理
+
+#### 数据库
+- 新建 directions 表（north/product/ai/content/family）
+- 种子数据：11条（1北极星+10个方向项）
+- 建表SQL: setup-directions.sql
+
+#### BUG 修复
+- 新表 directions 缺少 RLS 权限 → 匿名 key 返回空数组，页面看不到卡片
+- 修复：ALTER TABLE + CREATE POLICY（setup-directions-rls.sql / 已合并入 setup-directions.sql）
+
+#### 技术教训
+- Supabase 建表需通过 Dashboard SQL 编辑器执行，无法通过 REST API 或命令行直接操作
+- 新表必须立刻加 RLS 策略（CREATE POLICY），否则浏览器端 anon key 读不到数据
+
 ## 2026-05-27 晚上session（延续）
 
 ### v0.7.4-v0.7.8 连续迭代

@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>主宰面板</title>
-<meta name="version" content="0.8.2">
+<meta name="version" content="0.8.3">
 <style>
 /* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation}
@@ -267,7 +267,7 @@ body{background:#0f0f13;color:#fff}
 /* Scroller */
 .dir-scroller{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x mandatory;flex:1;scroll-behavior:smooth;height:100%}
 .dir-scroller::-webkit-scrollbar{display:none}
-.dir-page{min-width:100vw;scroll-snap-align:start;padding:0.5rem 1rem 0.3rem;display:flex;flex-direction:column;overflow-y:auto;flex:1;height:100%}
+.dir-page{flex:0 0 100%;scroll-snap-align:start;padding:0.5rem 1rem 0.3rem;display:flex;flex-direction:column;overflow-y:auto;height:100%}
 .dir-page::-webkit-scrollbar{display:none}
 .dir-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.85rem;padding:0.7rem;display:flex;flex-direction:column;justify-content:flex-start;flex:1}
 .dir-card.tint-product{border-color:rgba(91,154,255,0.25);background:rgba(91,154,255,0.04)}
