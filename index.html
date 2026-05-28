@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>主宰面板</title>
-<meta name="version" content="0.8.1">
+<meta name="version" content="0.8.2">
 <style>
 /* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation}
@@ -108,6 +108,7 @@ body{background:#0f0f13;color:#fff}
 /* Tab content */
 .tab-content{display:none}
 .tab-content.active{display:block}
+#tab-goals.active{display:flex;flex-direction:column;flex:1;height:100%}
 
 /* FAB */
 .fab{position:fixed;bottom:calc(6rem + env(safe-area-inset-bottom,0px));right:1rem;width:2.75rem;height:2.75rem;border-radius:50%;background:#5b9aff;border:none;color:#fff;font-size:1.5rem;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(91,154,255,0.3);cursor:pointer;z-index:150;transition:transform 0.15s}
@@ -266,14 +267,14 @@ body{background:#0f0f13;color:#fff}
 /* Scroller */
 .dir-scroller{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x mandatory;flex:1;scroll-behavior:smooth;height:100%}
 .dir-scroller::-webkit-scrollbar{display:none}
-.dir-page{min-width:100vw;scroll-snap-align:start;padding:0.5rem 1rem 0.3rem;display:flex;flex-direction:column;overflow-y:auto;height:100%}
+.dir-page{min-width:100vw;scroll-snap-align:start;padding:0.5rem 1rem 0.3rem;display:flex;flex-direction:column;overflow-y:auto;flex:1;height:100%}
 .dir-page::-webkit-scrollbar{display:none}
-.dir-card{background:rgba(255,255,255,0.012);border:1px solid rgba(255,255,255,0.03);border-radius:0.85rem;padding:0.7rem 0.7rem 0.55rem;display:flex;flex-direction:column;justify-content:flex-start;min-height:7rem}
-.dir-card.tint-product{border-color:rgba(91,154,255,0.06);background:rgba(91,154,255,0.008)}
-.dir-card.tint-ai{border-color:rgba(160,120,255,0.06);background:rgba(160,120,255,0.008)}
-.dir-card.tint-content{border-color:rgba(255,159,67,0.06);background:rgba(255,159,67,0.008)}
-.dir-card.tint-family{border-color:rgba(46,213,115,0.06);background:rgba(46,213,115,0.008)}
-.dir-card-label{font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.3);margin-bottom:0.5rem}
+.dir-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:0.85rem;padding:0.7rem;display:flex;flex-direction:column;justify-content:flex-start;flex:1}
+.dir-card.tint-product{border-color:rgba(91,154,255,0.25);background:rgba(91,154,255,0.04)}
+.dir-card.tint-ai{border-color:rgba(160,120,255,0.25);background:rgba(160,120,255,0.04)}
+.dir-card.tint-content{border-color:rgba(255,159,67,0.25);background:rgba(255,159,67,0.04)}
+.dir-card.tint-family{border-color:rgba(46,213,115,0.25);background:rgba(46,213,115,0.04)}
+.dir-card-label{font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.3);margin-bottom:0.5rem;text-align:center}
 .dir-item{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.55rem;border-radius:0.5rem;cursor:pointer}
 .dir-item+.dir-item{margin-top:0.15rem}
 .dir-item .orb{width:1.5rem;height:1.5rem;border-radius:0.4rem;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
@@ -296,11 +297,7 @@ body{background:#0f0f13;color:#fff}
 .dir-dots{display:flex;justify-content:center;gap:0.4rem;padding:0.2rem 0;flex-shrink:0}
 .dir-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.08);transition:all 0.2s}
 .dir-dot.cur{background:#5b9aff;width:18px;border-radius:4px}
-/* Bottom chips */
-.dir-chips{display:flex;gap:0.35rem;overflow-x:auto;scrollbar-width:none;justify-content:center;padding:0.15rem 1rem 0.1rem;flex-shrink:0}
-.dir-chips::-webkit-scrollbar{display:none}
-.dir-chip{flex-shrink:0;display:flex;align-items:center;gap:0.25rem;padding:0.2rem 0.45rem 0.2rem 0.2rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.035);border-radius:1rem;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.3)}
-.dir-chip .bd{width:0.9rem;height:0.9rem;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;font-size:0.55rem;flex-shrink:0}
+
 /* Tooltip */
 .dir-tip{position:fixed;z-index:50;background:rgba(20,20,36,0.97);border:1px solid rgba(255,255,255,0.06);border-radius:0.65rem;padding:0.45rem 0.65rem;min-width:4rem;backdrop-filter:blur(12px);box-shadow:0 4px 24px rgba(0,0,0,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s}
 .dir-tip.show{opacity:1}
@@ -642,7 +639,6 @@ body{background:#0f0f13;color:#fff}
       <div class="dir-polaris" id="dirPolaris"></div>
       <div class="dir-scroller" id="dirScroller"><div class="loading" style="width:100%;padding:2rem 0;text-align:center"><div class="spinner"></div>加载中...</div></div>
       <div class="dir-dots" id="dirDots"></div>
-      <div class="dir-chips" id="dirChips"></div>
       <div class="dir-tip" id="dirTip"><div class="tt"></div><div class="tm"></div></div>
     </div>
     <!-- Library -->
@@ -1153,14 +1149,7 @@ function renderDirections() {
   // Dots
   var dotsEl=document.getElementById('dirDots');
   dotsEl.innerHTML=cats.map(function(_,i){return '<span class="dir-dot'+(i===0?' cur':'')+'"></span>';}).join('');
-  // Chips
-  var chipsEl=document.getElementById('dirChips');
-  var actives=dirs.filter(function(d){return d.status==='active'&&d.category!=='north';});
-  if(actives.length){
-    chipsEl.innerHTML=actives.map(function(d){
-      return '<span class="dir-chip"><span class="bd">'+esc(d.icon)+'</span>'+esc(shortName(d.name))+'</span>';
-    }).join('')+'<button class="dir-add" style="flex-shrink:0;display:flex;align-items:center;gap:0.15rem;padding:0.2rem 0.45rem;border:1px dashed rgba(255,255,255,0.04);border-radius:1rem;font-size:0.7rem;font-weight:700;color:rgba(91,154,255,0.35);background:none;cursor:pointer;display:none">＋</button>';
-  } else chipsEl.innerHTML='';
+
   // Snap-scroll dot sync
   scroller.onscroll=function(){
     var i=Math.round(scroller.scrollLeft/window.innerWidth);
@@ -1185,13 +1174,7 @@ function renderDirections() {
   });
   document.onclick=function(){tip.classList.remove('show');};
 }
-function shortName(n){
-  if(n==='写字小程序')return'写字';if(n==='24点游戏')return'24点';
-  if(n==='主宰面板')return'面板';if(n==='Agent日报')return'日报';
-  if(n==='引光小站调研')return'引光小站';if(n==='天才小熊猫调研')return'小熊猫';
-  if(n==='每日打卡')return'打卡';if(n==='老二陪伴')return'老二';
-  if(n==='心理学笔记')return'心理';return n;
-}
+
 
 function renderEntries() {
   var el=document.getElementById('entryList');
