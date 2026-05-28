@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>主宰面板</title>
-<meta name="version" content="0.8.0">
+<meta name="version" content="0.8.1">
 <style>
 /* ===== RESET ===== */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;touch-action:manipulation}
@@ -260,6 +260,54 @@ body{background:#0f0f13;color:#fff}
 .pd-doc-tag{font-size:0.65rem;padding:0.1rem 0.375rem;border-radius:0.25rem;background:rgba(91,154,255,0.1);color:#5b9aff;font-weight:500;flex-shrink:0}
 }
 </style>
+
+<!-- ===== MOBILE: DIRECTION & FOCUS ===== -->
+<style>
+/* Scroller */
+.dir-scroller{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x mandatory;flex:1;scroll-behavior:smooth;height:100%}
+.dir-scroller::-webkit-scrollbar{display:none}
+.dir-page{min-width:100vw;scroll-snap-align:start;padding:0.5rem 1rem 0.3rem;display:flex;flex-direction:column;overflow-y:auto;height:100%}
+.dir-page::-webkit-scrollbar{display:none}
+.dir-card{background:rgba(255,255,255,0.012);border:1px solid rgba(255,255,255,0.03);border-radius:0.85rem;padding:0.7rem 0.7rem 0.55rem;display:flex;flex-direction:column;justify-content:flex-start;min-height:7rem}
+.dir-card.tint-product{border-color:rgba(91,154,255,0.06);background:rgba(91,154,255,0.008)}
+.dir-card.tint-ai{border-color:rgba(160,120,255,0.06);background:rgba(160,120,255,0.008)}
+.dir-card.tint-content{border-color:rgba(255,159,67,0.06);background:rgba(255,159,67,0.008)}
+.dir-card.tint-family{border-color:rgba(46,213,115,0.06);background:rgba(46,213,115,0.008)}
+.dir-card-label{font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.3);margin-bottom:0.5rem}
+.dir-item{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.55rem;border-radius:0.5rem;cursor:pointer}
+.dir-item+.dir-item{margin-top:0.15rem}
+.dir-item .orb{width:1.5rem;height:1.5rem;border-radius:0.4rem;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
+.dir-item .name{flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.85rem;color:#e8e8ed}
+.dir-item.act{background:rgba(91,154,255,0.1);border:1px solid rgba(91,154,255,0.15)}
+.dir-item.act .orb{background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0);box-shadow:0 0 8px rgba(91,154,255,0.12)}
+.dir-item.act .name{color:#fff}
+.dir-item.done{padding:0.4rem 0.55rem}
+.dir-item.done .orb{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08)}
+.dir-item.done .name{color:rgba(255,255,255,0.45)}
+/* Polaris */
+.dir-polaris{text-align:center;padding:0.4rem 0 0.15rem;flex-shrink:0}
+.dir-polaris .p-item{display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.15rem 0}
+.dir-polaris .p-item .orb{border-radius:0.4rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.dir-polaris .p-item .name{font-weight:700;letter-spacing:0.03em}
+.dir-polaris .north .orb{width:2rem;height:2rem;font-size:1.1rem;background:radial-gradient(circle at 30% 30%,#ffe680,#cc8a00);box-shadow:0 0 20px rgba(255,215,0,0.2)}
+.dir-polaris .north .name{font-size:0.9rem;color:#ffd700}
+.dir-polaris .axis-divider{height:1px;background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,0.04) 20%,rgba(255,255,255,0.04) 80%,transparent 95%);margin:0.3rem 2rem 0}
+/* Dots */
+.dir-dots{display:flex;justify-content:center;gap:0.4rem;padding:0.2rem 0;flex-shrink:0}
+.dir-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.08);transition:all 0.2s}
+.dir-dot.cur{background:#5b9aff;width:18px;border-radius:4px}
+/* Bottom chips */
+.dir-chips{display:flex;gap:0.35rem;overflow-x:auto;scrollbar-width:none;justify-content:center;padding:0.15rem 1rem 0.1rem;flex-shrink:0}
+.dir-chips::-webkit-scrollbar{display:none}
+.dir-chip{flex-shrink:0;display:flex;align-items:center;gap:0.25rem;padding:0.2rem 0.45rem 0.2rem 0.2rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.035);border-radius:1rem;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.3)}
+.dir-chip .bd{width:0.9rem;height:0.9rem;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;font-size:0.55rem;flex-shrink:0}
+/* Tooltip */
+.dir-tip{position:fixed;z-index:50;background:rgba(20,20,36,0.97);border:1px solid rgba(255,255,255,0.06);border-radius:0.65rem;padding:0.45rem 0.65rem;min-width:4rem;backdrop-filter:blur(12px);box-shadow:0 4px 24px rgba(0,0,0,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s}
+.dir-tip.show{opacity:1}
+.dir-tip .tt{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:0.05rem}
+.dir-tip .tm{font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.2)}
+</style>
+
 <!-- ===== DESKTOP CSS ===== -->
 <style>
 @media(min-width:768px){
@@ -313,50 +361,6 @@ body{background:#0f0f13;color:#fff}
 .d-proj-card .p-tags{display:flex;gap:0.2rem;margin-top:0.375rem;flex-wrap:wrap}
 .d-proj-card .p-tag{font-size:0.55rem;padding:0.05rem 0.25rem;border-radius:0.2rem}
 
-/* ===== Direction & Focus ===== */
-/* Scroller */
-.dir-scroller{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;scroll-snap-type:x mandatory;flex:1;scroll-behavior:smooth;height:100%}
-.dir-scroller::-webkit-scrollbar{display:none}
-.dir-page{min-width:100vw;scroll-snap-align:start;padding:0.5rem 1rem 0.3rem;display:flex;flex-direction:column;overflow-y:auto;height:100%}
-.dir-page::-webkit-scrollbar{display:none}
-.dir-card{background:rgba(255,255,255,0.012);border:1px solid rgba(255,255,255,0.03);border-radius:0.85rem;padding:0.7rem 0.7rem 0.55rem;display:flex;flex-direction:column;justify-content:flex-start;min-height:7rem}
-.dir-card.tint-product{border-color:rgba(91,154,255,0.06);background:rgba(91,154,255,0.008)}
-.dir-card.tint-ai{border-color:rgba(160,120,255,0.06);background:rgba(160,120,255,0.008)}
-.dir-card.tint-content{border-color:rgba(255,159,67,0.06);background:rgba(255,159,67,0.008)}
-.dir-card.tint-family{border-color:rgba(46,213,115,0.06);background:rgba(46,213,115,0.008)}
-.dir-card-label{font-size:0.8rem;font-weight:700;color:rgba(255,255,255,0.3);margin-bottom:0.5rem}
-.dir-item{display:flex;align-items:center;gap:0.5rem;padding:0.5rem 0.55rem;border-radius:0.5rem;cursor:pointer}
-.dir-item+.dir-item{margin-top:0.15rem}
-.dir-item .orb{width:1.5rem;height:1.5rem;border-radius:0.4rem;display:flex;align-items:center;justify-content:center;font-size:0.8rem;flex-shrink:0}
-.dir-item .name{flex:1;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:0.85rem;color:#e8e8ed}
-.dir-item.act{background:rgba(91,154,255,0.1);border:1px solid rgba(91,154,255,0.15)}
-.dir-item.act .orb{background:radial-gradient(circle at 30% 30%,#7cbaff,#3d7ae0);box-shadow:0 0 8px rgba(91,154,255,0.12)}
-.dir-item.act .name{color:#fff}
-.dir-item.done{padding:0.4rem 0.55rem}
-.dir-item.done .orb{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.08)}
-.dir-item.done .name{color:rgba(255,255,255,0.45)}
-/* Polaris */
-.dir-polaris{text-align:center;padding:0.4rem 0 0.15rem;flex-shrink:0}
-.dir-polaris .p-item{display:flex;align-items:center;justify-content:center;gap:0.4rem;padding:0.15rem 0}
-.dir-polaris .p-item .orb{border-radius:0.4rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.dir-polaris .p-item .name{font-weight:700;letter-spacing:0.03em}
-.dir-polaris .north .orb{width:2rem;height:2rem;font-size:1.1rem;background:radial-gradient(circle at 30% 30%,#ffe680,#cc8a00);box-shadow:0 0 20px rgba(255,215,0,0.2)}
-.dir-polaris .north .name{font-size:0.9rem;color:#ffd700}
-.dir-polaris .axis-divider{height:1px;background:linear-gradient(90deg,transparent 5%,rgba(255,255,255,0.04) 20%,rgba(255,255,255,0.04) 80%,transparent 95%);margin:0.3rem 2rem 0}
-/* Dots */
-.dir-dots{display:flex;justify-content:center;gap:0.4rem;padding:0.2rem 0;flex-shrink:0}
-.dir-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.08);transition:all 0.2s}
-.dir-dot.cur{background:#5b9aff;width:18px;border-radius:4px}
-/* Bottom chips */
-.dir-chips{display:flex;gap:0.35rem;overflow-x:auto;scrollbar-width:none;justify-content:center;padding:0.15rem 1rem 0.1rem;flex-shrink:0}
-.dir-chips::-webkit-scrollbar{display:none}
-.dir-chip{flex-shrink:0;display:flex;align-items:center;gap:0.25rem;padding:0.2rem 0.45rem 0.2rem 0.2rem;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.035);border-radius:1rem;font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.3)}
-.dir-chip .bd{width:0.9rem;height:0.9rem;border-radius:0.25rem;display:flex;align-items:center;justify-content:center;font-size:0.55rem;flex-shrink:0}
-/* Tooltip */
-.dir-tip{position:fixed;z-index:50;background:rgba(20,20,36,0.97);border:1px solid rgba(255,255,255,0.06);border-radius:0.65rem;padding:0.45rem 0.65rem;min-width:4rem;backdrop-filter:blur(12px);box-shadow:0 4px 24px rgba(0,0,0,0.5);pointer-events:none;opacity:0;transition:opacity 0.2s}
-.dir-tip.show{opacity:1}
-.dir-tip .tt{font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:0.05rem}
-.dir-tip .tm{font-size:0.78rem;font-weight:700;color:rgba(255,255,255,0.2)}
 /* Desktop directions */
 .d-dir-grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0.75rem}
 .d-dir-card{background:#1a1a24;border:1px solid #2a2a38;border-radius:0.75rem;padding:0.85rem}
