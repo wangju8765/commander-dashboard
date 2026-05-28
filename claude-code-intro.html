@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,
+  maximum-scale=1,user-scalable=no">
+<title>Claude Code 完全理解指南 - 主宰面板</title>
+<style>
+:root{--bg:#0b0d12;--card:#151821;--card2:#1c2030;--accent:#5b9aff;
+  --accent2:#ffd43b;--accent3:#51cf66;--text:#e4e7ed;--muted:#8b929a;
+  --border:#252836;--gold:#ffd43b;--green:#51cf66;--pink:#f06595}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:calc(100vw/375*18)}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC",
+  "Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+.container{max-width:44rem;margin:0 auto;padding:1rem 1rem 4rem}
+.back{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;
+  color:#5b9aff;cursor:pointer;margin-bottom:0.5rem;background:none;
+  border:none;padding:0;font-family:inherit}
+.hero{padding:1.5rem 0 1rem;margin-bottom:1rem}
+.hero .tag{display:inline-block;font-size:0.6rem;padding:0.15rem 0.5rem;
+  border-radius:0.25rem;background:rgba(91,154,255,0.12);color:var(--accent);
+  font-weight:600;letter-spacing:0.05em;margin-bottom:0.5rem;
+  text-transform:uppercase}
+.hero h1{font-size:1.25rem;font-weight:700;color:#fff;line-height:1.3;
+  margin-bottom:0.3rem}
+.hero .meta{font-size:0.72rem;color:var(--muted)}
+.hero .divider{height:3px;background:linear-gradient(90deg,var(--accent),
+  var(--gold),var(--accent3));border-radius:2px;margin-top:0.75rem}
+.sec{margin:1.25rem 0 0.75rem;padding:0.5rem 0.75rem;background:var(--card);
+  border-radius:0.5rem;border-left:3px solid var(--accent);font-size:0.85rem;
+  font-weight:700;color:#fff}
+.sec.sub{margin-top:0.75rem;border-left-color:var(--gold);font-size:0.78rem}
+p{font-size:0.78rem;color:var(--text);line-height:1.7;margin:0.5rem 0}
+strong{color:#fff}
+em{color:var(--muted);font-style:normal}
+blockquote{margin:0.5rem 0;padding:0.5rem 0.75rem;border-left:3px solid
+  var(--gold);background:rgba(255,212,59,0.06);border-radius:0 0.375rem
+  0.375rem 0;font-size:0.76rem;color:var(--muted);line-height:1.6}
+blockquote strong{color:var(--gold)}
+.card{background:var(--card);border:1px solid var(--border);
+  border-radius:0.625rem;padding:0.75rem;margin:0.5rem 0}
+.card.blue{border-color:rgba(91,154,255,0.2);
+  background:rgba(91,154,255,0.03)}
+.card.gold{border-color:rgba(255,212,59,0.2);
+  background:rgba(255,212,59,0.03)}
+.card.green{border-color:rgba(81,207,102,0.2);
+  background:rgba(81,207,102,0.03)}
+.card.purple{border-color:rgba(160,120,255,0.2);
+  background:rgba(160,120,255,0.03)}
+.card-title{font-size:0.78rem;font-weight:600;color:#fff;
+  margin-bottom:0.3rem;display:flex;align-items:center;gap:0.3rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;
+  margin:0.5rem 0}
+.gcell{background:var(--card);border:1px solid var(--border);
+  border-radius:0.5rem;padding:0.6rem}
+.gcell .glabel{font-size:0.6rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.2rem}
+.gcell .gvalue{font-size:0.78rem;color:#fff;font-weight:500}
+.insight{display:flex;gap:0.5rem;align-items:flex-start;padding:0.625rem;
+  border-radius:0.5rem;margin:0.5rem 0}
+.insight.blue{background:rgba(91,154,255,0.08);
+  border:1px solid rgba(91,154,255,0.15)}
+.insight.gold{background:rgba(255,212,59,0.08);
+  border:1px solid rgba(255,212,59,0.15)}
+.insight.green{background:rgba(81,207,102,0.08);
+  border:1px solid rgba(81,207,102,0.15)}
+.insight .icon{font-size:1rem;flex-shrink:0;margin-top:0.05rem}
+.insight .text{font-size:0.74rem;color:var(--text);line-height:1.5}
+.insight .text strong{color:#fff}
+.ul{margin:0.35rem 0;padding-left:1rem}
+.ul li{font-size:0.76rem;color:var(--text);line-height:1.6;margin:0.2rem 0}
+.hr{border:none;border-top:1px solid var(--border);margin:1rem 0}
+.tag-group{display:flex;flex-wrap:wrap;gap:0.375rem;margin:0.5rem 0}
+.tag-item{font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:0.25rem;
+  background:rgba(91,154,255,0.1);color:var(--accent);font-weight:500}
+.tag-item.gold{background:rgba(255,212,59,0.1);color:var(--gold)}
+.tag-item.green{background:rgba(81,207,102,0.1);color:var(--green)}
+code{font-size:0.72rem;background:var(--card2);padding:0.1rem 0.25rem;
+  border-radius:0.2rem;color:#cdd6f4}
+pre{font-size:0.7rem;background:var(--card2);border:1px solid var(--border);
+  border-radius:0.5rem;padding:0.6rem;overflow-x:auto;margin:0.5rem 0;
+  color:#cdd6f4;line-height:1.5}
+pre code{background:none;padding:0}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="back" onclick="history.back()">← 返回面板</div>
+
+<div class="hero">
+  <div class="tag">知识科普</div>
+  <h1>Claude Code 完全理解指南</h1>
+  <div class="meta">生成日期：2026-05-28 · 面向零编程基础的你</div>
+  <div class="divider"></div>
+</div>
+
+<div class="insight blue"><span class="icon">🎯</span><span class="text">
+<strong>一句话说清：</strong>Claude Code 是一个住在你终端里的 AI 程序员。
+你告诉它"帮我实现用户登录"，它自己读项目、制定方案、写代码、
+跑测试、迭代修复，直到任务完成。</span></div>
+
+<div class="sec">🤖 它跟普通 AI 编程工具有什么不同？</div>
+
+<p>这是一个<strong>本质区别</strong>，不是程度的差异。</p>
+
+<div class="grid2">
+  <div class="gcell" style="border-color:var(--accent)">
+    <div class="glabel">传统 AI 编程</div>
+    <div class="gvalue">你写一半，它补下一行</div>
+  </div>
+  <div class="gcell" style="border-color:var(--gold)">
+    <div class="glabel">Claude Code</div>
+    <div class="gvalue">你给目标，它独立完成</div>
+  </div>
+  <div class="gcell"><div class="glabel">工作范围</div>
+    <div class="gvalue">当前文件</div></div>
+  <div class="gcell"><div class="glabel">工作范围</div>
+    <div class="gvalue">整个项目</div></div>
+  <div class="gcell"><div class="glabel">主动性</div>
+    <div class="gvalue">被动·等你敲代码</div></div>
+  <div class="gcell"><div class="glabel">主动性</div>
+    <div class="gvalue">主动·自己规划执行</div></div>
+</div>
+
+<div class="insight gold"><span class="icon">💡</span><span class="text">
+<strong>传统 AI 像自动补全</strong>——你打字，它猜你下一句。<br>
+<strong>Claude Code 像一个外包程序员</strong>——你给需求，它自己去调研、
+写代码、测试、交付。</span></div>
+
+<div class="sec">⚙️ 核心原理：Agent 工作循环</div>
+
+<p>Claude Code 不是简单生成文字，而是一个持续循环的 Agent 系统：</p>
+
+<pre><code>你给任务
+    ↓
+┌─────────────────────────┐
+│ 1. 理解需求              │
+│ 2. 读代码库（扫描结构）   │
+│ 3. 制定方案（要改哪些文件）│
+│ 4. 执行（编辑+跑命令）     │
+│ 5. 验证（跑测试）          │
+│ 6. 迭代（失败就修）        │
+└─────────────────────────┘
+    ↓
+任务完成，交付结果</code></pre>
+
+<p>这叫<strong>"工具循环"</strong>——每次决定用什么工具、
+读什么文件、跑什么命令，结果反馈回来再做下步决策。
+跟人类写代码完全一样：写完→检查→发现不对→改→再检查。</p>
+
+<div class="card blue">
+  <div class="card-title">它能调用什么工具？</div>
+  <div class="ul">
+    <li><strong>读文件</strong> —— 你不用手动打开相关文件</li>
+    <li><strong>编辑文件</strong> —— 直接修改代码</li>
+    <li><strong>运行 shell 命令</strong> —— npm test / git status / curl</li>
+    <li><strong>搜索代码</strong> —— grep / find 定位相关内容</li>
+    <li><strong>Git 操作</strong> —— commit / push / 创建 PR</li>
+    <li><strong>浏览器</strong> —— 打开网页测试 UI</li>
+    <li><strong>MCP 工具</strong> —— 连接数据库 / API / Slack 等外部服务</li>
+  </div>
+</div>
+
+<div class="sec">💼 你能用它干什么？——8个实战场景</div>
+
+<div class="card gold">
+  <div class="card-title">🏗️ 场景1：接手新项目</div>
+  <p>进入项目目录，启动 Claude Code。</p>
+  <p>问："这个项目用什么技术栈？架构怎么设计的？"<br>
+  Claude Code 会自己翻文件，给你一份项目全景图。</p>
+</div>
+
+<div class="card">
+  <div class="card-title">🐛 场景2：修 Bug</div>
+  <p>把报错信息贴给它：</p>
+  <pre><code>我跑 npm run build 报了这个错：
+Error: Cannot find module 'react-dom/client'
+请帮我找到原因并修复</code></pre>
+  <p>它自动检查依赖、修复版本、重新构建验证。</p>
+</div>
+
+<div class="card blue">
+  <div class="card-title">✨ 场景3：写新功能</div>
+  <pre><code>帮我给用户模块加上"重置密码"功能
+要求：发验证邮件 · 验证码有效期15分钟
+      重置后发通知</code></pre>
+  <p>它分析现有结构，跨文件修改：路由、验证逻辑、邮件模板、
+  写单元测试、跑通后提交代码。</p>
+</div>
+
+<div class="card gold">
+  <div class="card-title">🔄 场景4：代码重构</div>
+  <p>"把所有 fetch 调用替换成 axios，保持相同的错误处理逻辑。"<br>
+  找所有相关文件，逐个替换，跑测试确认没改坏。</p>
+</div>
+
+<div class="card green">
+  <div class="card-title">🔍 场景5：代码审查</div>
+  <p>"review 这次 git diff 中的改动"<br>
+  对照项目规范找潜在问题、性能隐患、安全漏洞。</p>
+</div>
+
+<div class="card">
+  <div class="card-title">🚀 场景6：自动化部署</div>
+  <pre><code>帮我部署到生产环境
+1. 运行测试  2. 构建  3. 部署到服务器
+4. 验证成功  5. 失败就回滚</code></pre>
+</div>
+
+<div class="card blue">
+  <div class="card-title">🧪 场景7：写测试</div>
+  <p>"给 auth 模块写单元测试，覆盖率 90%，跑测试，修补没通过的。"</p>
+</div>
+
+<div class="card gold">
+  <div class="card-title">🔄 场景8：项目迁移</div>
+  <p>"把这个 Python 项目迁移成 TypeScript，保持 API 接口不变。"</p>
+</div>
+
+<div class="sec">🔧 进阶：定制你的 Claude Code</div>
+
+<div class="card purple">
+  <div class="card-title">📄 CLAUDE.md —— 项目级"记忆文件"</div>
+  <p>在项目根目录放一个 <code>CLAUDE.md</code>，Claude Code 每次自动读。
+  像团队手册一样告诉它代码规范，生成的代码就符合你的风格。</p>
+  <pre><code># 项目规范
+- 使用 TypeScript 严格模式
+- 测试覆盖率 > 80%
+- API 必须有 try-catch 错误处理</code></pre>
+</div>
+
+<div class="card gold">
+  <div class="card-title">🧩 Skills —— 可复用的"技能包"</div>
+  <p>预封装的工作流程指令，别人写好的、用完即走。</p>
+  <pre><code>\skills   # 查看可用技能
+使用 sql skill 分析数据库表结构
+使用 frontend-design skill 设计这个页面</code></pre>
+</div>
+
+<div class="card green">
+  <div class="card-title">🔒 Hooks —— 自动化"守门员"</div>
+  <p>特定事件触发时自动执行的脚本。和 CLAUDE.md 不同，
+  <strong>Hooks 是强制执行的</strong>。比如修改文件后自动格式化、
+  执行危险操作前弹确认。</p>
+</div>
+
+<div class="card blue">
+  <div class="card-title">🔗 MCP —— 连接外部世界</div>
+  <p>MCP（Model Context Protocol）让 Claude Code 能连接外部服务：
+  数据库查询、调用 API、连接 Slack/Jira、查天气查股票。</p>
+</div>
+
+<div class="card gold">
+  <div class="card-title">👥 Sub-agents —— 多 Agent 并行</div>
+  <p>复杂任务分解给多个子 Agent。比如主 Agent 拆任务，
+  Agent A 写后端、B 写前端、C 写测试，各自独立工作互不干扰。</p>
+</div>
+
+<div class="sec">💎 它是你的程序员搭档</div>
+
+<div class="grid2">
+  <div class="gcell"><div class="glabel">说人话给需求</div>
+    <div class="gvalue">不用学 DSL，直接说中文</div></div>
+  <div class="gcell"><div class="glabel">交给它自己干</div>
+    <div class="gvalue">能干多少干多少，搞不定会问你</div></div>
+  <div class="gcell"><div class="glabel">写 CLAUDE.md</div>
+    <div class="gvalue">越来越懂你的项目规范</div></div>
+  <div class="gcell"><div class="glabel">装 Skills</div>
+    <div class="gvalue">一次配置无限复用</div></div>
+  <div class="gcell"><div class="glabel">设 Hooks</div>
+    <div class="gvalue">质量把关，不用盯着</div></div>
+  <div class="gcell"><div class="glabel">开多个会话</div>
+    <div class="gvalue">同时干好几件事</div></div>
+</div>
+
+<div class="insight gold"><span class="icon">🌟</span><span class="text">
+<strong>最佳实践：</strong>开箱即用就开始，别花时间找"最佳配置"。
+给 Claude 验证能力——让它写完代码自己跑测试，质量提升 2-3 倍。
+多开几个会话，同时干 5-10 件事。</span></div>
+
+<div class="card pink" style="border-color:rgba(240,101,149,0.2);
+  background:rgba(240,101,149,0.03)">
+  <div class="card-title" style="color:var(--pink)">⚠️ 它不是用来做什么的</div>
+  <div class="ul">
+    <li>不是设计工具——不会帮你画 UI mockup</li>
+    <li>不是产品经理——不会帮你定义需求</li>
+    <li>不是非程序员工具——本质是为开发者设计的</li>
+    <li>不能代替你思考——架构决策还得你来定</li>
+  </div>
+</div>
+
+<div class="sec sub">❓ 常见问题</div>
+
+<div class="card blue">
+  <div class="card-title">我不会编程，能用吗？</div>
+  <p>不推荐。它是给程序员用的效率工具。虽然它能写很多代码，
+  但你需要能读懂、评估、修正它的输出。</p>
+</div>
+<div class="card gold">
+  <div class="card-title">跟 Cursor / Copilot 比呢？</div>
+  <p>Claude Code 是 Agent，其他两个偏辅助补全。同一件事，
+  Claude Code 能自己跑完整个流程。但 Cursor 的 IDE 体验更流畅。</p>
+</div>
+<div class="card green">
+  <div class="card-title">安全吗？贵吗？</div>
+  <p>每次执行命令都经过权限审批。Pro \$20/月够个人用。
+  也可以用 API 按量付费。换国产模型成本更低。</p>
+</div>
+<div class="card purple">
+  <div class="card-title">国内网络能用吗？</div>
+  <p>直接用 Claude 模型需要代理或中转。换国产模型则没有网络问题。</p>
+</div>
+
+<div class="hr"></div>
+<div style="font-size:0.65rem;color:var(--muted);text-align:center;
+  padding:0.5rem 0">生成时间：2026-05-28 · 主宰面板出品 🦞👑</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,
+  maximum-scale=1,user-scalable=no">
+<title>Git 极简教程 - 给完全不懂编程的你 - 主宰面板</title>
+<style>
+:root{--bg:#0b0d12;--card:#151821;--card2:#1c2030;--accent:#5b9aff;
+  --accent2:#ffd43b;--accent3:#51cf66;--text:#e4e7ed;--muted:#8b929a;
+  --border:#252836;--gold:#ffd43b;--green:#51cf66;--pink:#f06595;
+  --orange:#ff922b;--purple:#a078ff}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-size:calc(100vw/375*18)}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro","PingFang SC",
+  "Helvetica Neue",sans-serif;background:var(--bg);color:var(--text);
+  line-height:1.6;-webkit-font-smoothing:antialiased}
+.container{max-width:44rem;margin:0 auto;padding:1rem 1rem 4rem}
+.back{display:inline-flex;align-items:center;gap:0.25rem;font-size:0.78rem;
+  color:#5b9aff;cursor:pointer;margin-bottom:0.5rem;background:none;
+  border:none;padding:0;font-family:inherit}
+.hero{padding:1.5rem 0 1rem;margin-bottom:1rem}
+.hero .tag{display:inline-block;font-size:0.6rem;padding:0.15rem 0.5rem;
+  border-radius:0.25rem;background:rgba(91,154,255,0.12);color:var(--accent);
+  font-weight:600;letter-spacing:0.05em;margin-bottom:0.5rem;
+  text-transform:uppercase}
+.hero h1{font-size:1.25rem;font-weight:700;color:#fff;line-height:1.3;
+  margin-bottom:0.3rem}
+.hero .meta{font-size:0.72rem;color:var(--muted)}
+.hero .divider{height:3px;background:linear-gradient(90deg,var(--accent),
+  var(--gold),var(--accent3));border-radius:2px;margin-top:0.75rem}
+.sec{margin:1.25rem 0 0.75rem;padding:0.5rem 0.75rem;background:var(--card);
+  border-radius:0.5rem;border-left:3px solid var(--accent);font-size:0.85rem;
+  font-weight:700;color:#fff}
+.sec.sub{margin-top:0.75rem;border-left-color:var(--gold);font-size:0.78rem}
+p{font-size:0.78rem;color:var(--text);line-height:1.7;margin:0.5rem 0}
+strong{color:#fff}
+em{color:var(--muted);font-style:normal}
+blockquote{margin:0.5rem 0;padding:0.5rem 0.75rem;border-left:3px solid
+  var(--gold);background:rgba(255,212,59,0.06);border-radius:0 0.375rem
+  0.375rem 0;font-size:0.76rem;color:var(--muted);line-height:1.6}
+blockquote strong{color:var(--gold)}
+.card{background:var(--card);border:1px solid var(--border);
+  border-radius:0.625rem;padding:0.75rem;margin:0.5rem 0}
+.card.blue{border-color:rgba(91,154,255,0.2);
+  background:rgba(91,154,255,0.03)}
+.card.gold{border-color:rgba(255,212,59,0.2);
+  background:rgba(255,212,59,0.03)}
+.card.green{border-color:rgba(81,207,102,0.2);
+  background:rgba(81,207,102,0.03)}
+.card.purple{border-color:rgba(160,120,255,0.2);
+  background:rgba(160,120,255,0.03)}
+.card-title{font-size:0.78rem;font-weight:600;color:#fff;
+  margin-bottom:0.3rem;display:flex;align-items:center;gap:0.3rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;
+  margin:0.5rem 0}
+.gcell{background:var(--card);border:1px solid var(--border);
+  border-radius:0.5rem;padding:0.6rem}
+.gcell .glabel{font-size:0.6rem;color:var(--muted);
+  text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.2rem}
+.gcell .gvalue{font-size:0.78rem;color:#fff;font-weight:500}
+.insight{display:flex;gap:0.5rem;align-items:flex-start;padding:0.625rem;
+  border-radius:0.5rem;margin:0.5rem 0}
+.insight.blue{background:rgba(91,154,255,0.08);
+  border:1px solid rgba(91,154,255,0.15)}
+.insight.gold{background:rgba(255,212,59,0.08);
+  border:1px solid rgba(255,212,59,0.15)}
+.insight.green{background:rgba(81,207,102,0.08);
+  border:1px solid rgba(81,207,102,0.15)}
+.insight .icon{font-size:1rem;flex-shrink:0;margin-top:0.05rem}
+.insight .text{font-size:0.74rem;color:var(--text);line-height:1.5}
+.insight .text strong{color:#fff}
+.ul{margin:0.35rem 0;padding-left:1rem}
+.ul li{font-size:0.76rem;color:var(--text);line-height:1.6;margin:0.2rem 0}
+.hr{border:none;border-top:1px solid var(--border);margin:1rem 0}
+.tag-group{display:flex;flex-wrap:wrap;gap:0.375rem;margin:0.5rem 0}
+.tag-item{font-size:0.65rem;padding:0.2rem 0.5rem;border-radius:0.25rem;
+  background:rgba(91,154,255,0.1);color:var(--accent);font-weight:500}
+.tag-item.gold{background:rgba(255,212,59,0.1);color:var(--gold)}
+.tag-item.green{background:rgba(81,207,102,0.1);color:var(--green)}
+code{font-size:0.72rem;background:var(--card2);padding:0.1rem 0.25rem;
+  border-radius:0.2rem;color:#cdd6f4}
+pre{font-size:0.7rem;background:var(--card2);border:1px solid var(--border);
+  border-radius:0.5rem;padding:0.6rem;overflow-x:auto;margin:0.5rem 0;
+  color:#cdd6f4;line-height:1.5}
+pre code{background:none;padding:0}
+.timeline{margin:0.5rem 0;padding-left:1.25rem;border-left:2px solid
+  var(--border)}
+.tl-item{position:relative;padding:0.4rem 0 0.4rem 0.75rem;font-size:0.74rem;
+  color:var(--text);line-height:1.5}
+.tl-item::before{content:'';position:absolute;left:-0.45rem;top:0.65rem;
+  width:0.5rem;height:0.5rem;border-radius:50%;background:var(--accent);
+  border:2px solid var(--bg)}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="back" onclick="history.back()">← 返回面板</div>
+
+<div class="hero">
+  <div class="tag">新手教程</div>
+  <h1>Git 极简教程 — 给完全不懂编程的你</h1>
+  <div class="meta">写给 Zeno：你是一个奥数老师，刚搞清楚"分支"和"PR"是什么意思。
+  这篇用大白话讲 Git，不讲术语，只讲你能立刻用的东西。</div>
+  <div class="divider"></div>
+</div>
+
+<div class="sec">📁 Git 到底解决什么问题</div>
+
+<div class="card gold">
+  <div class="card-title">你的文件夹命名法（懂的都懂）</div>
+  <p>第一次写完一个文件，叫 <code>奥数讲义.docx</code>。<br>
+  改了一点，怕覆盖旧的，复制一份叫 <code>奥数讲义-最终版.docx</code>。<br>
+  又改了一点：<code>奥数讲义-最终版2.docx</code>。<br>
+  再改：<code>打死不改版.docx</code>。<br>
+  再改：<code>打死不改版-真的不改了.docx</code>。</p>
+  <p>两周后你自己都分不清哪个是哪个。</p>
+</div>
+
+<p><strong>Git 就是一个帮你自动管理版本的工具。</strong>它给你三样东西：</p>
+
+<div class="grid2">
+  <div class="gcell" style="border-color:var(--gold)">
+    <div class="glabel">⏳ 时光机</div>
+    <div class="gvalue">随时回到任何一个历史版本</div>
+  </div>
+  <div class="gcell" style="border-color:var(--green)">
+    <div class="glabel">🌌 平行宇宙</div>
+    <div class="gvalue">同时尝试不同做法，互不影响</div>
+  </div>
+  <div class="gcell" style="border-color:var(--accent)">
+    <div class="glabel">👥 多人协作</div>
+    <div class="gvalue">几个人同时改同一份文件，最后能安全合在一起</div>
+  </div>
+</div>
+
+<div class="insight blue"><span class="icon">✅</span><span class="text">
+不用再想"这个版本别覆盖了"；不用再手动备份文件夹；
+想尝试大胆改动？开个分支随便试，坏了就删掉；
+电脑被偷了？代码在云端，换个电脑继续干。</span></div>
+
+<div class="sec">🧠 核心概念（全用比喻）</div>
+
+<div class="card blue">
+  <div class="card-title">📦 仓库（repository）—— 项目的"历史档案室"</div>
+  <p>Git 会给你的项目建一个隐藏的档案室，里面存着你的
+  每一个历史版本。常缩写成 <strong>repo</strong>。</p>
+</div>
+
+<div class="card gold">
+  <div class="card-title">📸 提交（commit）—— 拍一张"快照"</div>
+  <p>你觉得"这个状态不错，先存着"，就做一个提交。每次提交
+  等于给整个项目拍一张照片，附上你写的一句话："我改了啥"。
+  以后随时可以回到这张照片的时刻。</p>
+</div>
+
+<div class="card green">
+  <div class="card-title">🌌 分支（branch）—— 平行宇宙</div>
+  <p><strong>这个比喻你肯定喜欢，毕竟是你搞明白的第一个术语。</strong></p>
+  <p>你在主线干活，突然想试一个大胆的想法，就开一个新的分支出来。
+  新分支一开始跟主线一模一样，你在里面随便改，主线那边纹丝不动。
+  觉得好，合并回去。觉得不好，直接删掉。</p>
+</div>
+
+<div class="card purple">
+  <div class="card-title">🔗 合并（merge）—— 把平行宇宙合并回来</div>
+  <p>你开了分支试新想法，试成功了，想让它们正式加入主线。
+  Git 会智能地把你分支上的改动"粘"回主线。</p>
+</div>
+
+<div class="card blue">
+  <div class="card-title">📋 PR / Pull Request —— "你先看看我改的"</div>
+  <p>做完一版修改后，请求别人<strong>审核</strong>一下再合并。
+  自己做项目时，PR 更像一个"正式发布的仪式"——你先在分支上做改动，
+  然后发起一个 PR，自己看看改了啥，没问题就合并。</p>
+</div>
+
+<div class="card gold">
+  <div class="card-title">☁️ 远程仓库（remote）—— 代码放云端</div>
+  <p>你电脑（本地）有一个仓库，还可以关联云端仓库（GitHub）。
+  电脑丢了不怕，换个电脑克隆下来就行了。</p>
+</div>
+
+<div class="card green">
+  <div class="card-title">📋 暂存区（staging area）—— 先挑要存档的改动</div>
+  <p>你改了好几个文件，但可能不想一次全部存档，只想先存一部分。
+  先 <strong>暂存</strong>（add）要存的文件，人站齐了，再拍照片
+  （commit）。</p>
+</div>
+
+<div class="sec">💪 日常使用场景</div>
+
+<div class="card green">
+  <div class="card-title">场景1：第一次把项目放到 Git</div>
+  <p><strong>背景：</strong>你有一个文件夹叫 <code>my-project</code>，
+  想让 Git 开始管理它。</p>
+  <pre><code>cd my-project          # 进入项目文件夹
+git init               # 初始化仓库
+git add .              # 把当前所有文件加入暂存区
+git commit -m "第一次提交"  # 拍第一张照片</code></pre>
+  <p><strong>结果：</strong>你的项目现在有完整的 Git 仓库了。</p>
+</div>
+
+<div class="card blue">
+  <div class="card-title">场景2：每天做完工作，保存一版</div>
+  <pre><code>git status             # 看看改了哪些文件
+git add .              # 暂存所有改动
+git commit -m "完成了加法功能"  # 提交，写说明</code></pre>
+  <p><strong>结果：</strong>明天改坏了，随时可以回来。</p>
+</div>
+
+<div class="card gold">
+  <div class="card-title">场景3：改了一半，先换个任务？</div>
+  <pre><code>git stash              # 把半成品先存起来
+# 去做别的…
+git stash pop          # 恢复回来继续</code></pre>
+  <p><strong>结果：</strong>改到一半的东西完好无损地保存着。</p>
+</div>
+
+<div class="card green">
+  <div class="card-title">场景4：改错了想反悔</div>
+  <pre><code># 更安全的方法：先存起来
+git stash</code></pre>
+  <p><strong>结果：</strong>文件回到上次提交时的样子。</p>
+</div>
+
+<div class="card blue">
+  <div class="card-title">场景5：想尝试新想法，又怕搞坏</div>
+  <pre><code>git checkout -b 试试新方案  # 创建+切换新分支
+# 在新分支里随便改…
+git add . && git commit -m "在新分支上改的内容"
+git checkout main          # 切回主线看看</code></pre>
+  <p><strong>结果：</strong>两个平行世界，互不干扰。觉得好就合并：
+  <code>git merge 试试新方案</code></p>
+</div>
+
+<div class="card gold">
+  <div class="card-title">场景6：多台电脑同步</div>
+  <p><strong>第一次推：</strong></p>
+  <pre><code>git remote add origin https://github.com/你的用户名/项目名.git
+git push -u origin main</code></pre>
+  <p><strong>另一台电脑首次拿代码：</strong></p>
+  <pre><code>git clone https://github.com/你的用户名/项目名.git
+# 改完后
+git add . && git commit -m "在家改了一版" && git push</code></pre>
+</div>
+
+<div class="sec">🤖 实战：跟 AI Agent 配合</div>
+
+<div class="card gold">
+  <div class="card-title">核心原则：AI 干活前，先建分支</div>
+  <pre><code>git checkout -b ai-实验功能</code></pre>
+  <p>让 AI 在这个分支上干活。AI 改啥都不影响你原有的 main 分支。
+  改完你觉得好，再合并。不好，直接删分支。</p>
+</div>
+
+<div class="insight blue"><span class="icon">🔑</span><span class="text">
+<strong>记住一个原则：</strong>main（或 master）分支是"干净的、确定没问题的版本"。
+所有实验、所有 AI 干的活，都在别的分支上做。这样 AI 就算把你的代码搞烂了，
+你切换到 main 分支，世界立刻恢复原样。</span></div>
+
+<div class="sec sub">❓ 常见问题</div>
+
+<div class="card blue">
+  <div class="card-title">什么是 .gitignore？</div>
+  <p>有些文件<strong>不应该被 Git 存档</strong>——密码文件、
+  编译生成的文件、系统隐藏文件。在项目根目录建一个
+  <code>.gitignore</code>，把不需要跟踪的文件写在里面：</p>
+  <pre><code># 忽略密码文件
+config/keys.json
+# 忽略系统文件
+.DS_Store
+# 忽略编译生成的文件
+node_modules/</code></pre>
+</div>
+
+<div class="card gold">
+  <div class="card-title">冲突是啥？遇到怎么办？</div>
+  <p>你改了一行，别人也改了同一行，Git 不知道该听谁的。</p>
+  <pre><code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+这是我写的版本
+=======
+这是别人写的版本
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 别人的分支</code></pre>
+  <p><strong>解决方法：</strong>打开文件，决定保留谁的版本，
+  删掉所有 <code>&lt;&lt;&lt;&lt; &gt;&gt;&gt;&gt; ===</code> 标记，
+  保存，然后 <code>git add . && git commit</code>。</p>
+</div>
+
+<div class="sec sub">🖥️ 可视化工具推荐</div>
+
+<div class="grid2">
+  <div class="gcell" style="border-color:var(--accent)">
+    <div class="glabel">免费 · Mac+Win</div>
+    <div class="gvalue">Sourcetree</div>
+  </div>
+  <div class="gcell" style="border-color:var(--gold)">
+    <div class="glabel">免费 · 适合新手</div>
+    <div class="gvalue">GitHub Desktop</div>
+  </div>
+</div>
+<p>日常操作（提交、推送）用图形界面，复杂命令回来看这个文档。</p>
+
+<div class="sec sub">📋 完整流程：从 0 到 1</div>
+
+<pre><code># 1. 创建仓库
+cd ~/我的项目
+git init
+
+# 2. 写第一行代码，保存
+
+# 3. 第一次提交
+git add .
+git commit -m "项目初始化"
+
+# 4. 开新分支
+git checkout -b 添加用户登录功能
+
+# 5. 写代码、改完提交
+git add .
+git commit -m "完成用户登录"
+
+# 6. 切回主线，合并
+git checkout main
+git merge 添加用户登录功能
+
+# 7. 推到云端
+git remote add origin https://github.com/你的用户名/你的项目.git
+git push -u origin main</code></pre>
+
+<div class="insight gold"><span class="icon">💎</span><span class="text">
+<strong>一句话总结：</strong>Git 是你的代码的"时光机+平行宇宙"。
+每次 commit 拍一张照片，每个 branch 是一个平行世界。
+搞不坏主线的。放心试。</span></div>
+
+<div class="hr"></div>
+<div style="font-size:0.65rem;color:var(--muted);text-align:center;
+  padding:0.5rem 0">生成时间：2026-05-28 · 主宰面板出品 🦞👑</div>
+
+</div>
+</body>
+</html>
