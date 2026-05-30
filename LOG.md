@@ -1,5 +1,17 @@
 # 主宰面板 · 运行日志
 
+## 2026-05-29 — v0.8.4 添加 SVG 图标（favicon + iOS 主屏幕）
+
+### 变更内容
+- 新增 `icon.svg` — 深色圆角方形图标，金色皇冠 + 红色龙虾钳 + 紫色宝石
+- `index.html` `<head>` 加了三行：`rel=icon`、`rel=apple-touch-icon`、`rel=mask-icon`
+- 版本号 v0.8.4
+- 在线部署：✅ 已推送（380d99a），等待 GitHub Pages 刷新
+
+### 讨论记录
+- **项目看板自动同步机制：** 讨论 Cron 任务方案，最终决定先放一放，下次用户直接告诉我更新
+- **「库」标签页现状：** entries 表 0 条记录，三个分类（思考/行动/规划）从未被使用过，需用户决定保留还是改造
+
 ## 2026-05-28 晚上session — v0.8.2 方向卡片修复
 
 ### 代码变更
@@ -20,8 +32,8 @@
 - `tab-content` 是 `display:block`，内部 flex 子元素的 `height:100%` 无效，必须父容器也 flex
 - 本地无法推送 GitHub（443 timeout），需手动 push
 
-### BUG（未推送）
-- v0.8.2 commit `1449c7e` 在本地，需手动 git push
+### v0.8.2 六项修复（已推送）
+- v0.8.3 （已推送）：卡片宽度修复 `min-width:100vw` → `flex:0 0 100%`
 
 ## 2026-05-28 下午session
 
